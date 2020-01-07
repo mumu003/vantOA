@@ -6,6 +6,12 @@
       <van-button type="info">登录</van-button>
       <p class="aa">这是16px的字</p>
     </form>
+    <van-cell-group>
+      <van-cell title="单元格" value="内容" ></van-cell>
+      <van-cell title="单元格" value="内容" label="描述信息" ></van-cell>
+    </van-cell-group>
+    <van-cell title="选择单个日期" :value="date" @click="show = true" ></van-cell>
+    <van-calendar v-model="show" @confirm="onConfirm" ></van-calendar>
   </div>
 </template>
 
@@ -20,7 +26,9 @@
         user: {
           loginName: '',
           pwd: '',
-        }
+        },
+        date: '',
+        show: false
       }
     },
     mounted() {
@@ -33,6 +41,13 @@
       }
     },
     methods: {
+      formatDate(date) {
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    },
+    onConfirm(date) {
+      this.show = false;
+      this.date = this.formatDate(date);
+    },
       async login() {
         await login(this.user).then(
           (res)=>{
