@@ -36,6 +36,13 @@ const routes = [
       requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
     },
     component: ()=>import('../views/login.vue')
+  },{
+    path: '/manager',
+    name: 'manager',
+    meta:{
+      requireAuth:true
+    },
+    component:()=>import('@/views/Management/index.vue')
   },
 ];
 
