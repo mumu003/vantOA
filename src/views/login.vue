@@ -12,6 +12,9 @@
     </van-cell-group>
     <van-cell title="选择单个日期" :value="date" @click="show = true" ></van-cell>
     <van-calendar v-model="show" @confirm="onConfirm" ></van-calendar>
+    
+
+    <button @click="download">点我下载</button>
   </div>
 </template>
 
@@ -59,8 +62,11 @@
             }
           }
         )
+      },
+      download(){
+        window.location.href = 'http://qiniu.zgrworld.com/video/00516202001031016511853.mp4?attname='
       }
-    }
+    },
   }
 </script>
 
