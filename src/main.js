@@ -9,8 +9,10 @@ import 'vant/lib/index.css';
 import '@/util/rem.js'
 
 // 全局组件
-import navBar from '@/components/navBar.vue'; // svg组件
+import navBar from '@/components/navBar.vue'; 
+import tabBar from '@/components/tabBar.vue'; // svg组件
 Vue.component('nav-bar', navBar);
+Vue.component('tab-bar', tabBar);
 
 Vue.use(Vant);
 Vue.config.productionTip = false

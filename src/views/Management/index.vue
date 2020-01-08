@@ -1,7 +1,7 @@
 <template>
   <!-- 管理中心 -->
   <div class="container">
-    <nav-bar></nav-bar>
+    <tab-bar></tab-bar>
     <van-row>
       <van-col :span="24">OA</van-col>
     </van-row>
