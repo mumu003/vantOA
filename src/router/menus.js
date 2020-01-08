@@ -7,8 +7,8 @@ export default [
       meta: {
         id: 0,
         name: '组织架构',
+        manageShow:false
       },
-      hidden: false,
     },
     {
       path: '/issue',
@@ -17,6 +17,7 @@ export default [
       meta: {
         id: 1,
         name: '发布通知',
+        manageShow:false
       },
     },
   ]

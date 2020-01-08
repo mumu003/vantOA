@@ -41,7 +41,8 @@ const routes = [
     path: '/manager',
     name: 'manager',
     meta:{
-      requireAuth:true
+      requireAuth:true,
+      manageShow:true
     },
     children:menusRoute,
     component:()=>import('@/views/Management/index.vue')
