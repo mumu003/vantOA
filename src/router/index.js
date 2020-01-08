@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import store from "../store/store";
 import * as types from '../store/types';
+import menusRoute from '@/router/menus';
 
 Vue.use(Router);
 
@@ -36,6 +37,14 @@ const routes = [
       requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
     },
     component: ()=>import('../views/login.vue')
+  },{
+    path: '/manager',
+    name: 'manager',
+    meta:{
+      requireAuth:true
+    },
+    children:menusRoute,
+    component:()=>import('@/views/Management/index.vue')
   },
 ];
 
@@ -48,19 +57,19 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to,from,next)=>{
-  if(to.matched.some( r => r.meta.requireAuth )){
-    if(store.state.token){
-      next();
-    }else{
-      next({
-        path:'/login',
-        query:{redirect:to.fullPath}
-      })
-    }
-  }else{
-    next();
-  }
-});
+// router.beforeEach((to,from,next)=>{
+//   if(to.matched.some( r => r.meta.requireAuth )){
+//     if(store.state.token){
+//       next();
+//     }else{
+//       next({
+//         path:'/login',
+//         query:{redirect:to.fullPath}
+//       })
+//     }
+//   }else{
+//     next();
+//   }
+// });
 export default router;
 

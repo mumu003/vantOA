@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../src/store/store';
 import * as types from '../src/store/types';
 import router from '../src/router/index';
+import { Toast } from 'vant';
 
 //axios配置
 let instance = axios.create({
@@ -13,7 +14,8 @@ let instance = axios.create({
 instance.interceptors.request.use(
   config => {
     if (store.state.token) {
-      config.headers.Authorization = `token ${store.state.token}`
+      config.headers.token = store.state.token
+      // config.headers.Authorization = `token ${store.state.token}`
     }
     return config;
   },
@@ -25,8 +27,10 @@ instance.interceptors.request.use(
 //http reponse拦截器
 instance.interceptors.response.use(
   response => {
-    if(response.data.code !== 0){
-      alert(response.data.errMsg);
+    if(response.data.code != 0){
+      // alert(response.data.errMsg);
+      console.log(response.data.msg)
+      Toast.fail(response.data.msg);
     }
     return response.data;  //只返回服务器返回的data信息
   },

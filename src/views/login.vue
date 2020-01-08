@@ -1,25 +1,30 @@
 <template>
   <div class="container">
-    <form class="login-form" novalidate @submit.stop.prevent="login">
-      <input type="text" v-model="user.loginName">
-      <input type="password" v-model="user.pwd">
-      <van-button type="info">登录</van-button>
-      <p class="aa">这是16px的字</p>
-    </form>
-    <van-cell-group>
-      <van-cell title="单元格" value="内容" ></van-cell>
-      <van-cell title="单元格" value="内容" label="描述信息" ></van-cell>
-    </van-cell-group>
-    <van-cell title="选择单个日期" :value="date" @click="show = true" ></van-cell>
-    <van-calendar v-model="show" @confirm="onConfirm" ></van-calendar>
+    <div id="top">
+      <p class="name">xxxxxx</p>
+      <p class="title">积分管理系统</p>
+    </div>
+    <div id="contain">
+        <van-cell-group>
+          <van-field value="请输入员工姓名" label="姓名" left-icon="contact" v-model="user.loginName" />
+          <van-field value="请输入员工密码" label="密码" left-icon="contact" v-model="user.pwd"  type="password"/>
+        </van-cell-group>
+        <van-checkbox v-model="remember">记住我</van-checkbox>
+        <div class="submit">
+          <van-button type="info" @click="login">登录</van-button>
+        </div>
+        <!-- <input type="text" >
+        <input type="password" >
+        <van-button type="info">登录</van-button>
+        <p class="aa">这是16px的字</p> -->
+    </div>
     
-
-    <button @click="download">点我下载</button>
+   
   </div>
 </template>
 
 <script>
-  import {login} from "../api/user";
+  import { login } from "../api/user";
   import * as types from '../store/types';
 
   export default {
@@ -30,47 +35,117 @@
           loginName: '',
           pwd: '',
         },
-        date: '',
-        show: false
+        remember:false,
       }
+    },
+    created(){
+      if(localStorage.getItem("user")){
+				this.remember = true;
+				this.user = JSON.parse(localStorage.getItem("user"));
+			}else{
+				this.remember = false;
+				this.user.loginName = ""
+				this.user.pwd = ""
+			}
     },
     mounted() {
       let token = this.$store.state.token;
       if(token){
         console.log('已有token，直接进入')
         this.$router.push({
-          path:'home',
+          path:'manager',
         })
       }
     },
     methods: {
-      formatDate(date) {
-      return `${date.getMonth() + 1}/${date.getDate()}`;
-    },
-    onConfirm(date) {
-      this.show = false;
-      this.date = this.formatDate(date);
-    },
-      async login() {
-        await login(this.user).then(
-          (res)=>{
-            if(res.code === 0){
-              this.$store.commit(types.LOGIN, res.data);
-              this.$router.push({
-                path:'home',
-              })
-            }
+      login() {
+        if(this.remember){
+				// 	// 记住密码
+					localStorage.setItem("user",JSON.stringify(this.user));
+				}else{
+					if(localStorage.getItem("user")){
+            localStorage.removeItem("user")
+					}
+				}
+        login(this.user).then(res => {
+          if(res.code === 0){
+            this.$store.commit(types.LOGIN, res.data.token);
+            this.$router.push({
+              path:'/organization',
+            })
+          }else{
+            this.$toast.fail(res.msg);
           }
-        )
-      },
-      download(){
-        window.location.href = 'http://qiniu.zgrworld.com/video/00516202001031016511853.mp4?attname='
+        })
       }
     },
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+$color-blur:#1989fa;
+$color-white:#fff;
+@mixin flex{
+  display: flex;
+  align-items: center;
+}
+@mixin ellipsis{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+
+.container{
+  #top{
+    height: 35vh;
+    min-height: 150px;
+    background: $color-blur;
+    color: $color-white;
+    text-align: center;
+    @include flex;
+    flex-direction: column;
+    justify-content: center;
+    p{
+      width: 100%;
+      margin: 5px 0;
+      font-size: 20px;
+      @include ellipsis;
+    }
+    .name{
+      font-size: 30px;
+    }
+  }
+  #contain{
+    .van-cell-group{
+      margin: 10px 0;
+      &::after{
+        content:unset;
+      }
+      .van-cell{
+        border-bottom: 1px solid #eee;
+        &::after{
+          content:unset;
+        }
+        .van-cell__title {
+          width: 40px;
+        }
+      }
+    }
+    .van-checkbox{
+      padding: 0.3125rem 0.5rem;
+      font-size: 14px;
+    }
+    .submit{
+      padding: 0.3125rem 0.5rem;
+      @include flex;
+      justify-content: center;
+      button{
+        width: 100%;
+      }
+    }
+  }
+}
   .login-form{
     .aa{
         font-size: 16px;
