@@ -19,6 +19,16 @@ export default [
         name: '发布通知',
         manageShow:false
       },
+    },{
+      path: '/task',
+      name: '发布任务',
+      component: () => import('@/views/Management/task.vue'),
+      meta: {
+        id: 2,
+        name: '发布任务',
+        manageShow:false
+      },
     },
+    
   ]
 

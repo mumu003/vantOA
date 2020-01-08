@@ -28,6 +28,8 @@
 
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+.van-nav-bar{
+  height: 45px !important;
+}
 </style>
