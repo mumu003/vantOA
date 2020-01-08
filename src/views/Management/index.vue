@@ -42,7 +42,7 @@ export default {
     }
   },
   mounted(){
-    console.log("123",menus)
+    // console.log("123",menus)
     // console.log(this.$router.options.routers )
   },
   methods:{

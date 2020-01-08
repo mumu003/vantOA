@@ -19,6 +19,15 @@ export default [
         name: '发布通知',
         manageShow:false
       },
+    },{
+      path: '/notice',
+      name: '通知公告',
+      component: () => import('@/views/Management/notice.vue'),
+      meta: {
+        id: 1,
+        name: '通知公告',
+        manageShow:false
+      },
     },
   ]
 

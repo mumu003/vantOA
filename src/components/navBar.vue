@@ -1,4 +1,5 @@
 <template>
+<!-- 头部导航 -->
   <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed'/>
 </template>
 
