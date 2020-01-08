@@ -18,8 +18,8 @@ export default new Vuex.Store({
   },
   mutations:{
     [types.LOGIN]: (state, data) => {
-      localStorage.token = data.token;
-      state.token = data.token;
+      localStorage.token = data;
+      state.token = data;
     },
     [types.LOGOUT]: (state) => {
       localStorage.removeItem('token');

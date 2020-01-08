@@ -1,0 +1,49 @@
+// 公共
+* {
+  font-family: -apple-system,PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Helvetica Neue,sans-serif;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  }
+  *, *:before, *:after {
+  box-sizing: border-box;
+  }
+  html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, form, label, input, legend, table, caption, tbody, tfoot, thead, tr, th, td, textarea, article, aside, audio, canvas, figure, footer, header, mark, menu, nav, section, time, video { margin: 0; padding: 0; }
+  h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
+  article, aside, dialog, figure, footer, header, hgroup, nav, section, blockquote { display: block; }
+  ul, ol { list-style: none; }
+  img { border: 0 none; vertical-align: top; }
+  blockquote, q { quotes: none; }
+  blockquote:before, blockquote:after, q:before, q:after { content: none; }
+  table { border-collapse: collapse; border-spacing: 0; }
+  strong, em, i { font-style: normal; font-weight: normal; }
+  ins { text-decoration: underline; }
+  del { text-decoration: line-through; }
+  mark { background: none; }
+  input::-ms-clear { display: none !important; }
+
+
+  $color-blur:#1989fa;
+  $color-white:#fff;
+  // 定位
+  @mixin flex{
+    display: flex;
+    align-items: center;
+  }
+  // 省略号
+  @mixin ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+
+// 文本域
+.van-cell{
+  font-size: 16px;
+  .van-field__word-limit{
+    font-size: 14px;
+  }
+}
+// 蓝色按钮
+.info-btn{
+  font-size: 16px;
+}

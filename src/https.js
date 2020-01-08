@@ -36,6 +36,7 @@ instance.interceptors.response.use(
   },
   error => {
     console.log("报错信息");
+    console.log(error)
     if (error.response) {
       switch (error.response.status) {
         case 401:

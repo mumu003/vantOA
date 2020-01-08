@@ -118,7 +118,7 @@ $color-white:#fff;
   }
   #contain{
     .van-cell-group{
-      margin: 10px 0;
+      // margin: 10px 0;
       &::after{
         content:unset;
       }

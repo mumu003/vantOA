@@ -1,4 +1,5 @@
 <template>
+<!-- 底部导航 -->
   <transition name="show">
     <nav v-if="isShow">
       <ul>
