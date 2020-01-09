@@ -31,20 +31,28 @@
     <div class="update-modal" v-if="showinput">
       <van-nav-bar :title="title2" left-arrow @click-left="showinput=false"  class="bluenav"/>
       <div> 
-        <van-cell-group>
-          <van-field v-model="activeitem.title" rows="1" autosize
-            label="公告标题" type="textarea" placeholder="请输入公告标题" />
-          <van-field v-model="activeitem.content" rows="3"
-            autosize label="留言" type="textarea" maxlength="50" placeholder="请输入公告内容" show-word-limit />
+        <van-field v-model="activeItem.text" clearable label="选择分类 &gt;" required placeholder="请选择分类" @click="typeShow = true" readonly="readonly"/>
+        <van-popup v-model="typeShow" position="bottom">
+          <van-picker show-toolbar :columns="typeColumns" @cancel="typeShow = false"  @confirm="onSelect2" />
+        </van-popup> 
+        <van-field label="积分" readonly required clickable v-model="activeItem.score" @touchstart.native.stop="scoreShow = true"  placeholder="请输入积分(负数代表扣分)"/>
+        <van-number-keyboard v-model="activeItem.score" :show="scoreShow" :maxlength="3" @blur="scoreShow = false" safe-area-inset-bottom  extra-key="-"/>
+        
+        <van-cell-group> 
+          <van-field v-model="activeItem.name" required clearable label="名称"
+            placeholder="请输入积分规则名称" @click-right-icon="$toast('question')" />
+          <van-field v-model="activeItem.remark" rows="3"  autosize label="内容" type="textarea" placeholder="请输入内容" />
+          <!-- <van-field v-model="activeItem.remark" clearable label="内容"
+            placeholder="请输入内容" @click-right-icon="$toast('question')" /> -->
         </van-cell-group>
-        <van-button type="info" class="info-btn" block @click="updatenotice">修改</van-button>
+        <van-button type="info" class="info-btn" block @click="updateRule">提交</van-button>
       </div>
     </div>
 
   </div>
 </template>
 <script>
-import { findByName,findAll,findByType } from "@/api/manager.js" ;
+import { findByName,findAll,findByType,updateRules } from "@/api/manager.js" ;
 export default {
   data(){
     return{
@@ -64,6 +72,14 @@ export default {
       limit:3,
       count:0,
       showinput:false,
+
+      // 修改
+      activeItem:"",
+      rulesType:0,
+      score:"",
+      scoreShow:false,
+      ruleContent:"",
+      ruleRemark:""
     }
   },
   mounted(){
@@ -132,13 +148,74 @@ export default {
     },
     // 修改规则
     showmodal(item){
-      this.activeitem = JSON.parse(JSON.stringify(item));
+      this.activeItem = JSON.parse(JSON.stringify(item));
+      this.activeItem.score = this.activeItem.score.toString();
+      var a =this.typeColumns.filter(item => {
+        return item["id"] == this.activeItem.rulesType
+      })
+      this.activeItem.text = a[0].text;
+      this.activeItem.rulesType = a[0].id;
       this.showinput = true;
-      if(item.id){
-        this.title2 = "修改规则"
+      if(this.activeItem.id){
+        this.title2 = "修改规则";
+        this.type2 = "";
+        this.typeId2 = "";
       }else{
-        this.title2 = "新增规则"
+        this.title2 = "新增规则";
       }
+    },
+    updateRule() {
+      if(!this.activeItem.name){
+        this.$toast("请输入规则名称");
+        return;
+      }else if(!(this.activeItem.score<0)){
+        // 分数大于0
+        if(this.activeItem.score.indexOf("-") != -1){
+          this.$toast("请输入正确格式的积分");
+          return;
+        }else if(this.activeItem.score > 100){
+          this.$toast("请输入100分以内的积分");
+          return;
+        }else{
+          this.submit();
+        }
+      }else{
+        this.submit();
+      }
+    },
+    async submit(){
+      var param = {
+        rulesType: this.activeItem.rulesType,
+        remark: this.activeItem.remark,
+        name: this.activeItem.name,
+        score: this.activeItem.score,
+        id: this.activeItem.id
+      };
+      await updateRules(param).then(res => {
+        if (res.code == 0) {
+          // console.log(res)
+          this.$toast.success({
+            message: "修改成功",
+            dduration: 1000
+          });
+          setTimeout(() => {
+            this.findName();
+            this.showinput = false;
+            this.type = "所有分类"
+            this.limit = 3;
+            this.count = 0;
+            this.loading = true;
+            this.finished = false;
+            this.list = []
+            this.onLoad()
+          }, 1500);
+        }
+      });
+    },
+    onSelect2(value, index){
+      this.typeShow = false;
+      this.activeItem.text = value.name;
+      this.activeItem.rulesType = value.id;
     },
     deletnotice(item) {
       this.$dialog.confirm({

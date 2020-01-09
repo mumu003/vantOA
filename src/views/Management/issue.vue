@@ -9,7 +9,7 @@
       <van-field class="field" v-model="form.content" rows="2" autosize label="内容" required
         type="textarea" maxlength="150" placeholder="请输入内容" show-word-limit />
     </van-cell-group>
-    <van-button type="info" class="info-btn" block @click="addnotice">发布公告</van-button>
+    <van-button type="info" class="info-btn" block @click="addnotice">发布</van-button>
   </div>
 </template>
 <script>
