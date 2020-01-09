@@ -41,5 +41,8 @@
       .van-nav-bar__title {
         color: #fff ;
       }
+      .van-icon{
+        color: #fff;
+      }
 }
 </style>

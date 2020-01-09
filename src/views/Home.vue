@@ -153,17 +153,16 @@
 
     .van-tabs__content {
       .chart {
-
         margin-bottom: 10px;
         display: flex;
         justify-content: center;
-        align-items: center
+        align-items: center;
       }
 
       .time-info {
         margin-top: 15px;
         color: #999;
-        font-size: 12px;
+        font-size: 14px;
       }
 
       .fraction-list {}
@@ -195,7 +194,6 @@
       }
     }
 
-
   }
 
 </style>
@@ -215,6 +213,10 @@
         margin: 0 20px;
       }
 
+      [class*=van-hairline]::after {
+        border: none;
+      }
+
       .van-tabs__wrap {
         padding: 0 80px;
       }
@@ -226,6 +228,10 @@
       .van-tabs__line {
         background: #1989fa;
       }
+    }
+
+    .van-circle__text {
+      font-size: 18px;
     }
 
   }

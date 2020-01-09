@@ -46,6 +46,15 @@ export default [
         name: '发布任务',
         manageShow:false
       },
+    },{
+      path: '/pointEntry',
+      name: '积分录入',
+      component: () => import('@/views/Management/pointEntry.vue'),
+      meta: {
+        id: 5,
+        name: '积分录入',
+        manageShow:false
+      },
     },
     
   ]
