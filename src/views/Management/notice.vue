@@ -1,6 +1,7 @@
 <template>
-  <div class="page">
-    <van-nav-bar title="通知公告" left-text="返回" left-arrow @click-left="onClickLeft" class="bluenav" />
+  <div class="page main-cnt">
+    <nav-bar :title='title1' :isLeftArrow='isLeftArrow' ></nav-bar>
+    <!-- <van-nav-bar title="通知公告" left-text="返回" left-arrow @click-left="onClickLeft" class="bluenav" /> -->
     <van-notice-bar text="公告内容" left-icon="volume-o" color="#1989fa" background="#ecf9ff" />
     
     <div class="notices" v-if="!showinput">
@@ -29,11 +30,7 @@
       </van-list>
     </div>
 
-
-    <!-- <div class="notices" v-if="!showinput">
-      
-    </div> -->
-    <div class="modal" v-if="showinput">
+    <div class="update-modal" v-if="showinput">
       <van-nav-bar title="修改公告" left-arrow @click-left="showinput=false"  class="bluenav"/>
       <div>
         <van-cell-group>
@@ -53,8 +50,11 @@ import { formdatatime } from "@/util/base";
 export default {
   data: function() {
     return {
+      title1:"通知公告",
+      title2:"修改公告",
+      isLeftArrow:true,
       showinput: false,
-      noticelist: [],
+      noticeList: [],
       activeitem: "",
 
       list: [],
@@ -62,7 +62,6 @@ export default {
       finished: false,
       limit:3,
       count:0,
-      start:0,
     };
   },
   created() {
@@ -72,17 +71,17 @@ export default {
     onLoad() {
       console.log("list---",this.list)
       this.count += 1;
-      this.list = this.noticelist.slice(0,this.limit * this.count)
+      this.list = this.noticeList.slice(0,this.limit * this.count)
       // console.log(this.limit * this.count)
-      if(this.limit * this.count > this.noticelist.length){
+      if(this.limit * this.count > this.noticeList.length){
         // console.log("到底了")
-        this.list = this.noticelist.slice(0,this.noticelist.length)
+        this.list = this.noticeList.slice(0,this.noticeList.length)
       }
       // 异步更新数据
       setTimeout(() => {
         this.loading = false;
         // 数据全部加载完成
-        if (this.list.length == this.noticelist.length) {
+        if (this.list.length == this.noticeList.length) {
           this.finished = true;
         }
       }, 1000);
@@ -96,8 +95,8 @@ export default {
       
       await findnotice().then(res => {
         if (res.code == 0) {
-          this.noticelist = res.data;
-          this.list = this.noticelist.slice(0,3)
+          this.noticeList = res.data;
+          this.list = this.noticeList.slice(0,3)
         }
       });
     },
@@ -113,18 +112,25 @@ export default {
       };
       await updatenotice(param).then(res => {
         if (res.code == 0) {
-          this.$toast({
+          this.$toast.success({
             message: "修改成功",
             dduration: 1000
           });
           setTimeout(() => {
             this.getnotices();
             this.showinput = false;
+            
+            this.limit = 3;
+            this.count = 0;
+            this.loading = true;
+            this.finished = false;
+            this.list = []
+            this.onLoad()
           }, 1500);
         }
       });
     },
-     deletnotice(item) {
+    deletnotice(item) {
       this.$dialog.confirm({
         title: "删除",
         message: "确定要删除吗？此操作仅限管理员使用。所有相关文件和相关数据将被删除。 相关统计结果和历史图表将失效。 这将影响系统的数据关系和智能判断。 重要的历史报告可能有错误。 相关功能将失效。"
@@ -135,19 +141,28 @@ export default {
         .catch(() => {
           // on cancel
         });
-     
     },
     async godelete(item){
-         await deletenotice({id:item.id}).then(res=>{
-          if(res.code==0){
+      await deletenotice({id:item.id}).then(res=>{
+        if(res.code==0){
              this.$toast({
               message:'删除成功',
               dduration:1000
           })
+          
+
+
           setTimeout(()=>{
-              this.getnotices();
+            
+            this.getnotices();
+            this.limit = 3;
+            this.count = 0;
+            this.loading = true;
+            this.finished = false;
+            this.list = []
+            this.onLoad()
           },800)
-          }
+        }
       })
     }
   },
@@ -173,8 +188,8 @@ export default {
       font-size: 0.675rem /* 14/16 */;
       background-color: #fff;
       border-radius: 4px;
-      box-shadow: 2px 2px 5px#888;
-      margin: 10px;
+      box-shadow: 0 2px 5px#ccc;
+      margin: 15px 10px;
     }
     // p {
     //   font-size: 16px;
@@ -223,7 +238,7 @@ export default {
       justify-content: flex-end;
       .time{
         font-size: 14px;
-        color: #555;
+        color: #999;
       }
     }
   }
@@ -234,7 +249,7 @@ export default {
 //   right: 0.2rem;
 //   top: calc((100% - 0.4rem) / 2);
 // }
-.modal {
+.update-modal {
   position: absolute;
   background-color: #f6f6f6;
   width: 100%;
@@ -244,7 +259,7 @@ export default {
   z-index: 10;
 }
 .van-button {
-  margin-top: 0.6rem;
+  // margin-top: 0.6rem;
 }
 .van-dialog{
     transform: unset;

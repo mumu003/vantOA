@@ -35,10 +35,29 @@
     white-space: nowrap;
   }
 
-
+// 顶部
+.main-cnt {
+  padding-top: 45px;
+}
+// 搜索框
+.van-search__action{
+  font-size: 16px;
+}
 // 文本域
 .van-cell{
   font-size: 16px;
+  &::after{
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 0.5rem;
+    border-bottom: 0.03125rem solid #ebedf0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+  }
   .van-field__word-limit{
     font-size: 14px;
   }
@@ -46,4 +65,14 @@
 // 蓝色按钮
 .info-btn{
   font-size: 16px;
+}
+// 新增 / 编辑容器
+.update-modal {
+  position: absolute;
+  background-color: #f6f6f6;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }

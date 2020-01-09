@@ -123,10 +123,10 @@ $color-white:#fff;
         content:unset;
       }
       .van-cell{
-        border-bottom: 1px solid #eee;
-        &::after{
-          content:unset;
-        }
+        // border-bottom: 1px solid #eee;
+        // &::after{
+        //   content:unset;
+        // }
         .van-cell__title {
           width: 40px;
         }

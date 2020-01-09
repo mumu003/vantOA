@@ -40,10 +40,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .main-cnt {
-    padding-top: 45px;
-  }
-
   .main-box {
     margin-left: 15px;
     margin-right: 15px;

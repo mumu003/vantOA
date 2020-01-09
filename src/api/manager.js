@@ -12,3 +12,11 @@ export const deletenotice = params=>req('delete','/notice/delete',params)
 // 发布公告
 export const addnotice = params=>req('post','/notice/add',params)
 
+// 积分规则列表(规则名称可选)
+export const findByName = params=>req('get','/rules/findByName',params)
+
+// 积分规则列表(根据规则类型)
+export const findByType = params=>req('get','/rules/findByType',params)
+
+// 获取规则类型
+export const findAll = params=>req('get','/rulesType/findAll',params)

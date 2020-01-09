@@ -1,6 +1,6 @@
 <template>
 <!-- 头部导航 -->
-  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed'/>
+  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed' @click-left="onClickLeft"/>
 </template>
 
 <script>
@@ -23,6 +23,11 @@
     data() {
       return {
 
+      }
+    },
+    methods:{
+      onClickLeft(){
+        this.$router.go(-1);
       }
     }
   }
