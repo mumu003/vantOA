@@ -18,5 +18,10 @@ export const findByName = params=>req('get','/rules/findByName',params)
 // 积分规则列表(根据规则类型)
 export const findByType = params=>req('get','/rules/findByType',params)
 
+// 修改规则
+export const updateRules = params=>req('put','/rules/update ',params)
+
+
+
 // 获取规则类型
 export const findAll = params=>req('get','/rulesType/findAll',params)
