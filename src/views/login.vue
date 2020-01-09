@@ -71,7 +71,7 @@
           if(res.code === 0){
             this.$store.commit(types.LOGIN, res.data.token);
             this.$router.push({
-              path:'/organization',
+              path:'/manager',
             })
           }else{
             this.$toast.fail(res.msg);
@@ -118,7 +118,7 @@ $color-white:#fff;
   }
   #contain{
     .van-cell-group{
-      margin: 10px 0;
+      // margin: 10px 0;
       &::after{
         content:unset;
       }

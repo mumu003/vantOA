@@ -41,11 +41,19 @@ const routes = [
     path: '/manager',
     name: 'manager',
     meta:{
-      requireAuth:true
+      requireAuth:true,
+      manageShow:true
     },
     children:menusRoute,
     component:()=>import('@/views/Management/index.vue')
-  },
+  },{
+    path: '/mine',
+    name: 'mine',
+    meta:{
+      requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
+    },
+    component: ()=>import('../views/User/index.vue')
+  }
 ];
 
 //页面刷新是，重新赋值token
