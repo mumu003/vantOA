@@ -17,9 +17,7 @@
         </div>
         <van-tabs v-model="activeTab" color="#1989fa" class="main-box">
           <van-tab title="选择部门" name="dept">
-            <van-field readonly clickable label="城市" :value="value" placeholder="选择城市" @click="showPicker = true" />
-            <van-picker show-toolbar :columns="columns" @cancel="showPicker = false" @confirm="onConfirm1"
-              @change="onChange" />
+            
           </van-tab>
           <van-tab title="选择人员" name="men">
 
@@ -31,10 +29,6 @@
   </div>
 </template>
 <script>
-  const citys = {
-    '浙江': ['杭州', '宁波', '温州', '嘉兴', '湖州'],
-    '福建': ['福州', '厦门', '莆田', '三明', '泉州']
-  };
   export default {
     name: 'ReleaseTask',
     data() {
@@ -53,16 +47,7 @@
         activeTab: 'dept',
         value: '',
         showPicker: false,
-        columns: [{
-            values: Object.keys(citys),
-            className: 'column1'
-          },
-          {
-            values: citys['浙江'],
-            className: 'column2',
-            defaultIndex: 2
-          }
-        ],
+      
       }
     },
     methods: {
@@ -77,13 +62,7 @@
       toSelect() {
 
       },
-      onConfirm1(value) {
-        this.value = value[0] + '-' + value[1];
-        this.showPicker = false;
-      },
-      onChange(picker, values) {
-        picker.setColumnValues(1, citys[values[0]]);
-      }
+      
     }
   }
 
