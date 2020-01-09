@@ -1,6 +1,6 @@
 <template>
 <!-- 头部导航 -->
-  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed' @click-left="onClickLeft"/>
+  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed' @click-left="onClickLeft" class="oa-nav"/>
 </template>
 
 <script>
@@ -35,7 +35,11 @@
 </script>
 
 <style lang="scss" scoped>
-.van-nav-bar{
-  height: 45px !important;
+.oa-nav{
+  height: 45px;
+  background: #1989fa;
+      .van-nav-bar__title {
+        color: #fff ;
+      }
 }
 </style>

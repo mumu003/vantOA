@@ -198,26 +198,10 @@
 
   }
 
-  .main-cnt {
-    padding-top: 45px;
-  }
-
-  .main-box {
-    margin-left: 15px;
-    margin-right: 15px;
-  }
-
 </style>
 
 <style lang="scss">
   .home {
-    .van-nav-bar {
-      background: #1989fa;
-
-      .van-nav-bar__title {
-        color: #fff !important;
-      }
-    }
 
     .van-image {
       width: 60px;

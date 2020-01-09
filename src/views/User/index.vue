@@ -135,10 +135,6 @@
     }
   }
 
-  .main-cnt {
-    padding-top: 45px;
-  }
-
 </style>
 <style lang="scss">
   .mine {
