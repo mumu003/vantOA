@@ -29,7 +29,7 @@
 
     <!-- 添加 / 修改 -->
     <div class="update-modal" v-if="showinput">
-      <van-nav-bar title="添加规则" left-arrow @click-left="showinput=false"  class="bluenav"/>
+      <van-nav-bar :title="title2" left-arrow @click-left="showinput=false"  class="bluenav"/>
       <div> 
         <van-cell-group>
           <van-field v-model="activeitem.title" rows="1" autosize
@@ -49,6 +49,7 @@ export default {
   data(){
     return{
       title:"积分规则",
+      title2:"",
       isLeftArrow:true,
       name:"",
       type:"所有分类",
@@ -133,6 +134,11 @@ export default {
     showmodal(item){
       this.activeitem = JSON.parse(JSON.stringify(item));
       this.showinput = true;
+      if(item.id){
+        this.title2 = "修改规则"
+      }else{
+        this.title2 = "新增规则"
+      }
     },
     deletnotice(item) {
       this.$dialog.confirm({
