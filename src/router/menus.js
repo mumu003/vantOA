@@ -8,8 +8,9 @@ export default [
         id: 0,
         type:1,
         name: '组织架构',
+        manageShow:false,
+        requireAuth:true,
         img:'img0',
-        manageShow:false
       },
     },
     {
@@ -20,8 +21,9 @@ export default [
         id: 1,
         type:1,
         name: '发布公告',
+        manageShow:false,
+        requireAuth:true,
         img:'img1',
-        manageShow:false
       },
     },{
       path: '/notice',
@@ -31,8 +33,9 @@ export default [
         id: 2,
         type:1,
         name: '通知公告',
+        manageShow:false,
+        requireAuth:true,
         img:'img2',
-        manageShow:false
       },
     },{
       path: '/pointRule',
@@ -42,8 +45,9 @@ export default [
         id: 3,
         type:1,
         name: '积分规则',
+        manageShow:false,
+        requireAuth:true,
         img:'img3',
-        manageShow:false
       },
     },{
       path: '/task',
@@ -53,8 +57,9 @@ export default [
         id: 4,
         type:1,
         name: '发布任务',
+        manageShow:false,
+        requireAuth:true,
         img:'img4',
-        manageShow:false
       },
     },{
       path: '/pointEntry',
@@ -65,6 +70,7 @@ export default [
         type:2,
         name: '积分录入',
         img:'img7',
+        requireAuth:true,
         manageShow:false
       },
     },

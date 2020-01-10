@@ -57,27 +57,33 @@ const routes = [
 ];
 
 //页面刷新是，重新赋值token
-if(window.localStorage.getItem('token')){
-  store.commit(types.LOGIN,window.localStorage.getItem('token'));
+if(window.localStorage.getItem('login')){
+  console.log("页面刷新",JSON.parse(localStorage.getItem('login')).value)
+  var data = {
+    value: JSON.parse(localStorage.getItem('login')).value,
+    time: new Date().getTime(),
+  }
+  localStorage.setItem("login",JSON.stringify(data))
+  // store.commit(types.LOGIN,data);
 }
 
 const router = new VueRouter({
   routes
 });
 
-// router.beforeEach((to,from,next)=>{
-//   if(to.matched.some( r => r.meta.requireAuth )){
-//     if(store.state.token){
-//       next();
-//     }else{
-//       next({
-//         path:'/login',
-//         query:{redirect:to.fullPath}
-//       })
-//     }
-//   }else{
-//     next();
-//   }
-// });
+router.beforeEach((to,from,next)=>{
+  if(to.matched.some( r => r.meta.requireAuth )){
+    if(localStorage.getItem("login")){
+      next();
+    }else{
+      next({
+        path:'/login',
+        query:{redirect:to.fullPath}
+      })
+    }
+  }else{
+    next();
+  }
+});
 export default router;
 

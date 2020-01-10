@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios';
 import store from '../src/store/store';
 import * as types from '../src/store/types';
@@ -10,13 +11,51 @@ let instance = axios.create({
   baseURL:"http://www.middle888.top:8081"
 });
 
+
+// 封装token过期控制
+export const setStorage = (key,val) => {
+  var cunrTime = new Date().getTime();
+  localStorage.setItem(key,JSON.stringify({value:val , time:cunrTime}))
+}
+export const getStorage = (key,expire,isReset) => {
+  var data = localStorage.getItem(key);
+  if(!data) return false;
+  data = JSON.parse(data);
+  if(expire && (new Date().getTime() - data.time > expire)){
+    console.log("过期")
+    // 过期
+    localStorage.removeItem(key);
+    return false;
+  }
+  if(isReset){
+    setStorage(key,data.value);
+  }
+  // console.log("进来啊",data.value)
+  return data.value;
+}
+
 //http request 拦截器
-instance.interceptors.request.use(
-  config => {
-    if (store.state.token) {
-      config.headers.token = store.state.token
-      // config.headers.Authorization = `token ${store.state.token}`
+instance.interceptors.request.use(config => {
+  let token = getStorage('login',1000*60*60*24,true);//获取token并重置有效期为24个小时
+  // console.log(token);  
+  if (token) {
+    config.headers.token = token
+    // config.headers.Authorization = `token ${store.state.token}`
+  }else {
+    localStorage.removeItem("login");  //清空缓存
+    if (router.currentRoute.name && router.currentRoute.name.toLowerCase() == "login") {  
+      //这里需要排除登陆(或第一次请求获取token)的时候的验证
+    } else {
+      //我的后台api接口，并没有对login接口做token验证，所以这里直接返回下面else方法
+      //但是其他需要token验证的方法，会走这里并返回null
+      Toast.fail("登录超时,请重新登录")
+      router.replace({
+        path: 'login',
+        query: {redirect: router.currentRoute.path},
+      });
+         return null;
     }
+ }
     return config;
   },
   error => {
@@ -25,18 +64,16 @@ instance.interceptors.request.use(
 );
 
 //http reponse拦截器
-instance.interceptors.response.use(
-  response => {
+instance.interceptors.response.use(response => {
     if(response.data.code != 0){
       // alert(response.data.errMsg);
-      console.log(response.data.msg)
+      console.log("返回信息:",response.data.msg)
       Toast.fail(response.data.msg);
     }
     return response.data;  //只返回服务器返回的data信息
   },
   error => {
-    console.log("报错信息");
-    console.log(error)
+    console.log("报错信息:",error);
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -46,12 +83,13 @@ instance.interceptors.response.use(
             path: 'login',
             query: {redirect: router.currentRoute.path},
           });
+          console.log("401",error.response.data);
           break;
         case 404:
-          console.log(error.response.data);
+          console.log("404",error.response.data);
           break;
         case 500:
-          console.log(error.response.data);
+          console.log("500",error.response.data);
           break;
       }
     }
@@ -81,3 +119,6 @@ export default function(method, url, data = null)
     return false;
   }
 }
+
+Vue.prototype.setStorage=setStorage;
+Vue.prototype.getStorage=getStorage;
