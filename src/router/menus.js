@@ -7,7 +7,8 @@ export default [
       meta: {
         id: 0,
         name: '组织架构',
-        manageShow:false
+        manageShow:false,
+        requireAuth:true
       },
     },
     {
@@ -17,7 +18,8 @@ export default [
       meta: {
         id: 1,
         name: '发布公告',
-        manageShow:false
+        manageShow:false,
+        requireAuth:true
       },
     },{
       path: '/notice',
@@ -26,7 +28,8 @@ export default [
       meta: {
         id: 2,
         name: '通知公告',
-        manageShow:false
+        manageShow:false,
+        requireAuth:true
       },
     },{
       path: '/pointRule',
@@ -35,7 +38,8 @@ export default [
       meta: {
         id: 3,
         name: '积分规则',
-        manageShow:false
+        manageShow:false,
+        requireAuth:true
       },
     },{
       path: '/task',
@@ -44,7 +48,8 @@ export default [
       meta: {
         id: 4,
         name: '发布任务',
-        manageShow:false
+        manageShow:false,
+        requireAuth:true
       },
     },
     

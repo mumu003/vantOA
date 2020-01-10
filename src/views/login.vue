@@ -49,13 +49,17 @@
 			}
     },
     mounted() {
-      let token = this.$store.state.token;
-      if(token){
-        console.log('已有token，直接进入')
-        this.$router.push({
-          path:'manager',
-        })
-      }
+      /**
+       * tls 1.10
+       * 取消自动登录
+       */
+      // let token = this.$store.state.token;
+      // if(token){
+      //   console.log('已有token，直接进入')
+      //   this.$router.push({
+      //     path:'manager',
+      //   })
+      // }
     },
     methods: {
       login() {
@@ -69,7 +73,14 @@
 				}
         login(this.user).then(res => {
           if(res.code === 0){
-            this.$store.commit(types.LOGIN, res.data.token);
+            /**
+             * tls 1.10 
+             * 登录成功时添加当前时间
+             * 获取token并重置有效期为24个小时
+             */
+            this.setStorage("login",res.data.token);
+            this.getStorage("login",1000*60*60*24,true);
+            // this.$store.commit(types.LOGIN, data);
             this.$router.push({
               path:'/manager',
             })
