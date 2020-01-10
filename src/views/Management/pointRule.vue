@@ -14,7 +14,7 @@
         <div class="ruleList" v-for="(item,index) in list" :key="item+index" >
           <div class="row first">
             <p class="type">名称：<span>{{item.name}}</span></p>
-            <van-icon name="cross" size="0.4rem" @click.stop="deletnotice(item)" />
+            <van-icon name="cross" size="0.4rem" @click.stop="deleteRules(item)" />
           </div>
           <div class="row second">
             <p class="mark">内容：<span>{{item.remark}}</span></p>          
@@ -42,8 +42,6 @@
           <van-field v-model="activeItem.name" required clearable label="名称"
             placeholder="请输入积分规则名称" @click-right-icon="$toast('question')" />
           <van-field v-model="activeItem.remark" rows="3"  autosize label="内容" type="textarea" placeholder="请输入内容" />
-          <!-- <van-field v-model="activeItem.remark" clearable label="内容"
-            placeholder="请输入内容" @click-right-icon="$toast('question')" /> -->
         </van-cell-group>
         <van-button type="info" class="info-btn" block @click="updateRule">提交</van-button>
       </div>
@@ -52,7 +50,7 @@
   </div>
 </template>
 <script>
-import { findByName,findAll,findByType,updateRules } from "@/api/manager.js" ;
+import { findByName,findAll,findByType,updateRules,deleteRules } from "@/api/manager.js" ;
 export default {
   data(){
     return{
@@ -164,6 +162,7 @@ export default {
         this.title2 = "新增规则";
       }
     },
+    // 表单校验
     updateRule() {
       if(!this.activeItem.name){
         this.$toast("请输入规则名称");
@@ -183,6 +182,7 @@ export default {
         this.submit();
       }
     },
+    // 提交
     async submit(){
       var param = {
         rulesType: this.activeItem.rulesType,
@@ -196,7 +196,7 @@ export default {
           // console.log(res)
           this.$toast.success({
             message: "修改成功",
-            dduration: 1000
+            duration: 1000
           });
           setTimeout(() => {
             this.findName();
@@ -217,15 +217,35 @@ export default {
       this.activeItem.text = value.name;
       this.activeItem.rulesType = value.id;
     },
-    deletnotice(item) {
+    deleteRules(item) {
       this.$dialog.confirm({
         title: "删除",
-        message: "确定要删除吗？此操作仅限管理员使用。所有相关文件和相关数据将被删除。 相关统计结果和历史图表将失效。 这将影响系统的数据关系和智能判断。 重要的历史报告可能有错误。 相关功能将失效。"
+        message: "确定要删除吗？"
       }).then(() => {
-         this.godelete(item);
+         this.goDelete(item);
       }).catch(() => {
           // on cancel
       });
+    },
+    async goDelete(item){
+      await deleteRules({id:item.id}).then(res=>{
+        if(res.code==0){
+             this.$toast({
+              message:'删除成功',
+              duration:1000
+          })
+          setTimeout(()=>{
+            
+            this.findName();
+            this.limit = 3;
+            this.count = 0;
+            this.loading = true;
+            this.finished = false;
+            this.list = []
+            this.onLoad()
+          },800)
+        }
+      })
     },
   }
 }
@@ -239,8 +259,9 @@ export default {
   -webkit-box-orient: vertical;
 }
 .pointRule{
+  background-color: #f6f6f6;
   .van-list{
-    height: calc(100vh - 190px);
+    height: calc(100vh - 145px);
     overflow-y: scroll;
     .ruleList {
       font-size: 0.675rem /* 14/16 */;

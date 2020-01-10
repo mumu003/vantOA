@@ -5,8 +5,7 @@
     <div v-if="$route.meta.manageShow" class="main-cnt">
       <van-row class="oa-cnt">
         <div class="m-type">OA</div>
-        <van-col class="content-item" span="6" v-for="(item,index) in menus" :key="index" @click="switchMenu(item)"
-          v-if="item.meta.type==1">
+        <van-col class="content-item" span="6" v-for="(item,index) in menuList(1)" :key="index" @click="switchMenu(item)">
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
@@ -16,8 +15,7 @@
       </van-row>
       <van-row class="jx-cnt">
         <div class="m-type">绩效相关</div>
-        <van-col class="content-item" span="6" v-for="(item,index) in menus" :key="index" @click="switchMenu(item)"
-          v-if="item.meta.type==2">
+        <van-col class="content-item" span="6" v-for="(item,index) in menuList(2)" :key="index" @click="switchMenu(item)">
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
@@ -26,7 +24,7 @@
         </van-col>
       </van-row>
     </div>
-
+    <tab-bar></tab-bar>
     <router-view></router-view>
   </div>
 </template>
@@ -50,6 +48,17 @@
           routes = routes.children.find((e) => (e.name == route[i].name));
         }
         return routes.children
+      },
+      menuList() {
+        return (type) => {
+          let newData = []
+          this.menus.forEach(item => {
+            if(item.meta.type == type) {
+             newData.push(item)
+            }
+          });
+          return newData
+        }
       }
     },
     mounted() {
