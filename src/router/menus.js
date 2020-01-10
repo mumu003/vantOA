@@ -6,9 +6,11 @@ export default [
       component: () => import('@/views/Management/organization.vue'),
       meta: {
         id: 0,
+        type:1,
         name: '组织架构',
         manageShow:false,
-        requireAuth:true
+        requireAuth:true,
+        img:'img0',
       },
     },
     {
@@ -17,9 +19,11 @@ export default [
       component: () => import('@/views/Management/issue.vue'),
       meta: {
         id: 1,
+        type:1,
         name: '发布公告',
         manageShow:false,
-        requireAuth:true
+        requireAuth:true,
+        img:'img1',
       },
     },{
       path: '/notice',
@@ -27,9 +31,11 @@ export default [
       component: () => import('@/views/Management/notice.vue'),
       meta: {
         id: 2,
+        type:1,
         name: '通知公告',
         manageShow:false,
-        requireAuth:true
+        requireAuth:true,
+        img:'img2',
       },
     },{
       path: '/pointRule',
@@ -37,9 +43,11 @@ export default [
       component: () => import('@/views/Management/pointRule.vue'),
       meta: {
         id: 3,
+        type:1,
         name: '积分规则',
         manageShow:false,
-        requireAuth:true
+        requireAuth:true,
+        img:'img3',
       },
     },{
       path: '/task',
@@ -47,9 +55,23 @@ export default [
       component: () => import('@/views/Management/task.vue'),
       meta: {
         id: 4,
+        type:1,
         name: '发布任务',
         manageShow:false,
-        requireAuth:true
+        requireAuth:true,
+        img:'img4',
+      },
+    },{
+      path: '/pointEntry',
+      name: '积分录入',
+      component: () => import('@/views/Management/pointEntry.vue'),
+      meta: {
+        id: 5,
+        type:2,
+        name: '积分录入',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false
       },
     },
     
