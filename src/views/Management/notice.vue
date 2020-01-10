@@ -1,5 +1,5 @@
 <template>
-  <div class="page main-cnt">
+  <div class="noticePage main-cnt">
     <nav-bar :title='title1' :isLeftArrow='isLeftArrow' ></nav-bar>
     <!-- <van-nav-bar title="通知公告" left-text="返回" left-arrow @click-left="onClickLeft" class="bluenav" /> -->
     <van-notice-bar text="公告内容" left-icon="volume-o" color="#1989fa" background="#ecf9ff" />
@@ -18,14 +18,6 @@
           <div class="row last">
             <p class="time">发布时间：<span>{{item.createTime | formtime}}</span></p>
           </div>
-          
-          <!-- <h2> {{item.title}}
-            <van-icon name="cross" size="0.4rem" @click.stop="deletnotice(item)" />
-          </h2>
-          <h4>{{item.content}}</h4>
-          <p> 发布时间:
-            <span>{{item.createTime | formtime}}</span>
-          </p> -->
         </div>
       </van-list>
     </div>
@@ -114,7 +106,7 @@ export default {
         if (res.code == 0) {
           this.$toast.success({
             message: "修改成功",
-            dduration: 1000
+            duration: 1000
           });
           setTimeout(() => {
             this.getnotices();
@@ -147,7 +139,7 @@ export default {
         if(res.code==0){
              this.$toast({
               message:'删除成功',
-              dduration:1000
+              duration:1000
           })
           
 
@@ -174,7 +166,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.page {
+.noticePage {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -182,7 +174,7 @@ export default {
 }
 .notices {
   .van-list{
-    height: calc(100vh - 130px);
+    height: calc(100vh - 95px);
     overflow-y: scroll;
     .notice {
       font-size: 0.675rem /* 14/16 */;
@@ -191,17 +183,6 @@ export default {
       box-shadow: 0 2px 5px#ccc;
       margin: 15px 10px;
     }
-    // p {
-    //   font-size: 16px;
-    //   text-align: right;
-    //   margin: 0.25rem 0rem;
-    //   span {
-    //     color: #ccc;
-    //     margin-left: 0.1rem;
-    //   }
-    // }
-
-
     .row{
       display: flex;
       align-items: center;
@@ -242,13 +223,7 @@ export default {
       }
     }
   }
-  
 }
-// .van-icon-cross {
-//   position: absolute;
-//   right: 0.2rem;
-//   top: calc((100% - 0.4rem) / 2);
-// }
 .update-modal {
   position: absolute;
   background-color: #f6f6f6;
@@ -257,9 +232,6 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
-}
-.van-button {
-  // margin-top: 0.6rem;
 }
 .van-dialog{
     transform: unset;
