@@ -7,6 +7,7 @@ import store from './store/store';
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import '@/util/rem.js'
+import $ from "jquery"
 
 // 全局组件
 import navBar from '@/components/navBar.vue'; 
