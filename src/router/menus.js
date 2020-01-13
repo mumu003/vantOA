@@ -73,7 +73,19 @@ export default [
         requireAuth:true,
         manageShow:false
       },
-    },
+    },{
+      path: '/integral',
+      name: '积分申请',
+      component: () => import('@/views/Management/integral.vue'),
+      meta: {
+        id: 5,
+        type:2,
+        name: '积分申请',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false
+      },
+    }
     
   ]
 
