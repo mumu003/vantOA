@@ -2,14 +2,18 @@
   <div class="approval-page main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
     <van-search placeholder="请输入搜索关键词" shape="round" v-model="keyWord" />
+    <div class="batch-head" v-show="isBatch">
+      <van-checkbox v-model="isAll">全选</van-checkbox>
+      <span class="cancle">取消</span>
+    </div>
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
-        <van-checkbox-group v-model="result" ref="checkboxGroup" class="appli-list main-box">  
-          <van-checkbox name="a" >
+        <van-checkbox-group v-model="result" ref="checkboxGroup" class="appli-list main-box">
+          <van-checkbox name="a">
             <div class="appli-item">
               <div class="appli-head ">
                 <span class="name">籍影博提交积分申请</span>
-                <van-icon name="ellipsis" @click.stop="isBatch=!isBatch" />
+                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" />
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title ">规则：</span>
@@ -34,16 +38,74 @@
             </div>
           </van-checkbox>
         </van-checkbox-group>
-        <van-popup v-model="isBatch" position="bottom" :style="{ height: '20%' }">
+        <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
           <div class="main-box">
             <div class="more-operat" @click="batch">批量操作</div>
-            <div class="more-operat" @click="isBatch=!isBatch">取消</div>
+            <div class="more-operat" @click="batchShow=!batchShow">取消</div>
           </div>
-
         </van-popup>
       </van-tab>
-      <van-tab title="已通过">内容 2</van-tab>
-      <van-tab title="未通过">内容 3</van-tab>
+      <van-tab title="已通过">
+        <div class="appli-list main-box">
+          <div class="appli-item">
+            <div class="appli-head ">
+              <span class="name">籍影博提交积分申请</span>
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title ">规则：</span>
+              <span class="appli-cnt-info">显示申请积分时候所选的积分规则文字</span>
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title">申请理由：</span>
+              <span class="appli-cnt-info">显示申请积分时候所选的申请理由文字</span>
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title">申请积分：</span>
+              <span class="appli-cnt-info">+20分</span>
+            </div>
+            <div class="appli-footer">
+              <span class="time">2020-01-10</span>
+              <div class="state">
+                <span class="passed">已通过</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </van-tab>
+      <van-tab title="未通过">
+        <div class="appli-list main-box">
+          <div class="appli-item">
+            <div class="appli-head ">
+              <span class="name">籍影博提交积分申请</span>
+              <van-icon name="ellipsis" @click.stop="updateShow=!updateShow" />
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title ">规则：</span>
+              <span class="appli-cnt-info">显示申请积分时候所选的积分规则文字</span>
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title">申请理由：</span>
+              <span class="appli-cnt-info">显示申请积分时候所选的申请理由文字</span>
+            </div>
+            <div class="appli-cnt">
+              <span class="appli-cnt-title">申请积分：</span>
+              <span class="appli-cnt-info">+20分</span>
+            </div>
+            <div class="appli-footer">
+              <span class="time">2020-01-10</span>
+              <div class="state">
+                <span class="rejected">已拒绝</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <van-popup v-model="updateShow" position="bottom" :style="{ height: '20%' }">
+          <div class="main-box">
+            <div class="more-operat" @click="update">更改为同意</div>
+            <div class="more-operat" @click="updateShow=!updateShow">取消</div>
+          </div>
+        </van-popup>
+      </van-tab>
     </van-tabs>
 
     <tab-bar></tab-bar>
@@ -60,15 +122,21 @@
         keyWord: '',
         activeTab: 0,
         isBatch: false,
-        result: []
+        batchShow: false,
+        result: [],
+        isAll: false,
+        updateShow: false
       }
     },
-    methods:{
-        batch(){
-            document.querySelector('.van-checkbox__icon').style.display="block"
-            document.querySelector('.van-checkbox__label').style.marginLeft="8px"
-        }
-        
+    methods: {
+      batch() {
+        document.querySelector('.van-tabs__content .van-checkbox__icon').style.display = "block"
+        document.querySelector('.van-tabs__content .van-checkbox__label').style.marginLeft = "8px"
+        document.querySelector('.van-tabs__wrap').style.display = "none"
+        this.isBatch = true
+        this.batchShow = false
+      }
+
     }
   }
 
@@ -76,6 +144,19 @@
 
 <style lang="scss" scoped>
   .approval-page {
+    .batch-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      background: #fff;
+      padding: 10px 15px;
+
+      .cancle {
+        color: #1989fa;
+      }
+    }
+
     .appli-list {
       padding-top: 10px;
       padding-bottom: 10px;
@@ -133,9 +214,20 @@
         }
 
         .state {
+          em{
+            color: #eee;
+          }
           span {
             padding: 0 10px;
             color: #1989fa;
+          }
+
+          .passed {
+            color: #52D77B;
+          }
+
+          .rejected {
+            color: #D75252;
           }
         }
       }
@@ -169,8 +261,9 @@
       .van-checkbox__icon {
         display: none;
       }
-      .van-checkbox__label{
-          margin-left: 0;
+
+      .van-checkbox__label {
+        margin-left: 0;
       }
     }
 

@@ -1,11 +1,17 @@
 <template>
   <div class="point-entry main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <van-cell title="选择规则分类" is-link :value="pointObj.ruleClassifiy" placeholder="请选择" />
-    <van-cell title="选择分类" is-link :value="pointObj.classifiy" placeholder="请选择" />
-    <van-cell title="日期" is-link :value="pointObj.date" @click="isDateShow = true" placeholder="请选择" />
-    <van-field v-model="pointObj.integral" rows="1" label="积分" type="number" placeholder="请输入积分" />
-    <van-field class="reason-cnt" v-model="pointObj.reason" rows="2" autosize label="理由" type="textarea" maxlength="50"
+    <van-cell title="选择规则分类" is-link :value="ruleId" placeholder="请选择" />
+    <van-popup v-model="showRule" position="bottom">
+      <van-picker show-toolbar :columns="ruleList" @cancel="showRule = false" @confirm="ruleConfirm" />
+    </van-popup>
+    <van-cell title="选择分类" is-link :value="pointObj.rulesId" placeholder="请选择" />
+    <van-popup v-model="showClassify" position="bottom">
+      <van-picker show-toolbar :columns="classifyList" @cancel="showClassify = false" @confirm="classifyConfirm" />
+    </van-popup>
+    <van-cell title="日期" is-link :value="pointObj.applyTime" @click="isDateShow = true" placeholder="请选择" />
+    <van-field v-model="pointObj.add" rows="1" label="积分" type="number" placeholder="请输入积分" disabled />
+    <van-field class="reason-cnt" v-model="pointObj.content" rows="2" autosize label="理由" type="textarea" maxlength="50"
       placeholder="请输入理由（选填）" show-word-limit />
     <div class="line"></div>
     <van-cell is-link @click="isMemberShow=!isMemberShow">选择人员
@@ -48,15 +54,22 @@
         title: '积分录入',
         isLeftArrow: true,
         isDateShow: false,
+        ruleList: [],
+        classifyList: [],
+        ruleId: '',
+        showRule: false,
+        showClassify: false,
         pointObj: {
-          ruleClassifiy: '',
-          classifiy: '',
-          date: '',
-          reason: ''
+          rulesId: '', //小类规则Id
+          applyTime: '',
+          add: 0,
+          contnet: '',
+          employeesId: []
         },
         isMemberShow: false,
         activeTab: 'dept',
         showPicker: false,
+        list:[],
         deptList: [{
           id: 1,
           name: '技术部'
@@ -83,6 +96,12 @@
       }
     },
     methods: {
+      ruleConfirm() {
+
+      },
+      classifyConfirm() {
+
+      },
       onLoad() {
         // 异步更新数据
         setTimeout(() => {

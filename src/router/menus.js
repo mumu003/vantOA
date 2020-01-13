@@ -51,7 +51,7 @@ export default [
       },
     },{
       path: '/task',
-      name: '发布任务',
+      name: '任务管理',
       component: () => import('@/views/Management/task.vue'),
       meta: {
         id: 4,
