@@ -47,6 +47,13 @@ const routes = [
     children:menusRoute,
     component:()=>import('@/views/Management/index.vue')
   },{
+    path: '/approval',
+    name: 'approval',
+    meta:{
+      requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
+    },
+    component: ()=>import('../views/Approval/index.vue')
+  },{
     path: '/mine',
     name: 'mine',
     meta:{
