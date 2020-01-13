@@ -30,12 +30,16 @@
           <van-cell v-else :value="'暂无数据'"></van-cell>
         </div>
       </div>
-      <van-popup v-model="showinput" class="popmodal">
-        <h2 class="poph2">添加部门</h2>
+      <!-- <van-popup v-model="showinput" class="popmodal">
         <van-field v-model="activeitem.name" center clearable placeholder="请输入部门名称">
           <van-button slot="button" size="small" type="info" @click="addintegral">确认</van-button>
         </van-field>
-      </van-popup>
+      </van-popup> -->
+      <van-dialog v-model="showinput" title="添加部门" show-cancel-button @confirm="addintegral">
+        <van-field v-model="activeitem.name" center clearable placeholder="请输入部门名称">
+          <!-- <van-button slot="button" size="small" type="info" @click="addintegral">确认</van-button> -->
+        </van-field>
+      </van-dialog>
     </div>
     <!-- <div class="modal" v-if="showinput">
       <van-nav-bar :title="activeitem.id?'修改部门':'添加部门'" left-arrow @click-left="showinput=false"  class="bluenav"/>
@@ -113,7 +117,7 @@ export default {
     async godelete(item) {
       await deletedepart(item).then(res => {
         if (res.code == 0) {
-          this.$toast({
+          this.$toast.success({
             message: "删除成功",
             dduration: 1000
           });
@@ -198,12 +202,12 @@ export default {
 }
 
 .van-popup--center {
-  border-radius: 0.5rem;
   width: 80%;
-  left: 10%;
-  top: 20%;
-  padding: 1rem 0rem;
-  transform: unset;
+  padding: 10px 0;
+  // left: 10%;
+  // top: 20%;
+  // padding: 1rem 0rem;
+  // transform: unset;
 }
 .popmodal .van-cell__value {
   border: 1px solid #ccc;

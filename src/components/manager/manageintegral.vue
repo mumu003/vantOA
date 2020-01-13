@@ -102,6 +102,10 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
+  .van-cell-group{
+    max-height: calc(100vh - 85px);
+    overflow-y: scroll;
+  }
   .van-swipe-cell__left, .van-swipe-cell__right{
     top: -8px;
   }
