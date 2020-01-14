@@ -5,8 +5,8 @@
     <div class="user-info main-box">
       <van-image round src="https://img.yzcdn.cn/vant/cat.jpeg" />
       <div>
-        <span class="user-name">Jack</span>
-        <span class="user-time">2019年11月6日</span>
+        <span class="user-name">{{userInfo.name}}</span>
+        <span class="user-time">{{formatTime(userInfo.createTime)}}</span>
       </div>
       <button>管理</button>
     </div>
@@ -71,10 +71,25 @@
         title: '首页',
         activeTab: 'award',
         rate: 100,
-        currentRate: 0
+        currentRate: 0,
+        userInfo: ''
       }
     },
+    mounted() {
+      this.getUserInfo()
+    },
     methods: {
+      getUserInfo() {
+        let info = JSON.parse(localStorage.getItem("userinfo"))
+        this.userInfo = info
+      },
+      formatTime(date) {
+        var date = new Date(date);
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        let day = date.getDate();
+        return year + '年' + month + '月' + day + '日';
+      },
       async logout() {
         console.log("logout");
         this.$store.commit(types.LOGOUT);
