@@ -80,6 +80,7 @@
              */
             this.setStorage("login",res.data.token);
             this.getStorage("login",1000*60*60*24,true);
+            this.$store.commit(types.USERINFO, res.data);
             // this.$store.commit(types.LOGIN, data);
             this.$router.push({
               path:'/manager',

@@ -62,6 +62,30 @@ export default [
         img:'img4',
       },
     },{
+      path: '/taskRoom',
+      name: '任务大厅',
+      component: () => import('@/views/Management/taskRoom.vue'),
+      meta: {
+        id: 5,
+        type:1,
+        name: '任务大厅',
+        manageShow:false,
+        requireAuth:true,
+        img:'img5',
+      },
+    },{
+      path: '/taskManage',
+      name: '任务管理（管理员）',
+      component: () => import('@/views/Admin/taskManage.vue'),
+      meta: {
+        id: 5,
+        type:1,
+        name: '任务管理',
+        manageShow:false,
+        requireAuth:true,
+        img:'img5',
+      },
+    },{
       path: '/pointEntry',
       name: '积分录入',
       component: () => import('@/views/Management/pointEntry.vue'),
@@ -73,7 +97,19 @@ export default [
         requireAuth:true,
         manageShow:false
       },
-    },
+    },{
+      path: '/integral',
+      name: '积分申请',
+      component: () => import('@/views/Management/integral.vue'),
+      meta: {
+        id: 5,
+        type:2,
+        name: '积分申请',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false
+      },
+    }
     
   ]
 

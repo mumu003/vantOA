@@ -14,11 +14,12 @@ export default new Vuex.Store({
   state:{
     user:{},
     token:null,
+    userinfo:JSON.parse(localStorage.getItem('userinfo')),
     title:''
   },
   mutations:{
     [types.LOGIN]: (state, data) => {
-      console.log("111",data.curTime)
+      // console.log("111",data.curTime)
       localStorage.token = data.token;
       localStorage.loginTime = data.curTime;
       state.token = data.token;
@@ -26,10 +27,15 @@ export default new Vuex.Store({
     [types.LOGOUT]: (state) => {
       localStorage.removeItem('token');
       localStorage.removeItem('loginTime');
-      state.token = null
+      localStorage.removeItem('userinfo');
+      state.token = null;
     },
     [types.TITLE]: (state, data) => {
       state.title = data;
+    },
+    [types.USERINFO]: (state, data) => {
+      localStorage.userinfo = JSON.stringify(data.employees);
+      state.userinfo = data.employees;
     }
   }
 })
