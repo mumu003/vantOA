@@ -422,7 +422,7 @@ export default {
   }
   .bigest{
     position: absolute;
-    bottom: 40px;
+    bottom: 80px;
     // padding-bottom: 40px;
     right: 40px;
       .content{
