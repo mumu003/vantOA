@@ -2,21 +2,19 @@
   <div class="release-task main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
     <van-cell-group>
-      <van-field v-model="taskObj.taskTitle" rows="2" autosize label="任务标题" type="textarea" maxlength="50"
+      <van-field v-model="taskObj.title" rows="2" autosize label="任务标题" type="textarea" maxlength="50"
         placeholder="请输入任务标题" show-word-limit />
-      <van-field v-model="taskObj.taskCnt" rows="2" autosize label="任务内容" type="textarea" maxlength="100"
+      <van-field v-model="taskObj.content" rows="2" autosize label="任务内容" type="textarea" maxlength="100"
         placeholder="请输入任务内容" show-word-limit />
-      <van-field v-model="taskObj.integral" rows="1" label="积分" type="number" placeholder="请输入积分" />
-      <van-cell title="截止日期" is-link :value="taskObj.endTime" @click="isDateShow = true">
-        <span class="tip">请选择</span>
-      </van-cell>
+      <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" />
+      <van-cell title="截止日期" is-link :value="taskObj.endTime" @click="isDateShow = true" />
       <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" />
       <van-cell is-link @click="isMemberShow=!isMemberShow">选择人员
         <span class="tip">请选择</span>
       </van-cell>
       <div class="main-box">
-        <van-tag closeable round plain @close="remove" v-for="(item,index) in finalList" :key="index">
-          标签
+        <van-tag closeable round plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
+          {{item}}
         </van-tag>
       </div>
       <van-popup round v-model="isMemberShow" position="bottom" :style="{ height: '60%' }">
@@ -26,24 +24,28 @@
         </div>
         <van-tabs v-model="activeTab" color="#1989fa" class="main-box">
           <van-tab title="选择部门" name="dept" class="dept-area">
-            <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-              <van-cell :class="activeDept==index?'dept-active':''" v-for="(item,index) in deptList" :key="index"
+            <van-list v-model="loading" :finished="finished" @load="onLoad">
+              <van-cell :class="activeDept==index?'dept-active':''" v-for="(item,index) in list" :key="index"
                 :title="item.name" @click="deptConfirm(item.id,index)" />
             </van-list>
           </van-tab>
           <van-tab title="选择人员" name="men">
-            <van-checkbox-group v-model="finalList" class="men-area">
-              <van-checkbox :name="`${val.name}`" v-for="(val,i) in memberList" :key="i">{{val.name}}</van-checkbox>
+            <van-checkbox-group v-model="taskObj.employeesId" class="men-area">
+              <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(val.name)">
+                {{val.name}}</van-checkbox>
             </van-checkbox-group>
           </van-tab>
         </van-tabs>
       </van-popup>
     </van-cell-group>
-    <van-button type="info" class="info-btn" block @click="">发布任务</van-button>
+    <van-button type="info" class="info-btn" block @click="addTask">发布任务</van-button>
 
   </div>
 </template>
 <script>
+  import { addTask } from "@/api/task";
+  import { findAll,findList } from "@/api/dept";
+
   export default {
     name: 'ReleaseTask',
     data() {
@@ -51,76 +53,96 @@
         title: '发布任务',
         isLeftArrow: true,
         taskObj: {
-          taskTitle: '',
-          taskCnt: '',
-          integral: 0, //积分
-          endTime: '', //截止时间
+          title: '',
+          content: '',
+          score: 0, //积分
+          endTime: '请选择', //截止时间
+          // degree: '',
+          employeesId: []
         },
-
         isDateShow: false,
         isMemberShow: false,
         activeTab: 'dept',
         showPicker: false,
-        deptList: [{
-          id: 1,
-          name: '技术部'
-        }, {
-          id: 6,
-          name: '人事部'
-        }, {
-          id: 21,
-          name: '运营部'
-        }],
-        memberList: [{
-          id: 1,
-          name: '张三'
-        }, {
-          id: 6,
-          name: '李四'
-        }],
+        list: [],
+        deptList: [],
+        memberList: [],
         activeDept: -1,
         finalList: [], //最终选中
         loading: false,
         finished: false
       }
     },
+    mounted() {
+      this.getDeptList()
+    },
+
     methods: {
+      // 获取部门列表
+      async getDeptList() {
+        await findAll().then(res => {
+          console.log(res)
+          if (res.code == 0) {
+            this.deptList = res.data
+            this.list = this.deptList
+          }
+        });
+      },
+      // 格式化日期
       formatDate(date) {
-        return `${date.getMonth() + 1}/${date.getDate()}`
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       },
       dateConfirm(endTime) {
         this.isDateShow = false
-        this.endTime = this.formatDate(endTime)
+        this.taskObj.endTime = this.formatDate(endTime)
       },
       onLoad() {
         // 异步更新数据
         setTimeout(() => {
-          for (let i = 0; i < 10; i++) {
-            this.deptList.push(this.deptList.length + 1)
-          }
           // 加载状态结束
           this.loading = false
 
           // 数据全部加载完成
-          if (this.deptList.length >= 40) {
+          if (this.list.length >= this.deptList.length) {
             this.finished = true
           }
         }, 500);
       },
       // 部门选中
-      deptConfirm(deptId, index) {
+      async deptConfirm(departId, index) {
         this.activeDept = index
-        console.log(deptId)
+        let data = {
+          departId
+        }
+        await findList(data).then(res => {
+          console.log(res)
+          if (res.code == 0) {
+            this.memberList=res.data
+          }
+        })
+      },
+      menConfirm(name) {
+        this.finalList.push(name)
       },
       // 人员选中
       toSelect() {
         this.isMemberShow = false
       },
-      remove() {
-
+      remove(i) {
+        this.finalList.splice(i, 1)
+        this.taskObj.employeesId.splice(i, 1)
       },
-      submit() {
-
+      async addTask() {
+        if (this.taskObj.title == '' || this.taskObj.content == '' || this.taskObj.score == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
+          this.$toast("请输入完整内容再提交")
+        } else {
+          this.taskObj.employeesId=this.taskObj.employeesId.map(Number)
+          await addTask(this.taskObj).then(res => {
+            if (res.code == 0) {
+              this.$toast("发布成功")
+            }
+          })
+        }
       }
     }
   }
@@ -187,7 +209,7 @@
 </style>
 <style lang="scss">
   .release-task {
-    .van-field__control {
+    .score .van-field__control {
       text-align: right;
     }
 
