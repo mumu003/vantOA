@@ -13,42 +13,21 @@
           <span>1111111</span>
         </div>
         <div class="related-item">
-          <span>入职时间</span>
-          <span>111111111</span>
-        </div>
-        <div class="related-item">
-          <span>工龄</span>
-          <span>测试测试</span>
-        </div>
-        <div class="related-item">
-          <span>生日</span>
-          <span>22222</span>
-        </div>
-        <div class="related-item">
-          <span>部门</span>
-          <span>测试测试</span>
-        </div>
-        <div class="related-item">
-          <span>职务</span>
-          <span>测试测试</span>
-        </div>
-        <div class="related-item">
-          <span>手机</span>
+          <span>姓名</span>
           <span>1323435354</span>
         </div>
         <div class="related-item">
-          <span>微信</span>
-          <span>5535353532</span>
+          <span>手机号</span>
+          <span>1323435354</span>
         </div>
-
-      </div>
-      <div class="setting" @click="isSetShow=true">
-        <span>设置</span>
-        <van-icon name="arrow" />
+        <div class="related-item">
+          <span>密码</span>
+          <span>1323435354</span>
+        </div>
       </div>
     </div>
     <!-- 设置 -->
-    <div class="update-modal" v-if="isSetShow">
+    <!-- <div class="update-modal" v-if="isSetShow">
       <van-nav-bar title="设置" left-arrow @click-left="isSetShow=false" />
       <van-cell-group>
         <van-field label="名称" v-model="username" placeholder="请输入新名称" />
@@ -56,7 +35,7 @@
         <van-field label="手机" type="tel" v-model="mobile" placeholder="请输入新手机号" />
       </van-cell-group>
       <van-button type="info" class="info-btn" block @click="save">保存</van-button>
-    </div>
+    </div> -->
     <tab-bar></tab-bar>
   </div>
 </template>

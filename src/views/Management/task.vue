@@ -44,7 +44,7 @@
 </template>
 <script>
   import { addTask } from "@/api/task";
-  import { findAll,findList } from "@/api/dept";
+  import { findAlldepart,findAllList } from "@/api/depart";
 
   export default {
     name: 'ReleaseTask',
@@ -80,8 +80,7 @@
     methods: {
       // 获取部门列表
       async getDeptList() {
-        await findAll().then(res => {
-          console.log(res)
+        await findAlldepart().then(res => {
           if (res.code == 0) {
             this.deptList = res.data
             this.list = this.deptList
@@ -90,7 +89,7 @@
       },
       // 格式化日期
       formatDate(date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
       },
       dateConfirm(endTime) {
         this.isDateShow = false
@@ -101,7 +100,6 @@
         setTimeout(() => {
           // 加载状态结束
           this.loading = false
-
           // 数据全部加载完成
           if (this.list.length >= this.deptList.length) {
             this.finished = true
@@ -114,8 +112,7 @@
         let data = {
           departId
         }
-        await findList(data).then(res => {
-          console.log(res)
+        await findAllList(data).then(res => {
           if (res.code == 0) {
             this.memberList=res.data
           }
@@ -133,7 +130,7 @@
         this.taskObj.employeesId.splice(i, 1)
       },
       async addTask() {
-        if (this.taskObj.title == '' || this.taskObj.content == '' || this.taskObj.score == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
+        if (this.taskObj.title == '' || this.taskObj.score == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
           this.$toast("请输入完整内容再提交")
         } else {
           this.taskObj.employeesId=this.taskObj.employeesId.map(Number)
