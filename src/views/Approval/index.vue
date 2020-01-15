@@ -4,39 +4,47 @@
     <van-search placeholder="请输入搜索关键词" shape="round" v-model="keyWord" />
     <div class="batch-head" v-show="isBatch">
       <van-checkbox v-model="isAll">全选</van-checkbox>
-      <span class="cancle">取消</span>
+      <span class="cancle" @click="isBatch=!isLeftArrow">取消</span>
     </div>
+    <!-- 批量处理 -->
+    <div class="batch-footer" v-show="isBatch">
+      <span @click="allOperat(1)">拒绝</span>
+      <span></span>
+      <span @click="allOperat(2)">同意</span>
+    </div>
+
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
-        <van-checkbox-group v-model="result" ref="checkboxGroup" class="appli-list main-box">
-          <van-checkbox name="a">
-            <div class="appli-item">
+        <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}">
+          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
+            <van-checkbox name="1" v-show="isBatch" />
+            <div :class="{'appli-item':true,'batchActive':isBatch}">
               <div class="appli-head ">
-                <span class="name">籍影博提交积分申请</span>
+                <span class="name">{{item1.name}}</span>
                 <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" />
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title ">规则：</span>
-                <span class="appli-cnt-info">显示申请积分时候所选的积分规则文字</span>
+                <span class="appli-cnt-info">{{item1.rname}}</span>
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title">申请理由：</span>
-                <span class="appli-cnt-info">显示申请积分时候所选的申请理由文字</span>
+                <span class="appli-cnt-info">{{item1.content}}</span>
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title">申请积分：</span>
-                <span class="appli-cnt-info">+20分</span>
+                <span class="appli-cnt-info">+{{item1.score}}分</span>
               </div>
               <div class="appli-footer">
-                <span class="time">2020-01-10</span>
+                <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
                 <div class="state">
-                  <span>拒绝</span>
-                  <em>|</em>
-                  <span>同意</span>
+                  <span @click="singleOperat(item1.id,1)">拒绝</span>
+                  <em></em>
+                  <span @click="singleOperat(item1.id,2)">同意</span>
                 </div>
               </div>
             </div>
-          </van-checkbox>
+          </van-cell-group>
         </van-checkbox-group>
         <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
           <div class="main-box">
@@ -47,24 +55,24 @@
       </van-tab>
       <van-tab title="已通过">
         <div class="appli-list main-box">
-          <div class="appli-item">
+          <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
-              <span class="name">籍影博提交积分申请</span>
+              <span class="name">{{item2.name}}</span>
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title ">规则：</span>
-              <span class="appli-cnt-info">显示申请积分时候所选的积分规则文字</span>
+              <span class="appli-cnt-info">{{item2.rname}}</span>
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请理由：</span>
-              <span class="appli-cnt-info">显示申请积分时候所选的申请理由文字</span>
+              <span class="appli-cnt-info">{{item2.content}}</span>
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请积分：</span>
-              <span class="appli-cnt-info">+20分</span>
+              <span class="appli-cnt-info">+{{item2.score}}分</span>
             </div>
             <div class="appli-footer">
-              <span class="time">2020-01-10</span>
+              <span class="time">{{item2.applyTime.split(" ")[0]}}</span>
               <div class="state">
                 <span class="passed">已通过</span>
               </div>
@@ -74,25 +82,25 @@
       </van-tab>
       <van-tab title="未通过">
         <div class="appli-list main-box">
-          <div class="appli-item">
+          <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
             <div class="appli-head ">
-              <span class="name">籍影博提交积分申请</span>
-              <van-icon name="ellipsis" @click.stop="updateShow=!updateShow" />
+              <span class="name">{{item3.name}}</span>
+              <van-icon name="ellipsis" @click.stop="update(item3.id)" />
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title ">规则：</span>
-              <span class="appli-cnt-info">显示申请积分时候所选的积分规则文字</span>
+              <span class="appli-cnt-info">{{item3.rname}}</span>
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请理由：</span>
-              <span class="appli-cnt-info">显示申请积分时候所选的申请理由文字</span>
+              <span class="appli-cnt-info">{{item3.content}}</span>
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请积分：</span>
-              <span class="appli-cnt-info">+20分</span>
+              <span class="appli-cnt-info">+{{item3.score}}分</span>
             </div>
             <div class="appli-footer">
-              <span class="time">2020-01-10</span>
+              <span class="time">{{item3.applyTime.split(" ")[0]}}</span>
               <div class="state">
                 <span class="rejected">已拒绝</span>
               </div>
@@ -101,7 +109,7 @@
         </div>
         <van-popup v-model="updateShow" position="bottom" :style="{ height: '20%' }">
           <div class="main-box">
-            <div class="more-operat" @click="update">更改为同意</div>
+            <div class="more-operat" @click="singleOperat(updateId,2)">更改为同意</div>
             <div class="more-operat" @click="updateShow=!updateShow">取消</div>
           </div>
         </van-popup>
@@ -113,6 +121,13 @@
 </template>
 
 <script>
+  import {
+    findPointWait,
+    findPointPass,
+    findPointDisagree,
+    passPoint,
+    pointDisagree
+  } from "@/api/integral";
   export default {
     name: "Approval",
     data() {
@@ -121,20 +136,96 @@
         isLeftArrow: true,
         keyWord: '',
         activeTab: 0,
-        isBatch: false,
+        isBatch: false, //是否批量状态
         batchShow: false,
-        result: [],
+        batchData: [], //批量数据d
         isAll: false,
-        updateShow: false
+        updateShow: false,
+        updateId: '', //更改Id
+        waitList: [], //待审核
+        passList: [], //已通过
+        disagreeList: [], //未通过
       }
+    },
+    mounted() {
+      this.getList()
     },
     methods: {
       batch() {
-        document.querySelector('.van-tabs__content .van-checkbox__icon').style.display = "block"
-        document.querySelector('.van-tabs__content .van-checkbox__label').style.marginLeft = "8px"
         document.querySelector('.van-tabs__wrap').style.display = "none"
         this.isBatch = true
         this.batchShow = false
+      },
+      // 获取审批列表
+      async getList() {
+        await findPointWait().then(res => {
+          if (res.code == 0) {
+            this.waitList = res.data
+          }
+        })
+        await findPointPass().then(res => {
+          if (res.code == 0) {
+            this.passList = res.data
+          }
+        })
+        await findPointDisagree().then(res => {
+          if (res.code == 0) {
+            this.disagreeList = res.data
+          }
+        })
+      },
+      // 单个操作
+      async singleOperat(id, type) {
+        console.log(id)
+        let ids = []
+        ids.push(id)
+        if (type == 1) {
+          // 拒绝
+          await pointDisagree(ids).then(res => {
+            if (res.code == 0) {
+              this.$toast("操作成功!")
+            } else if (res.code == -1) {
+              this.$toast(res.msg)
+            }
+          })
+        } else {
+          // 通过
+          await passPoint(ids).then(res => {
+            if (res.code == 0) {
+              if (this.updateShow) {
+                this.updateShow = !this.updateShow
+              }
+              this.$toast("操作成功!")
+            } else if (res.code == -1) {
+              this.$toast(res.msg)
+            }
+          })
+        }
+      },
+      // 批量操作
+      async allOperat(type) {
+        if (type == 1) {
+          await pointDisagree(this.batchData).then(res => {
+            if (res.code == 0) {
+              this.$toast("操作成功!")
+            } else if (res.code == -1) {
+              this.$toast(res.msg)
+            }
+          })
+        } else {
+          await passPoint(this.batchData).then(res => {
+            if (res.code == 0) {
+              this.$toast("操作成功!")
+            } else if (res.code == -1) {
+              this.$toast(res.msg)
+            }
+          })
+        }
+      },
+      update(id) {
+        this.updateShow = true
+        this.updateId = id
+
       }
 
     }
@@ -143,13 +234,18 @@
 </script>
 
 <style lang="scss" scoped>
+  @mixin flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .approval-page {
     .batch-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include flex;
       font-size: 16px;
       background: #fff;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
       padding: 10px 15px;
 
       .cancle {
@@ -157,21 +253,60 @@
       }
     }
 
+    .batch-footer {
+      z-index: 1000;
+      width: 100%;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+      background: #fff;
+      position: fixed;
+      bottom: 45px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 12px;
+
+      span {
+        color: #1989fa;
+        font-size: 16px;
+      }
+
+      span:nth-child(2) {
+        display: block;
+        width: 1px;
+        height: 28px;
+        background: #eee;
+      }
+    }
+
+    .batch-list {
+      height: calc(100vh - 220px) !important;
+    }
+
     .appli-list {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding: 10px 0;
+      height: calc(100vh - 180px);
+      overflow-y: scroll;
+
+    }
+
+    .wait-item {
+      @include flex;
+      background: none;
+    }
+
+    .batchActive {
+      margin-left: 5px;
     }
 
     .appli-item {
       background-color: #fff;
       border-radius: 4px;
       font-size: 16px;
+      margin-bottom: 10px;
 
       // box-shadow: 0 0.0625rem 0.15625rem #ccc;
       .appli-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        @include flex;
         padding: 10px;
         font-size: 17px;
 
@@ -202,9 +337,7 @@
 
       .appli-footer {
         border-top: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        @include flex;
         padding: 10px 0;
 
         .time {
@@ -214,11 +347,16 @@
         }
 
         .state {
-          em{
-            color: #eee;
+          @include flex;
+
+          em {
+            width: 1px;
+            height: 18px;
+            background: #eee;
           }
+
           span {
-            padding: 0 10px;
+            padding: 0 15px;
             color: #1989fa;
           }
 
@@ -257,14 +395,8 @@
       color: #333;
     }
 
-    .appli-list {
-      .van-checkbox__icon {
-        display: none;
-      }
-
-      .van-checkbox__label {
-        margin-left: 0;
-      }
+    .van-checkbox__icon {
+      margin-right: 5px;
     }
 
     .van-popup {

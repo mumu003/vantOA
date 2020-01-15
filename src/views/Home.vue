@@ -13,15 +13,15 @@
     <!-- 积分信息 -->
     <van-row class="integral-info">
       <van-col span="8">
-        <span>100</span>
+        <span>{{userInfo.score}}</span>
         <span>累计总分</span>
       </van-col>
       <van-col span="8">
-        <span>200</span>
+        <span>{{sumData.yearSum}}</span>
         <span>本年积分</span>
       </van-col>
       <van-col span="8">
-        <span>100</span>
+        <span>{{sumData.mothSum}}</span>
         <span>本月积分</span>
       </van-col>
     </van-row>
@@ -31,14 +31,13 @@
       <van-tab title="奖励分" name="award">
         <div class="time-info">2020.1.9-2020.1.9</div>
         <div class="chart">
-
           <van-circle v-model="currentRate" :rate="rate" :stroke-width="60" text="100分" />
         </div>
 
         <div class="fraction-list">
-          <div class="fraction-item">
-            <span>加班</span>
-            <span class="award-score">+100分</span>
+          <div class="fraction-item" v-for="(item1,index1) in increaseScore" :key="index1">
+            <span>{{item1.name}}</span>
+            <span class="award-score">+{{item1.score}}分</span>
           </div>
         </div>
       </van-tab>
@@ -49,9 +48,9 @@
         </div>
 
         <div class="fraction-list">
-          <div class="fraction-item">
-            <span>迟到</span>
-            <span class="punish-score">-100分</span>
+          <div class="fraction-item" v-for="(item2,index2) in reduceScore" :key="index2">
+            <span>{{item2.name}}</span>
+            <span class="punish-score">{{item2.score}}分</span>
           </div>
         </div>
       </van-tab>
@@ -62,6 +61,7 @@
 
 <script>
   import * as types from "../store/types";
+  import { increaseOrReduce, sumScore} from "@/api/user";
 
   export default {
     name: "home",
@@ -72,7 +72,10 @@
         activeTab: 'award',
         rate: 100,
         currentRate: 0,
-        userInfo: ''
+        userInfo: '',
+        increaseScore:[],//奖分分列表
+        reduceScore:[], //扣分列表
+        sumData:''// 积分列表
       }
     },
     mounted() {
@@ -80,15 +83,34 @@
     },
     methods: {
       getUserInfo() {
-        let info = JSON.parse(localStorage.getItem("userinfo"))
+        let info = this.$store.state.userinfo
         this.userInfo = info
+        this.increaseOrReduce()
+        this.sumScore()
+      },
+      // 奖扣分明细
+      async increaseOrReduce(){
+        await increaseOrReduce().then(res=>{
+          if(res.code==0){
+            this.increaseScore=res.data.increaseScore
+            this.reduceScore=res.data.reduceScore
+          }
+        })
+      },
+      // 积分明细
+      async sumScore(){
+        await sumScore().then(res=>{
+          if(res.code==0){
+            this.sumData=res.data
+          }
+        })
       },
       formatTime(date) {
-        var date = new Date(date);
-        let year = date.getFullYear();
-        let month = date.getMonth();
-        let day = date.getDate();
-        return year + '年' + month + '月' + day + '日';
+        var date = new Date(date)
+        let year = date.getFullYear()
+        let month = date.getMonth()+1
+        let day = date.getDate()
+        return year + '年' + month + '月' + day + '日'
       },
       async logout() {
         console.log("logout");

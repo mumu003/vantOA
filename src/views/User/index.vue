@@ -61,14 +61,15 @@
     },
     methods: {
       getUserInfo() {
-        let info = JSON.parse(localStorage.getItem("userinfo"))
-
-        this.userInfo.id = info.id
-        this.userInfo.departId = info.departId
-        this.userInfo.roleId = info.roleId
-        this.userInfo.name = info.name
-        this.userInfo.phone = info.phone
-        this.userInfo.pwd = info.pwd
+        let info = this.$store.state.userinfo
+        this.userInfo={
+          id:info.id,
+          departId:info.departId,
+          roleId:info.roleId,
+          name:info.name,
+          phone:info.phone,
+          pwd:info.pwd
+        }
       },
       updateName() {
         this.setTitle = '修改名称'
@@ -110,7 +111,6 @@
             this.$toast("手机号不能为空!")
           } else {
             await updatename(this.userInfo).then(res => {
-              console.log(res)
               if (res.code == 0) {
                 this.$toast("修改成功!")
                 this.back()
@@ -124,7 +124,6 @@
             this.$toast("密码不能为空!")
           } else {
             await updatename(this.userInfo).then(res => {
-              console.log(res)
               if (res.code == 0) {
                 this.$toast("修改成功!")
                 this.back()

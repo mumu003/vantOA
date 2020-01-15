@@ -14,3 +14,9 @@ export const updatephone = params =>req('post','/employees/updatephone',params);
 
 // 修改密码
 export const updatepwd = params =>req('post','/employees/updatepwd',params);
+
+// 规则奖分和扣分明细
+export const increaseOrReduce = params =>req('get','/scorerecord/increaseOrReduce',params);
+
+// 统计月积分和年积分
+export const sumScore = params =>req('get','/scorerecord/sumScore',params);
