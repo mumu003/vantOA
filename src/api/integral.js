@@ -12,6 +12,9 @@ export const applyempl = params=>req('post','/point/applyempl',params)
 //查询审批人
 export const findautior = params=>req('get','/employees/findListByAuditor',params)
 
+// 积分事件
+export const findPointEvent = params =>req('get','/point/findPointEvent',params);
+
 // 积分录入
 export  const addPoint = params =>req('post','/point/add',params);
 

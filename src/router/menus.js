@@ -85,6 +85,19 @@ export default [
         requireAuth:true,
         img:'img5',
       },
+    },
+    {
+      path: '/pointEvent',
+      name: '积分事件',
+      component: () => import('@/views/Management/pointEvent.vue'),
+      meta: {
+        id: 5,
+        type:2,
+        name: '积分录入',
+        img:'img6',
+        requireAuth:true,
+        manageShow:false
+      },
     },{
       path: '/pointEntry',
       name: '积分录入',

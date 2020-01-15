@@ -2,7 +2,7 @@
   <!-- 管理中心 -->
   <div class="container">
     <nav-bar :title='title'></nav-bar>
-    <div v-if="$route.meta.manageShow" class="main-cnt">
+    <div v-if="$route.meta.manageShow" class="main-cnt manage-page">
       <van-row class="oa-cnt">
         <div class="m-type">OA</div>
         <van-col class="content-item" span="6" v-for="(item,index) in menuList(1)" :key="index" @click="switchMenu(item)">
@@ -94,9 +94,10 @@
   }
 
 
-  .container {
-    background: #fff;
-
+  .container { 
+    .manage-page{
+      background: #fff;
+    }
     .m-type {
       width: 100%;
       padding: 10px 15px;
