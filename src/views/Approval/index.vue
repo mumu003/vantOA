@@ -409,7 +409,7 @@
           }
 
           .passed {
-            color: #52D77B;
+            color: #07c160;
           }
 
           .rejecte,

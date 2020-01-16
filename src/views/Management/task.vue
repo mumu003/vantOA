@@ -1,20 +1,28 @@
 <template>
-  <div class="release-task main-cnt">
-    <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
+  <div class="release-task">
+    <van-nav-bar title="发布任务" left-arrow @click-left="$emit('back')"  class="bluenav"/>
+    <!-- <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar> -->
     <van-cell-group>
+      <!-- <div :class="[aaa&&bbb ==1 ? 'a':aaa&&bbb == 2 ? 'b' : 'c']">{{aaa && bbb == "1" ? '123' : (aaa && bbb == '2') ? '456' : '789'}}</div> -->
       <van-field v-model="taskObj.title" rows="2" autosize label="任务标题" type="textarea" maxlength="50"
         placeholder="请输入任务标题" show-word-limit />
       <van-field v-model="taskObj.content" rows="2" autosize label="任务内容" type="textarea" maxlength="100"
         placeholder="请输入任务内容" show-word-limit />
       <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" />
-      <van-cell title="截止日期" is-link :value="taskObj.endTime" @click="isDateShow = true" />
-      <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" />
+
+      <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="timeShow = true" />
+      <van-popup v-model="timeShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="confirmTime" @cancel="timeShow = false;" :formatter="formatter"/>
+      </van-popup>
+
+      <!-- <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="isDateShow = true" />
+      <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" /> -->
       <van-cell is-link @click="isMemberShow=!isMemberShow">选择人员
         <span class="tip">请选择</span>
       </van-cell>
       <div class="main-box">
-        <van-tag closeable round plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
-          {{item}}
+        <van-tag closeable  plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
+          {{item}}&#x3000;
         </van-tag>
       </div>
       <van-popup round v-model="isMemberShow" position="bottom" :style="{ height: '60%' }">
@@ -30,9 +38,13 @@
             </van-list>
           </van-tab>
           <van-tab title="选择人员" name="men">
-            <van-checkbox-group v-model="taskObj.employeesId" class="men-area">
+            <van-checkbox-group v-model="taskObj.employeesId" class="men-area" v-if="memberList.length !=0 ">
               <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(val.name)">
-                {{val.name}}</van-checkbox>
+                {{val.name}}
+              </van-checkbox>
+            </van-checkbox-group>
+            <van-checkbox-group v-model="taskObj.employeesId" class="men-area" v-else>
+              <p style="font-size:14px;color:#323233">暂无数据</p>
             </van-checkbox-group>
           </van-tab>
         </van-tabs>
@@ -45,6 +57,7 @@
 <script>
   import { addTask } from "@/api/task";
   import { findAlldepart,findAllList } from "@/api/depart";
+  import { formdatatime } from "@/util/base";
 
   export default {
     name: 'ReleaseTask',
@@ -70,7 +83,13 @@
         activeDept: -1,
         finalList: [], //最终选中
         loading: false,
-        finished: false
+        finished: false,
+
+        timeShow:false,
+        minDate: new Date(2020, 0, 1),
+        maxDate: new Date(2025, 10, 1),
+        currentDate: new Date(),
+
       }
     },
     mounted() {
@@ -130,16 +149,46 @@
         this.taskObj.employeesId.splice(i, 1)
       },
       async addTask() {
-        if (this.taskObj.title == '' || this.taskObj.score == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
-          this.$toast("请输入完整内容再提交")
+        // console.log(this.taskObj.title)
+        // console.log(this.taskObj.score)
+        // console.log(this.taskObj.employeesId)
+        // console.log(this.taskObj.endTime)
+        if (this.taskObj.title == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
+          this.$toast("请输入完整内容再提交");
+          return
+        }else if(!this.taskObj.score){
+          this.$toast("请输入正确格式的积分");
+          // 分数大于0
         } else {
           this.taskObj.employeesId=this.taskObj.employeesId.map(Number)
           await addTask(this.taskObj).then(res => {
             if (res.code == 0) {
-              this.$toast("发布成功")
+              this.$toast.success("发布成功");
+              setTimeout(() => {
+                this.$emit("back");
+              },800)   
             }
           })
         }
+      },
+      confirmTime(value){
+        this.taskObj.endTime = formdatatime(value);
+        this.timeShow = false;
+        // console.log(formdatatime(value))
+      },
+      formatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`
+        }else if (type === 'day') {
+          return `${value}日`
+        }else if (type === 'hour') {
+          return `${value}时`
+        }else if (type === 'minute') {
+          return `${value}分`
+        }
+        return value;
       }
     }
   }
@@ -148,6 +197,11 @@
 
 <style lang="scss" scoped>
   .release-task {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
     .member-title {
       display: flex;
       justify-content: space-between;
@@ -155,51 +209,42 @@
       font-size: 16px;
       padding-top: 20px;
       padding-bottom: 10px;
-
       span:last-child {
         color: #1989fa;
       }
     }
-
     .van-tag {
       color: #333;
       font-size: 14px;
       border: 1px solid #D6D6D6;
       margin-right: 10px;
       padding: 5px 10px;
-
       .van-tag__close {
         color: #D8D8D8;
         border-radius: 50%;
-        font-size: 10px;
+        font-size: 8px;
         border: 1px solid #D8D8D8;
       }
     }
-
     .tip {
       float: right;
       color: #969799;
     }
-
     .dept-area {
       .van-cell {
         padding-left: 0;
         padding-right: 0;
       }
-
       .van-cell:not(:last-child)::after {
         border: none;
       }
-
       .dept-active span {
         color: #1989fa;
       }
     }
-
     .main-box {
       padding-bottom: 20px;
     }
-
 
   }
 
@@ -213,8 +258,12 @@
     .van-tab {
       flex: unset;
       padding: 0;
-      padding-right: 10px;
+      // margin-right: 15px;
       font-size: 15px;
+      width:100px;
+    }
+    .van-tabs__content{
+      padding-left:20px;
     }
 
     .van-cell__title {
