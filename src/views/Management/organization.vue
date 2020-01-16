@@ -23,8 +23,10 @@
               <van-cell-group v-if="showlist.length>0">
                 <van-cell :title="'姓名:'+ citem.name" :value="'电话:'+ citem.phone" v-for="(citem,cindex) in showlist" :key="citem.id+cindex" />
               </van-cell-group>
-              <!-- 如果没数据 -->
+              <van-loading size="24px" v-else-if="loading">加载中...</van-loading>
               <van-cell v-else :value="'暂无数据'"></van-cell>
+              <!-- 如果没数据 -->
+              <!-- <van-cell v-else :value="'暂无数据'"></van-cell> -->
             </van-collapse-item>
           </van-collapse>
           <van-cell v-else :value="'暂无数据'"></van-cell>
@@ -87,7 +89,8 @@ export default {
       title: "",
       manageintegral: false,
       activeitem: "",
-      showlist: [] //折叠面板展开图
+      showlist: [],   //折叠面板展开图
+      loading:false,
     };
   },
   created() {
@@ -99,10 +102,12 @@ export default {
     },
     //获取部门
     async finddepart() {
+      this.loading = true;
       await findAlldepart({ name: this.value }).then(res => {
         if (res.code == 0) {
           this.departlist = res.data;
         }
+        this.loading = false;
       });
     },
     deledepart(item) {
@@ -161,11 +166,13 @@ export default {
       if (!value) {
         return;
       }
+      this.loading = true;
       var param = {
         departId: value
       };
       await findAllList(param).then(res => {
         if (res.code == 0) {
+          this.loading = false;
           this.showlist = res.data;
         }
       });

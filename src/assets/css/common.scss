@@ -102,6 +102,17 @@
     padding: 0 10px;
   }
 }
+// 已通过 / 未通过
+.passed {
+  color: #07c160;
+}
 
+.rejected {
+  color: #ff976a;
+}
+// 数字键盘
+.van-number-keyboard{
+  margin-bottom:45px;
+}
 
 

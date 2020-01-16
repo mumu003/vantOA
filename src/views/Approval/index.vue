@@ -361,11 +361,11 @@
           }
 
           .passed {
-            color: #52D77B;
+            color: #07c160;
           }
 
           .rejected {
-            color: #D75252;
+            color: #ff976a;
           }
         }
       }

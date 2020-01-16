@@ -14,7 +14,8 @@
         </template>
       </van-swipe-cell>
     </van-cell-group>
-    <van-cell v-else :value="'没有更多了'"></van-cell>
+    <van-loading size="24px" v-else-if="loading">加载中...</van-loading>
+    <van-cell v-else :value="'暂无数据'"></van-cell>
      <van-popup v-model="showinput" class="popmodal">
          <h2 class="poph2">修改部门</h2>
         <van-field v-model="activeitem.name" center clearable placeholder="请输入部门名称" >
@@ -32,6 +33,7 @@ export default {
        activeNames: "",
       showinput:false,
       activeitem:'',
+      loading:false,
     };
   },
   created() {
@@ -40,10 +42,12 @@ export default {
   methods: {
     //获取部门
     async finddepart() {
+      this.loading = true;
       await findAlldepart({ name: this.value }).then(res => {
         if (res.code == 0) {
           this.departList = res.data;
         }
+        this.loading = false;
       });
     },
     openmodal(item){
@@ -54,7 +58,7 @@ export default {
     async upadeintegral(){
           await updatedepart(this.activeitem).then(res=>{
              if(res.code==0){
-                     this.$toast({
+                this.$toast({
               message:'修改成功',
               dduration:1000
           })

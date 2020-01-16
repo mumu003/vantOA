@@ -101,7 +101,7 @@
           } else {
             await updatename(this.userInfo).then(res => {
               if (res.code == 0) {
-                this.$toast("修改成功!")
+                this.$toast.success("修改成功!")
                 this.back()
               }
             })
@@ -112,7 +112,7 @@
           } else {
             await updatename(this.userInfo).then(res => {
               if (res.code == 0) {
-                this.$toast("修改成功!")
+                this.$toast.success("修改成功!")
                 this.back()
               } else if (res.code == -1) {
                 this.$toast("手机号已经存在，请重新修改!")
@@ -125,7 +125,7 @@
           } else {
             await updatename(this.userInfo).then(res => {
               if (res.code == 0) {
-                this.$toast("修改成功!")
+                this.$toast.success("修改成功!")
                 this.back()
               }
             })

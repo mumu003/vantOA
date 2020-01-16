@@ -1,6 +1,6 @@
 <template>
 <!-- 头部导航 -->
-  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed' @click-left="onClickLeft" class="oa-nav"/>
+  <van-nav-bar :title="`${title}`" :left-arrow='isLeftArrow' :fixed='isFixed' @click-left="onClickLeft" class="oa-nav" :right-text="rightText" @click-right="onClickRight"/>
 </template>
 
 <script>
@@ -18,6 +18,10 @@
         isFixed:{
             type:Boolean,
             default:true
+        },
+        rightText:{
+          type:String,
+          default:''
         }
     },
     data() {
@@ -28,6 +32,9 @@
     methods:{
       onClickLeft(){
         this.$router.go(-1);
+      },
+      onClickRight(){
+        
       }
     }
   }
@@ -38,7 +45,8 @@
 .oa-nav{
   height: 45px;
   background: #1989fa;
-      .van-nav-bar__title {
+      .van-nav-bar__title,
+      .van-nav-bar__text {
         color: #fff ;
       }
       .van-icon{
