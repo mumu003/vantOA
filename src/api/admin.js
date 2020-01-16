@@ -14,3 +14,6 @@ export const updateTitle = params=>req('put','/task/updateTitle',params);
 
 // 修改任务内容
 export const updateContent = params=>req('put','/task/updateContent',params);
+
+// 超级管理员（各部门统计）
+export const findAdminData = params=>req('get','/employees/findAdmin',params);
