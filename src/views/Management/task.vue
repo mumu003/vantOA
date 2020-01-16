@@ -57,7 +57,7 @@
           content: '',
           score: 0, //积分
           endTime: '请选择', //截止时间
-          // degree: '',
+          degree: '0',    // 程度 0:待完成 1:已完成 2:未完成
           employeesId: []
         },
         isDateShow: false,

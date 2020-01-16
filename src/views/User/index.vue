@@ -3,9 +3,9 @@
     <nav-bar :title='title' :isLeftArrow='isLeftArrow' :isFixed='isFixed'></nav-bar>
     <div v-if="!isSetShow">
       <div class="user-info">
-        <van-image round src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <van-image round src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579150814844&di=9c18d02255eecfc420c994089535bf2d&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F71807977.jpeg" />
         <div class="user-name">{{userInfo.name}}</div>
-        <div class="qr-code"></div>
+        <!-- <div class="qr-code"></div> -->
       </div>
       <van-cell-group class="info-list">
         <van-field label="个人账号" :value="userInfo.phone" readonly />
@@ -14,6 +14,9 @@
         <van-field label="密码" type="password" :value="userInfo.pwd" readonly @click="updatePwd" />
       </van-cell-group>
     </div>
+    <!-- <div class="main-box"> -->
+       <van-button type="info" class="info-btn" block>注销</van-button>
+    <!-- </div> -->
     <!-- 修改 -->
     <div class="update-modal" v-if="isSetShow">
       <van-nav-bar :title="setTitle" left-arrow right-text="保存" @click-left="back" @click-right="save" />
@@ -165,6 +168,9 @@
         background-size: 100% 100%;
         background-repeat: no-repeat;
       }
+    }
+    .info-btn{
+      margin-top: 30px;
     }
 
     .setting {

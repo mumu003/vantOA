@@ -1,10 +1,10 @@
 <template>
   <div class="approval-page main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <van-search placeholder="请输入搜索关键词" shape="round" v-model="keyWord" />
+    <!-- <van-search placeholder="请输入搜索关键词" v-model="keyWord" /> -->
     <div class="batch-head" v-show="isBatch">
       <van-checkbox v-model="isAll">全选</van-checkbox>
-      <span class="cancle" @click="isBatch=!isLeftArrow">取消</span>
+      <span class="cancle" @click="cancle">取消</span>
     </div>
     <!-- 批量处理 -->
     <div class="batch-footer" v-show="isBatch">
@@ -15,9 +15,11 @@
 
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
-        <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}">
-          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
-            <van-checkbox name="1" v-show="isBatch" />
+        <!-- 超级管理员 -->
+        <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}"
+          v-if="roleId==1">
+          <van-cell-group class="wait-item" v-for="(item1,index1) in passList" :key="index1">
+            <van-checkbox :name="item1.id" v-show="isBatch" />
             <div :class="{'appli-item':true,'batchActive':isBatch}">
               <div class="appli-head ">
                 <span class="name">{{item1.name}}</span>
@@ -33,7 +35,7 @@
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title">申请积分：</span>
-                <span class="appli-cnt-info">+{{item1.score}}分</span>
+                <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
               </div>
               <div class="appli-footer">
                 <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
@@ -46,6 +48,37 @@
             </div>
           </van-cell-group>
         </van-checkbox-group>
+        <!-- 普通管理员、员工 -->
+        <van-checkbox-group :class="{'appli-list':true, 'main-box':true}" v-else>
+          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
+            <van-checkbox :name="item1.id" v-show="isBatch" />
+            <div :class="{'appli-item':true,'batchActive':isBatch}">
+              <div class="appli-head ">
+                <span class="name">{{item1.name}}</span>
+                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" />
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title ">规则：</span>
+                <span class="appli-cnt-info">{{item1.rname}}</span>
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title">申请理由：</span>
+                <span class="appli-cnt-info">{{item1.content}}</span>
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title">申请积分：</span>
+                <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
+              </div>
+              <div class="appli-footer">
+                <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
+                <div class="state">
+                  <span class="delete">删除</span>
+                </div>
+              </div>
+            </div>
+          </van-cell-group>
+        </van-checkbox-group>
+        <!-- 超管批量操作 -->
         <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
           <div class="main-box">
             <div class="more-operat" @click="batch">批量操作</div>
@@ -69,7 +102,7 @@
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请积分：</span>
-              <span class="appli-cnt-info">+{{item2.score}}分</span>
+              <span class="appli-cnt-info">{{item2.score>0?`+${item2.score}`:item2.score}}分</span>
             </div>
             <div class="appli-footer">
               <span class="time">{{item2.applyTime.split(" ")[0]}}</span>
@@ -97,7 +130,7 @@
             </div>
             <div class="appli-cnt">
               <span class="appli-cnt-title">申请积分：</span>
-              <span class="appli-cnt-info">+{{item3.score}}分</span>
+              <span class="appli-cnt-info">{{item3.score>0?`+${item3.score}`:item3.score}}分</span>
             </div>
             <div class="appli-footer">
               <span class="time">{{item3.applyTime.split(" ")[0]}}</span>
@@ -141,6 +174,7 @@
         batchData: [], //批量数据d
         isAll: false,
         updateShow: false,
+        roleId: '', //角色id
         updateId: '', //更改Id
         waitList: [], //待审核
         passList: [], //已通过
@@ -148,6 +182,8 @@
       }
     },
     mounted() {
+      let userInfo = this.$store.state.userinfo
+      this.roleId = userInfo.roleId
       this.getList()
     },
     methods: {
@@ -155,6 +191,10 @@
         document.querySelector('.van-tabs__wrap').style.display = "none"
         this.isBatch = true
         this.batchShow = false
+      },
+      cancle() {
+        document.querySelector('.van-tabs__wrap').style.display = "block"
+        this.isBatch = false
       },
       // 获取审批列表
       async getList() {
@@ -176,7 +216,6 @@
       },
       // 单个操作
       async singleOperat(id, type) {
-        console.log(id)
         let ids = []
         ids.push(id)
         if (type == 1) {
@@ -205,27 +244,35 @@
       // 批量操作
       async allOperat(type) {
         if (type == 1) {
-          await pointDisagree(this.batchData).then(res => {
-            if (res.code == 0) {
-              this.$toast("操作成功!")
-            } else if (res.code == -1) {
-              this.$toast(res.msg)
-            }
-          })
+          if (this.batchData == '') {
+            this.$toast("请选择要操作的数据!")
+          } else {
+            await pointDisagree(this.batchData).then(res => {
+              if (res.code == 0) {
+                this.$toast("操作成功!")
+              } else if (res.code == -1) {
+                this.$toast(res.msg)
+              }
+            })
+          }
         } else {
           await passPoint(this.batchData).then(res => {
-            if (res.code == 0) {
-              this.$toast("操作成功!")
-            } else if (res.code == -1) {
-              this.$toast(res.msg)
+            if (this.batchData == '') {
+              this.$toast("请选择要操作的数据!")
+            } else {
+              if (res.code == 0) {
+                this.$toast("操作成功!")
+              } else if (res.code == -1) {
+                this.$toast(res.msg)
+              }
             }
+
           })
         }
       },
       update(id) {
         this.updateShow = true
         this.updateId = id
-
       }
 
     }
@@ -299,6 +346,7 @@
     }
 
     .appli-item {
+      width: 100%;
       background-color: #fff;
       border-radius: 4px;
       font-size: 16px;
@@ -364,7 +412,8 @@
             color: #52D77B;
           }
 
-          .rejected {
+          .rejecte,
+          .delete {
             color: #D75252;
           }
         }

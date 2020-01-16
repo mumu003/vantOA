@@ -65,7 +65,7 @@
     width: 100%;
     height: 45px;
     z-index: 1000;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #eee;
     background: #fff;
 
     ul {
@@ -102,5 +102,4 @@
       fill: #1989fa;
     }
   }
-
 </style>

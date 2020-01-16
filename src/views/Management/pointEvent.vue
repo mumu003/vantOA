@@ -9,7 +9,8 @@
     <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="endShow = true" />
     <van-calendar v-model="endShow" color="#1989fa" @confirm="endConfirm" />
       <div class="main-box">
-      <div class="event-item" v-for="(item,index) in list" :key="index">
+      <div class="no-data" v-if="loadFinished">查无数据~</div>
+      <div class="event-item" v-for="(item,index) in list" :key="index" v-else>
           <div class="user-info">
               <span>{{item.name}}</span>
               <span class="time">{{item.auditTime}}</span>
@@ -40,13 +41,18 @@
             endTime: '',
         },
         list: [],
+        loadFinished:false
       }
     },
     methods: {
       async filter() {
           await findPointEvent(this.eventObj).then(res=>{
               if(res.code==0){
-                  this.list=res.data
+                  if(res.data==''){
+                    this.loadFinished=true
+                  }else{
+                    this.list=res.data
+                  }
               }
           })
       },
@@ -61,8 +67,7 @@
       endConfirm(time) {
         this.endShow = false
         this.eventObj.endTime = this.formatDate(time)
-      },
-      
+      }
     }
   }
 
@@ -80,6 +85,11 @@
           margin-top: 10px;
           height: calc(100vh - 260px);
           overflow-y: scroll;
+      }
+      .no-data{
+        text-align: center;
+        font-size: 16px;
+        color: #666;
       }
       .event-item{
           font-size: 16px;

@@ -3,7 +3,7 @@
     <nav-bar :title='title'></nav-bar>
     <!-- 用户信息 -->
     <div class="user-info main-box">
-      <van-image round src="https://img.yzcdn.cn/vant/cat.jpeg" />
+      <van-image round src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579150814844&di=9c18d02255eecfc420c994089535bf2d&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F71807977.jpeg" />
       <div>
         <span class="user-name">{{userInfo.name}}</span>
         <span class="user-time">{{formatTime(userInfo.createTime)}}</span>
@@ -29,10 +29,10 @@
     <!-- 分数详情 -->
     <van-tabs v-model="activeTab">
       <van-tab title="奖励分" name="award">
-        <div class="time-info">2020.1.9-2020.1.9</div>
-        <div class="chart">
+        <div class="time-info">{{monthStartDate}}-{{nowDate}}</div>
+        <!-- <div class="chart">
           <van-circle v-model="currentRate" :rate="rate" :stroke-width="60" text="100分" />
-        </div>
+        </div> -->
 
         <div class="fraction-list">
           <div class="fraction-item" v-for="(item1,index1) in increaseScore" :key="index1">
@@ -42,10 +42,10 @@
         </div>
       </van-tab>
       <van-tab title="扣分项" name="punish">
-        <div class="time-info">2020.1.9-2020.1.9</div>
-        <div class="chart">
+        <div class="time-info">{{monthStartDate}}-{{nowDate}}</div>
+        <!-- <div class="chart">
           <van-circle v-model="currentRate" :rate="rate" :stroke-width="60" text="100分" />
-        </div>
+        </div> -->
 
         <div class="fraction-list">
           <div class="fraction-item" v-for="(item2,index2) in reduceScore" :key="index2">
@@ -73,20 +73,30 @@
         rate: 100,
         currentRate: 0,
         userInfo: '',
+        monthStartDate:'',//本月第一天
+        nowDate:'',// 当前时间
         increaseScore:[],//奖分分列表
         reduceScore:[], //扣分列表
-        sumData:''// 积分列表
+        sumData:''// 积分数据
       }
     },
     mounted() {
       this.getUserInfo()
     },
     methods: {
+      getTime(){
+        let now = new Date()  
+        this.nowDate=this.formatTime(now)
+        let nowMonth = now.getMonth()
+        let nowYear = now.getFullYear()//本月的开始时间
+        this.monthStartDate =this.formatTime(new Date(nowYear, nowMonth, 1))
+      },
       getUserInfo() {
         let info = this.$store.state.userinfo
         this.userInfo = info
         this.increaseOrReduce()
         this.sumScore()
+        this.getTime()
       },
       // 奖扣分明细
       async increaseOrReduce(){
@@ -110,7 +120,7 @@
         let year = date.getFullYear()
         let month = date.getMonth()+1
         let day = date.getDate()
-        return year + '年' + month + '月' + day + '日'
+        return year + '.' + month + '.' + day 
       },
       async logout() {
         console.log("logout");
@@ -139,13 +149,14 @@
       align-items: flex-end;
 
       .user-name {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
       }
 
       .user-time {
         font-size: 12px;
         color: #999;
+        margin-top: 5px;
       }
 
       button {
@@ -202,7 +213,9 @@
         font-size: 14px;
       }
 
-      .fraction-list {}
+      .fraction-list {
+        margin-top: 15px;
+      }
 
       .fraction-item {
         display: flex;
