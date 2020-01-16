@@ -18,6 +18,14 @@ const routes = [
     component: Home
   },
   {
+    path: '/adminhome',
+    name: 'adminhome',
+    meta:{
+      requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
+    },
+    component:()=>import('@/views/Admin/home.vue')
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting

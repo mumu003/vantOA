@@ -93,20 +93,20 @@ export default [
       meta: {
         id: 5,
         type:2,
-        name: '积分录入',
+        name: '积分事件',
         img:'img6',
         requireAuth:true,
         manageShow:false
       },
     },{
-      path: '/pointEntry',
-      name: '积分录入',
-      component: () => import('@/views/Management/pointEntry.vue'),
+      path: '/pointRank',
+      name: '积分排名',
+      component: () => import('@/views/Management/pointRank.vue'),
       meta: {
-        id: 5,
+        id: 6,
         type:2,
-        name: '积分录入',
-        img:'img7',
+        name: '积分排名',
+        img:'img8',
         requireAuth:true,
         manageShow:false
       },
@@ -115,7 +115,7 @@ export default [
       name: '积分申请',
       component: () => import('@/views/Management/integral.vue'),
       meta: {
-        id: 5,
+        id: 7,
         type:2,
         name: '积分申请',
         img:'img7',
