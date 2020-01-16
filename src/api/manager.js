@@ -38,3 +38,18 @@ export const updateRulesType = params=>req('put','/rulesType/update',params)
 
 // 删除规则类型
 export const deleteRulesType = params=>req('delete','/rulesType/delete',params)
+
+// 任务大厅(员工端)
+export const findByEmpl = params=>req('get','/task/findByEmpl',params)
+
+// 员工管理-查看所有用户
+export const findList = params=>req('get','/employees/findList',params)
+
+// 修改员工部门
+export const updateEmployeesDept = params=>req('put','/employees/updateEmployeesDept',params)
+
+// 修改员工角色
+export const updateEmployeesRole = params=>req('put','/employees/updateEmployeesRole',params)
+
+// 删除员工
+export const deleteEmployees = params=>req('delete','/employees/delete',params)

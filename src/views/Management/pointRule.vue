@@ -3,7 +3,7 @@
   <div class="pointRule main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow' ></nav-bar>
     <div v-if="baseShow">
-      <van-search v-model="name" placeholder="请输入规则名称" show-action shape="round" @search="onSearch">
+      <van-search v-model="name" placeholder="请输入规则名称" show-action @search="onSearch">
         <div slot="action" @click="onSearch">搜索</div>
       </van-search>
       <van-field v-model="type" clearable label="选择分类 &gt;" placeholder="请选择分类" @click="typeShow = true" readonly="readonly"/>

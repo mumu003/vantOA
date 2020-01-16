@@ -4,12 +4,19 @@
     <van-search v-model="eventObj.name" placeholder="请输入人员姓名" show-action @search="filter">
       <div slot="action" @click="filter">筛选</div>
     </van-search>
-    <van-cell title="开始时间" is-link :value="eventObj.starTime" @click="startShow = true" />
+    <!-- <van-cell title="开始时间" is-link :value="eventObj.starTime" @click="show = true"/>
     <van-calendar v-model="startShow" color="#1989fa" @confirm="startConfirm" />
-    <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="endShow = true" />
-    <van-calendar v-model="endShow" color="#1989fa" @confirm="endConfirm" />
-      <div class="main-box">
-      <div class="no-data" v-if="loadFinished">查无数据~</div>
+    <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="show = true" />
+    <van-calendar v-model="endShow" color="#1989fa" @confirm="endConfirm" /> -->
+
+
+    <van-cell title="选择日期区间" :value="date" @click="show = true" is-link required/>
+    <van-calendar v-model="show" color="#1989fa" @confirm="onConfirm" type="range" :min-date="minTime"/>
+
+
+    <div class="main-box">
+      <van-loading size="24px" v-show="loading">加载中...</van-loading>
+      <div class="no-data" v-if="loadFinished">查无数据</div>
       <div class="event-item" v-for="(item,index) in list" :key="index" v-else>
           <div class="user-info">
               <span>{{item.name}}</span>
@@ -21,7 +28,7 @@
               <span>{{item.score}}分</span>
           </div>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -41,32 +48,55 @@
             endTime: '',
         },
         list: [],
-        loadFinished:false
+        loadFinished:false,
+        date: '',
+        show: false,
+        minTime:new Date(2019,0,1),
+        loading:false,
       }
     },
     methods: {
       async filter() {
+        if(this.eventObj.starTime == ""){
+          this.$toast.fail("请选择起始时间");
+          return;
+        }
+        else{
+          this.loading = true;
           await findPointEvent(this.eventObj).then(res=>{
-              if(res.code==0){
-                  if(res.data==''){
-                    this.loadFinished=true
-                  }else{
-                    this.list=res.data
-                  }
-              }
+            if(res.code==0){
+              setTimeout(() => {
+                this.loading = false;
+                if(res.data.length==0){
+                  this.loadFinished = true;
+                }else{
+                  this.loadFinished = false;
+                  this.list = res.data;
+                }
+              }, 800);
+            }
           })
+        }
+          
       },
       // 格式化日期
       formatDate(date) {
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       },
-      startConfirm(time) {
-        this.startShow = false
-        this.eventObj.starTime = this.formatDate(time)
-      },
-      endConfirm(time) {
-        this.endShow = false
-        this.eventObj.endTime = this.formatDate(time)
+      // startConfirm(time) {
+      //   this.startShow = false;
+      //   this.eventObj.starTime = this.formatDate(time);
+      // },
+      // endConfirm(time) {
+      //   this.endShow = false;
+      //   this.eventObj.endTime = this.formatDate(time);
+      // },
+      onConfirm(val){
+        // this.date = val;
+        this.eventObj.starTime = this.formatDate(val[0]);
+        this.eventObj.endTime = this.formatDate(val[1]);
+        this.date = this.eventObj.starTime + '-' + this.eventObj.endTime;
+        this.show = false;
       }
     }
   }

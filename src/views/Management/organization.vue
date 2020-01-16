@@ -4,7 +4,7 @@
       <div>
         <nav-bar :title='barTitle' :isLeftArrow='isLeftArrow' ></nav-bar>
         <!-- <van-nav-bar title="组织架构" left-text="返回" left-arrow @click-left="onClickLeft" class="bluenav" /> -->
-        <van-search v-model="value" placeholder="请输入部门名称" show-action shape="round" @search="onSearch" >
+        <van-search v-model="value" placeholder="请输入部门名称" show-action  @search="onSearch" >
           <div slot="action" @click="onSearch">搜索</div> 
         </van-search>
         <div class="topmain">

@@ -260,7 +260,7 @@ export default {
         font-size: 0.675rem /* 14/16 */;
         background-color: #fff;
         border-radius: 4px;
-        box-shadow: 0 2px 5px#ccc;
+        box-shadow: 0 2px 5px #ccc;
         margin: 15px 10px;
       }
       .row{
@@ -309,6 +309,7 @@ export default {
             // margin: 0 3px;
           }
           .van-tag{
+            font-size:12px;
             padding: 8px 8px;
           }
         }

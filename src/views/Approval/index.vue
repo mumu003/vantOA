@@ -87,7 +87,7 @@
         </van-popup>
       </van-tab>
       <van-tab title="已通过">
-        <div class="appli-list main-box">
+        <div class="appli-list main-box accept">
           <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
               <span class="name">{{item2.name}}</span>
@@ -114,7 +114,7 @@
         </div>
       </van-tab>
       <van-tab title="未通过">
-        <div class="appli-list main-box">
+        <div class="appli-list main-box unaccept">
           <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
             <div class="appli-head ">
               <span class="name">{{item3.name}}</span>
@@ -330,15 +330,24 @@
     }
 
     .appli-list {
-      padding: 10px 0;
-      height: calc(100vh - 180px);
+      // padding: 10px 0;
+      max-height: calc(100vh - 140px);
       overflow-y: scroll;
-
+    }
+    .accept,.unaccept{
+      .appli-item{
+        width:unset;
+        margin: 15px 10px;
+      }
     }
 
     .wait-item {
       @include flex;
       background: none;
+      margin: 15px 10px;
+      .appli-item{
+       margin-bottom:0;
+      }
     }
 
     .batchActive {
@@ -351,6 +360,8 @@
       border-radius: 4px;
       font-size: 16px;
       margin-bottom: 10px;
+      box-shadow: 0 2px 5px #ccc;
+      // margin: 15px 10px;
 
       // box-shadow: 0 0.0625rem 0.15625rem #ccc;
       .appli-head {
@@ -363,7 +374,7 @@
         }
 
         .van-icon-ellipsis {
-          color: #E4E4E4;
+          color: #333;
         }
       }
 

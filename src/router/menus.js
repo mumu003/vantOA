@@ -50,18 +50,32 @@ export default [
         img:'img3',
       },
     },{
-      path: '/task',
+      path: '/taskManage',
       name: '任务管理',
-      component: () => import('@/views/Management/task.vue'),
+      component: () => import('@/views/Admin/taskManage.vue'),
       meta: {
         id: 4,
         type:1,
-        name: '发布任务',
+        name: '任务管理',
         manageShow:false,
         requireAuth:true,
         img:'img4',
       },
-    },{
+    },
+    // {
+    //   path: '/task',
+    //   name: '任务管理',
+    //   component: () => import('@/views/Management/task.vue'),
+    //   meta: {
+    //     id: 4,
+    //     type:1,
+    //     name: '发布任务',
+    //     manageShow:false,
+    //     requireAuth:true,
+    //     img:'img4',
+    //   },
+    // },
+    {
       path: '/taskRoom',
       name: '任务大厅',
       component: () => import('@/views/Management/taskRoom.vue'),
@@ -74,24 +88,11 @@ export default [
         img:'img5',
       },
     },{
-      path: '/taskManage',
-      name: '任务管理（管理员）',
-      component: () => import('@/views/Admin/taskManage.vue'),
-      meta: {
-        id: 5,
-        type:1,
-        name: '任务管理',
-        manageShow:false,
-        requireAuth:true,
-        img:'img5',
-      },
-    },
-    {
       path: '/pointEvent',
       name: '积分事件',
       component: () => import('@/views/Management/pointEvent.vue'),
       meta: {
-        id: 5,
+        id: 6,
         type:2,
         name: '积分录入',
         img:'img6',
@@ -103,7 +104,7 @@ export default [
       name: '积分录入',
       component: () => import('@/views/Management/pointEntry.vue'),
       meta: {
-        id: 5,
+        id: 7,
         type:2,
         name: '积分录入',
         img:'img7',
@@ -115,10 +116,22 @@ export default [
       name: '积分申请',
       component: () => import('@/views/Management/integral.vue'),
       meta: {
-        id: 5,
+        id: 8,
         type:2,
         name: '积分申请',
         img:'img7',
+        requireAuth:true,
+        manageShow:false
+      },
+    },{
+      path: '/staff',
+      name: '员工管理',
+      component: () => import('@/views/Management/staff.vue'),
+      meta: {
+        id: 9,
+        type:2,
+        name: '员工管理',
+        img:'img9',
         requireAuth:true,
         manageShow:false
       },

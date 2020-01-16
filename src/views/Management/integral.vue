@@ -13,11 +13,11 @@
           </van-dropdown-menu>
         </div>
         <div class="moreinput">
-          <van-field v-model="param.certifier" size="small" placeholder="证明人" />
-          <span class="span">分数:</span>
-          <van-field v-model="param.add" size="small" placeholder="输入分值" />
+          <van-field v-model="param.certifier" size="small" placeholder="证明人" required />
+          <span class="span">分值:</span>
+          <van-field v-model="param.add" size="small" type="number" min="0" placeholder="输入分值" required />
         </div>
-        <van-switch-cell v-model="checked" title="指定积分规则" active-color="rgb(0,226,102)" />
+        <van-switch-cell v-model="checked" title="指定积分规则" active-color="#1989fa" />
         <div class="select" v-if="checked">
           <label for>选择规则类别</label>
           <van-dropdown-menu>
@@ -32,7 +32,7 @@
         </div>
       </van-cell-group>
     </div>
-    <van-button type="primary" block class="bottombtn" @click="applyempl">立即申请</van-button>
+    <van-button type="info" class="info-btn" block  @click="applyempl">立即申请</van-button>
   </div>
 </template>
 <script>
@@ -141,22 +141,26 @@ export default {
       if (this.param.certifier == "") {
         this.$toast("证明人不能为空!");
         return;
-      } else if (this.param.add == "") {
-        this.$toast("分数不能为空!");
-        return;
-      }
-
-      delete this.param.employeesId;
-      if (!this.checked) {
-        this.param.rulesId = "";
-      }
-
-      await applyempl(this.param).then(res => {
-        if (res.code == 0) {
-          this.$toast("申请成功");
+      } 
+      // else if (this.param.add == "") {
+      //   this.$toast("分数不能为空!");
+      //   return;
+      // }
+      else if(!this.param.add){
+        this.$toast("请输入正确格式的积分");
+      }else{
+        delete this.param.employeesId;
+        if (!this.checked) {
+          this.param.rulesId = "";
         }
-        this.init();
-      });
+
+        await applyempl(this.param).then(res => {
+          if (res.code == 0) {
+            this.$toast("申请成功");
+          }
+          this.init();
+        });
+      }
     }
   }
 };
@@ -171,23 +175,22 @@ export default {
   left: 0;
 }
 .van-cell-group {
-  padding-bottom: 1rem;
+  padding:10px 0;
+  // padding-bottom: 1rem;
 }
 .van-field {
   border: 1px solid #ccc;
   width: calc(100% - 0.4rem);
   margin-left: 0.2rem;
   border-radius: 3px;
-  margin-top: 0.2rem;
+  // margin-top: 0.2rem;
 }
 .moreinput {
   display: flex;
-
-  line-height: 1.75rem;
   font-size: 0.5rem;
-  font-weight: bold;
   .span {
     margin-left: 0.5rem;
+    line-height: 45px;
   }
   .van-field {
     width: 40%;
@@ -214,16 +217,16 @@ export default {
 }
 
 .bottombtn {
-  position: absolute;
-  bottom: 2rem;
-  background-color: rgb(25, 137, 250);
+  // position: absolute;
+  // bottom: 2rem;
+  background-color: #1989fa;
 }
 .approverselect {
   font-size: 0.5rem;
   display: flex;
   width: calc(100% - 0.4rem);
   margin: 0.3rem auto;
-  margin-bottom: 0rem;
+  // margin-bottom: 0rem;
   justify-content: space-between;
   border: 1px solid #ccc;
   height: 1.4rem;
