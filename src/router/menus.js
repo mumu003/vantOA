@@ -100,18 +100,6 @@ export default [
         manageShow:false
       },
     },{
-      path: '/pointRank',
-      name: '积分排名',
-      component: () => import('@/views/Management/pointRank.vue'),
-      meta: {
-        id: 7,
-        type:2,
-        name: '积分排名',
-        img:'img8',
-        requireAuth:true,
-        manageShow:false
-      },
-    },{
       path: '/integral',
       name: '积分申请',
       component: () => import('@/views/Management/integral.vue'),
@@ -120,6 +108,18 @@ export default [
         type:2,
         name: '积分申请',
         img:'img7',
+        requireAuth:true,
+        manageShow:false
+      },
+    },{
+      path: '/pointRank',
+      name: '积分排名',
+      component: () => import('@/views/Management/pointRank.vue'),
+      meta: {
+        id: 7,
+        type:2,
+        name: '积分排名',
+        img:'img8',
         requireAuth:true,
         manageShow:false
       },

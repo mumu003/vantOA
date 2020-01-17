@@ -115,7 +115,7 @@
     .summary-list {
       margin-top: 10px;
       background: #fff;
-      height: calc(100vh - 240px);
+      height: calc(100vh - 195px);
       overflow: auto;
 
     }

@@ -85,6 +85,8 @@
             <div class="more-operat" @click="batchShow=!batchShow">取消</div>
           </div>
         </van-popup>
+        <van-loading size="24px" v-show="loading">加载中...</van-loading>
+        <div class="no-data">暂无数据</div>
       </van-tab>
       <van-tab title="已通过">
         <div class="appli-list main-box accept">
@@ -112,6 +114,8 @@
             </div>
           </div>
         </div>
+        <van-loading size="24px" v-show="loading">加载中...</van-loading>
+        <div class="no-data">暂无数据</div>
       </van-tab>
       <van-tab title="未通过">
         <div class="appli-list main-box unaccept">
@@ -146,6 +150,8 @@
             <div class="more-operat" @click="updateShow=!updateShow">取消</div>
           </div>
         </van-popup>
+        <van-loading size="24px" v-show="loading">加载中...</van-loading>
+        <div class="no-data">暂无数据</div>
       </van-tab>
     </van-tabs>
 
@@ -180,6 +186,8 @@
         waitList: [], //待审核
         passList: [], //已通过
         disagreeList: [], //未通过
+        loadFinished: false,
+        loading: false
       }
     },
     mounted() {
@@ -199,27 +207,55 @@
       },
       // 获取审批列表
       async getList() {
+        this.loading = true
+        // 待审批
         await findPointWait().then(res => {
           if (res.code == 0) {
-            this.waitList = res.data
+            setTimeout(() => {
+              this.loading = false
+              if (res.data.length == 0) {
+                this.loadFinished = true
+              } else {
+                this.loadFinished = false
+                this.waitList = res.data
+              }
+            })
           }
         })
+        // 已通过
         await findPointPass().then(res => {
           if (res.code == 0) {
-            this.passList = res.data
+            setTimeout(() => {
+              this.loading = false
+              if (res.data.length == 0) {
+                this.loadFinished = true
+              } else {
+                this.loadFinished = false
+                this.passList = res.data
+              }
+            })
           }
         })
+        // 未通过
         await findPointDisagree().then(res => {
           if (res.code == 0) {
-            this.disagreeList = res.data
+            setTimeout(() => {
+              this.loading = false
+              if (res.data.length == 0) {
+                this.loadFinished = true
+              } else {
+                this.loadFinished = false
+                this.disagreeList = res.data
+              }
+            })
           }
         })
       },
       async deletePoint(id) {
         await deletePoint(id).then(res => {
-          if(res.code==0){
+          if (res.code == 0) {
             this.$toast("删除成功!")
-          }else{
+          } else {
             this.$toast(res.msg)
           }
         })
@@ -461,6 +497,13 @@
       font-size: 16px;
       margin-top: 10px;
       border-radius: 12px;
+    }
+
+    .no-data {
+      text-align: center;
+      font-size: 16px;
+      padding: 20px 0;
+      color: #666;
     }
   }
 
