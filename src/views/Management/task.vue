@@ -5,28 +5,28 @@
     <van-cell-group>
       <!-- <div :class="[aaa&&bbb ==1 ? 'a':aaa&&bbb == 2 ? 'b' : 'c']">{{aaa && bbb == "1" ? '123' : (aaa && bbb == '2') ? '456' : '789'}}</div> -->
       <van-field v-model="taskObj.title" rows="2" autosize label="任务标题" type="textarea" maxlength="50"
-        placeholder="请输入任务标题" show-word-limit />
+        placeholder="请输入任务标题" show-word-limit required/>
       <van-field v-model="taskObj.content" rows="2" autosize label="任务内容" type="textarea" maxlength="100"
-        placeholder="请输入任务内容" show-word-limit />
-      <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" />
+        placeholder="请输入任务内容" show-word-limit required/>
+      <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" required/>
 
-      <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="timeShow = true" />
+      <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="timeShow = true" required/>
       <van-popup v-model="timeShow" position="bottom" :style="{ height: '40%' }"   >
         <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="confirmTime" @cancel="timeShow = false;" :formatter="formatter"/>
       </van-popup>
 
       <!-- <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="isDateShow = true" />
       <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" /> -->
-      <van-cell is-link @click="isMemberShow=!isMemberShow">选择人员
+      <van-cell is-link @click="isMemberShow=!isMemberShow" required>选择人员
         <span class="tip">请选择</span>
       </van-cell>
-      <div class="main-box">
-        <van-tag closeable  plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
+      <div class="main-box" style="margin:5px 10px;">
+        <van-tag closeable round plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
           {{item}}&#x3000;
         </van-tag>
       </div>
       <van-popup round v-model="isMemberShow" position="bottom" :style="{ height: '60%' }">
-        <div class="member-title main-box">
+        <div class="member-title main-box" >
           <span>请选择人员</span>
           <span @click="toSelect">确定</span>
         </div>
@@ -153,10 +153,10 @@
         // console.log(this.taskObj.score)
         // console.log(this.taskObj.employeesId)
         // console.log(this.taskObj.endTime)
-        if (this.taskObj.title == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '') {
+        if (this.taskObj.title == '' ||  this.taskObj.content == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '' ) {
           this.$toast("请输入完整内容再提交");
           return
-        }else if(!this.taskObj.score){
+        }else if(!this.taskObj.score && this.taskObj.score != 0){
           this.$toast("请输入正确格式的积分");
           // 分数大于0
         } else {
@@ -207,8 +207,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 16px;
-      padding-top: 20px;
-      padding-bottom: 10px;
+      padding: 20px;
       span:last-child {
         color: #1989fa;
       }
@@ -264,6 +263,8 @@
     }
     .van-tabs__content{
       padding-left:20px;
+      height: 280px;
+      overflow-y: scroll;
     }
 
     .van-cell__title {

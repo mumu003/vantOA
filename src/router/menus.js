@@ -100,11 +100,23 @@ export default [
         manageShow:false
       },
     },{
+      path: '/pointEntry',
+      name: '积分录入',
+      component: () => import('@/views/Management/pointEntry.vue'),
+      meta: {
+        id: 7,
+        type:2,
+        name: '积分录入',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false
+      },
+    },{
       path: '/pointRank',
       name: '积分排名',
       component: () => import('@/views/Management/pointRank.vue'),
       meta: {
-        id: 7,
+        id: 8,
         type:2,
         name: '积分排名',
         img:'img8',
