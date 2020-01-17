@@ -15,81 +15,84 @@
 
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
-        <!-- 超级管理员 -->
-        <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}"
-          v-if="roleId==1">
-          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
-            <van-checkbox :name="item1.id" v-show="isBatch" />
-            <div :class="{'appli-item':true,'batchActive':isBatch}">
-              <div class="appli-head ">
-                <span class="name">{{item1.name}}</span>
-                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title ">规则：</span>
-                <span class="appli-cnt-info">{{item1.rname}}</span>
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title">申请理由：</span>
-                <span class="appli-cnt-info">{{item1.content}}</span>
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title">申请积分：</span>
-                <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
-              </div>
-              <div class="appli-footer">
-                <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
-                <div class="state">
-                  <span @click="singleOperat(item1.id,1)">拒绝</span>
-                  <em></em>
-                  <span @click="singleOperat(item1.id,2)">同意</span>
-                </div>
-              </div>
-            </div>
-          </van-cell-group>
-        </van-checkbox-group>
-        <!-- 普通管理员、员工 -->
-        <van-checkbox-group :class="{'appli-list':true, 'main-box':true}" v-else>
-          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
-            <van-checkbox :name="item1.id" v-show="isBatch" />
-            <div :class="{'appli-item':true,'batchActive':isBatch}">
-              <div class="appli-head ">
-                <span class="name">{{item1.name}}</span>
-                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title ">规则：</span>
-                <span class="appli-cnt-info">{{item1.rname}}</span>
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title">申请理由：</span>
-                <span class="appli-cnt-info">{{item1.content}}</span>
-              </div>
-              <div class="appli-cnt">
-                <span class="appli-cnt-title">申请积分：</span>
-                <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
-              </div>
-              <div class="appli-footer">
-                <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
-                <div class="state">
-                  <span class="delete" @click="deletePoint(item1.id)">删除</span>
-                </div>
-              </div>
-            </div>
-          </van-cell-group>
-        </van-checkbox-group>
-        <!-- 超管批量操作 -->
-        <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
-          <div class="main-box">
-            <div class="more-operat" @click="batch">批量操作</div>
-            <div class="more-operat" @click="batchShow=!batchShow">取消</div>
-          </div>
-        </van-popup>
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data">暂无数据</div>
+        <div class="no-data" v-if="loadFinished[0]">暂无数据</div>
+        <template v-else>
+          <!-- 超级管理员 -->
+          <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}"
+            v-if="roleId==1">
+            <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
+              <van-checkbox :name="item1.id" v-show="isBatch" />
+              <div :class="{'appli-item':true,'batchActive':isBatch}">
+                <div class="appli-head ">
+                  <span class="name">{{item1.name}}</span>
+                  <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title ">规则：</span>
+                  <span class="appli-cnt-info">{{item1.rname}}</span>
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title">申请理由：</span>
+                  <span class="appli-cnt-info">{{item1.content}}</span>
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title">申请积分：</span>
+                  <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
+                </div>
+                <div class="appli-footer">
+                  <span class="time">{{item1.applyTime}}</span>
+                  <div class="state">
+                    <span @click="singleOperat(item1.id,1)">拒绝</span>
+                    <em></em>
+                    <span @click="singleOperat(item1.id,2)">同意</span>
+                  </div>
+                </div>
+              </div>
+            </van-cell-group>
+          </van-checkbox-group>
+          <!-- 普通管理员、员工 -->
+          <van-checkbox-group :class="{'appli-list':true, 'main-box':true}" v-else>
+            <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
+              <div :class="{'appli-item':true,'batchActive':isBatch}">
+                <div class="appli-head ">
+                  <span class="name">{{item1.name}}</span>
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title ">规则：</span>
+                  <span class="appli-cnt-info">{{item1.rname}}</span>
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title">申请理由：</span>
+                  <span class="appli-cnt-info">{{item1.content}}</span>
+                </div>
+                <div class="appli-cnt">
+                  <span class="appli-cnt-title">申请积分：</span>
+                  <span class="appli-cnt-info">{{item1.score>0 ? `+${item1.score}`:item1.score}}分</span>
+                </div>
+                <div class="appli-footer">
+                  <span class="time">{{item1.applyTime}}</span>
+                  <div class="state">
+                    <span class="delete" @click="deletePoint(item1.id)">删除</span>
+                  </div>
+                </div>
+              </div>
+            </van-cell-group>
+          </van-checkbox-group>
+          <!-- 超管批量操作 -->
+          <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
+            <div class="main-box">
+              <div class="more-operat" @click="batch">批量操作</div>
+              <div class="more-operat" @click="batchShow=!batchShow">取消</div>
+            </div>
+          </van-popup>
+        </template>
+
       </van-tab>
       <van-tab title="已通过">
-        <div class="appli-list main-box accept">
+        <van-loading size="24px" v-show="loading">加载中...</van-loading>
+        <div class="no-data" v-if="loadFinished[1]">暂无数据</div>
+        <div class="appli-list main-box accept" v-else>
           <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
               <span class="name">{{item2.name}}</span>
@@ -107,51 +110,51 @@
               <span class="appli-cnt-info">{{item2.score>0?`+${item2.score}`:item2.score}}分</span>
             </div>
             <div class="appli-footer">
-              <span class="time">{{item2.applyTime.split(" ")[0]}}</span>
+              <span class="time">{{item2.applyTime}}</span>
               <div class="state">
                 <span class="passed">已通过</span>
               </div>
             </div>
           </div>
         </div>
-        <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data">暂无数据</div>
       </van-tab>
       <van-tab title="未通过">
-        <div class="appli-list main-box unaccept">
-          <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
-            <div class="appli-head ">
-              <span class="name">{{item3.name}}</span>
-              <van-icon name="ellipsis" @click.stop="update(item3.id)" />
-            </div>
-            <div class="appli-cnt">
-              <span class="appli-cnt-title ">规则：</span>
-              <span class="appli-cnt-info">{{item3.rname}}</span>
-            </div>
-            <div class="appli-cnt">
-              <span class="appli-cnt-title">申请理由：</span>
-              <span class="appli-cnt-info">{{item3.content}}</span>
-            </div>
-            <div class="appli-cnt">
-              <span class="appli-cnt-title">申请积分：</span>
-              <span class="appli-cnt-info">{{item3.score>0?`+${item3.score}`:item3.score}}分</span>
-            </div>
-            <div class="appli-footer">
-              <span class="time">{{item3.applyTime.split(" ")[0]}}</span>
-              <div class="state">
-                <span class="rejected">已拒绝</span>
+        <van-loading size="24px" v-show="loading">加载中...</van-loading>
+        <div class="no-data" v-if="loadFinished[2]">暂无数据</div>
+        <template v-else>
+          <div class="appli-list main-box unaccept">
+            <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
+              <div class="appli-head ">
+                <span class="name">{{item3.name}}</span>
+                <van-icon name="ellipsis" @click.stop="update(item3.id)" />
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title ">规则：</span>
+                <span class="appli-cnt-info">{{item3.rname}}</span>
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title">申请理由：</span>
+                <span class="appli-cnt-info">{{item3.content}}</span>
+              </div>
+              <div class="appli-cnt">
+                <span class="appli-cnt-title">申请积分：</span>
+                <span class="appli-cnt-info">{{item3.score>0?`+${item3.score}`:item3.score}}分</span>
+              </div>
+              <div class="appli-footer">
+                <span class="time">{{item3.applyTime}}</span>
+                <div class="state">
+                  <span class="rejected">已拒绝</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <van-popup v-model="updateShow" position="bottom" :style="{ height: '20%' }">
-          <div class="main-box">
-            <div class="more-operat" @click="singleOperat(updateId,2)">更改为同意</div>
-            <div class="more-operat" @click="updateShow=!updateShow">取消</div>
-          </div>
-        </van-popup>
-        <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data">暂无数据</div>
+          <van-popup v-model="updateShow" position="bottom" :style="{ height: '20%' }">
+            <div class="main-box">
+              <div class="more-operat" @click="singleOperat(updateId,2)">更改为同意</div>
+              <div class="more-operat" @click="updateShow=!updateShow">取消</div>
+            </div>
+          </van-popup>
+        </template>
       </van-tab>
     </van-tabs>
 
@@ -186,7 +189,7 @@
         waitList: [], //待审核
         passList: [], //已通过
         disagreeList: [], //未通过
-        loadFinished: false,
+        loadFinished: [false, false, false],
         loading: false
       }
     },
@@ -214,9 +217,9 @@
             setTimeout(() => {
               this.loading = false
               if (res.data.length == 0) {
-                this.loadFinished = true
+                this.loadFinished[0] = true
               } else {
-                this.loadFinished = false
+                this.loadFinished[0] = false
                 this.waitList = res.data
               }
             })
@@ -228,9 +231,9 @@
             setTimeout(() => {
               this.loading = false
               if (res.data.length == 0) {
-                this.loadFinished = true
+                this.loadFinished[1] = true
               } else {
-                this.loadFinished = false
+                this.loadFinished[1] = false
                 this.passList = res.data
               }
             })
@@ -242,9 +245,9 @@
             setTimeout(() => {
               this.loading = false
               if (res.data.length == 0) {
-                this.loadFinished = true
+                this.loadFinished[2] = true
               } else {
-                this.loadFinished = false
+                this.loadFinished[2] = false
                 this.disagreeList = res.data
               }
             })
