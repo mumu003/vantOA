@@ -2,11 +2,11 @@
 <!-- 添加员工 -->
   <div class="addStaff">
     <van-nav-bar title="添加员工" left-arrow @click-left="$emit('back')"  class="bluenav"/>
-    <van-field v-model="departName" clearable label="选择部门 &gt;" placeholder="请选择部门" @click="departPop" readonly="readonly" required/>
+    <van-field v-model="departName" clearable label="选择部门" placeholder="请选择部门" @click="departPop" readonly="readonly" required is-link/>
     <van-popup v-model="departShow" position="bottom">
       <van-picker show-toolbar :columns="departColumns" @cancel="departShow = false"  @confirm="onSelect" />
     </van-popup>  
-    <van-field v-model="roleName" clearable label="选择职位 &gt;" placeholder="请选择职位" @click="rolePop" readonly="readonly" required/>
+    <van-field v-model="roleName" clearable label="选择职位" placeholder="请选择职位" @click="rolePop" readonly="readonly" required is-link/>
     <van-popup v-model="roleShow" position="bottom">
       <van-picker show-toolbar :columns="roleColumns" @cancel="roleShow = false"  @confirm="onSelect2" />
     </van-popup>  

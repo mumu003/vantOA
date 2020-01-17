@@ -254,7 +254,7 @@ export default {
   }
   .tasks {
     .van-list{
-      height: calc(100vh - 90px);
+      height: calc(100vh - 55px);
       overflow-y: scroll;
       .task {
         font-size: 0.675rem /* 14/16 */;

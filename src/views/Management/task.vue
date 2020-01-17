@@ -108,7 +108,7 @@
       },
       // 格式化日期
       formatDate(date) {
-       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+       return `${date.getFullYear()}-${date.getMonth() + 1}~${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
       },
       dateConfirm(endTime) {
         this.isDateShow = false

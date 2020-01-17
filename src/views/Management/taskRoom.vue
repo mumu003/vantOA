@@ -16,13 +16,14 @@
                 <p class="time">发布时间：<span>{{item.createTime | formtime}}</span></p>
                 <p class="time">结束时间：<span>{{item.endDate | formtime}}</span></p>
               </div>
-              <div class="btn-row" v-if="item.degree == 0">
+              <!-- <div class="btn-row" v-if="item.degree == 0">
                 <van-tag plain type="success" @click.stop="finish(item)" style="margin-right:8px;">已完成</van-tag>
                 <van-tag plain type="warning" @click.stop="finish(item)">未完成</van-tag>
-              </div>
-              <div class="btn-row" v-else>
+              </div> -->
+              <div class="btn-row" >
                 <span v-if="item.degree == 1" class="passed">已完成</span>
                 <span v-else-if="item.degree == 2" class="rejected">未完成</span>
+                <span v-else class="unpassed">待完成</span>
               </div>
             </div>
           </div>
@@ -136,7 +137,7 @@ export default {
   }
   .tasks {
     .van-list{
-      height: calc(100vh - 90px);
+      height: calc(100vh - 50px);
       overflow-y: scroll;
       .task {
         font-size: 0.675rem /* 14/16 */;

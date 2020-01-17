@@ -95,7 +95,7 @@
         // this.date = val;
         this.eventObj.starTime = this.formatDate(val[0]);
         this.eventObj.endTime = this.formatDate(val[1]);
-        this.date = this.eventObj.starTime + '-' + this.eventObj.endTime;
+        this.date = this.eventObj.starTime + '~' + this.eventObj.endTime;
         this.show = false;
       }
     }

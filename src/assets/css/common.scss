@@ -107,13 +107,15 @@
     padding: 0 10px;
   }
 }
-// 已通过 / 未通过
+// 已通过 
 .passed {
   color: #07c160;
 }
-
 .rejected {
   color: #ff976a;
+}
+.unpassed{
+  color: #ee0a24;
 }
 // 数字键盘
 .van-number-keyboard{

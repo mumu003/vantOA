@@ -204,7 +204,7 @@ export default {
 }
 .main {
   margin-top: 10px;
-  height: calc(100vh - 265px);
+  height: calc(100vh - 220px);
   overflow-y: scroll;
 }
 
