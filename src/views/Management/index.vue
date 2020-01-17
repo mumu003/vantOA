@@ -9,7 +9,6 @@
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
-          <!-- <p>{{$route.meta.manageShow}}</p> -->
           <p>{{item.name}}</p>
         </van-col>
       </van-row>
@@ -19,12 +18,11 @@
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
-          <!-- <p>{{$route.meta.manageShow}}</p> -->
           <p>{{item.name}}</p>
         </van-col>
       </van-row>
     </div>
-    <tab-bar></tab-bar>
+    <tab-bar v-show="$route.meta.manageShow"></tab-bar>
     <router-view></router-view>
   </div>
 </template>
@@ -66,9 +64,6 @@
       // console.log(this.$router.options.routers )
     },
     methods: {
-      aaa() {
-        console.log(this.routes)
-      },
       switchMenu(item) {
         this.$router.push({
           path: item.path,

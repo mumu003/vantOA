@@ -123,7 +123,6 @@
         return year + '.' + month + '.' + day 
       },
       async logout() {
-        console.log("logout");
         this.$store.commit(types.LOGOUT);
         this.$router.push({
           path: "login"

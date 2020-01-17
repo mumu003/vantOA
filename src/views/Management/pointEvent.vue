@@ -113,7 +113,7 @@
   .point-event {
       .main-box{
           margin-top: 10px;
-          height: calc(100vh - 260px);
+          height: calc(100vh - 215px);
           overflow-y: scroll;
       }
       .no-data{
