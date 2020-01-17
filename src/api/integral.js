@@ -35,3 +35,6 @@ export const pointDisagree = params =>req('post','/point/pointDisagree',params);
 
 // 普通员积分排行
 export const getRank = params =>req('get','/point/emplrank',params);
+
+// 删除审批申请信息
+export const deletePoint = params =>req('delete','/point/delete',params);
