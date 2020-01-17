@@ -1,7 +1,7 @@
 <template>
   <div class="point-rank main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <van-cell title="选择日期区间" is-link :value="date" @click="dateShow = true" />
+    <van-cell title="选择日期区间" required is-link :value="date" @click="dateShow = true" />
 
     <van-calendar v-model="dateShow" type="range" color="#1989fa" @confirm="dateConfirm" />
 
@@ -28,6 +28,8 @@
         </div>
       </van-tab>
     </van-tabs>
+    <van-loading size="24px" v-show="loading">加载中...</van-loading>
+    <div class="no-data" v-if="loadFinished">查无数据</div>
   </div>
 </template>
 
@@ -49,7 +51,9 @@
           endTime: ''
         },
         activeTab: 0,
-        rankList: []
+        rankList: [],
+        loadFinished:false,
+        loading:false
       }
     },
     methods: {
@@ -60,15 +64,24 @@
       dateConfirm(date) {
         const [start, end] = date
         this.dateShow = false
+        this.rankObj.startTime = this.formatDate(start)
+        this.rankObj.endTime = this.formatDate(end)
         this.date = `${this.formatDate(start)} ~ ${this.formatDate(end)}`
-        this.rankObj.startTime = `${this.formatDate(start)}`
-        this.rankObj.endTime = `${this.formatDate(end)}`
         this.getRank()
       },
       async getRank() {
+        this.loading=true
         await getRank(this.rankObj).then(res => {
           if (res.code == 0) {
-            this.rankList = res.data.list
+            setTimeout(()=>{
+              this.loading=false
+              if(res.data.list.length==0){
+                this.loadFinished=true
+              }else{
+                this.loadFinished=false
+                this.rankList = res.data.list
+              }
+            })
           }
         })
       },
@@ -92,6 +105,7 @@
   .point-rank {
     .van-tabs {
       margin-top: 6px;
+      margin-bottom: 10px;
     }
 
     .rank-item {

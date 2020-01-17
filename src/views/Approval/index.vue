@@ -18,12 +18,12 @@
         <!-- 超级管理员 -->
         <van-checkbox-group v-model="batchData" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}"
           v-if="roleId==1">
-          <van-cell-group class="wait-item" v-for="(item1,index1) in passList" :key="index1">
+          <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
             <van-checkbox :name="item1.id" v-show="isBatch" />
             <div :class="{'appli-item':true,'batchActive':isBatch}">
               <div class="appli-head ">
                 <span class="name">{{item1.name}}</span>
-                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" />
+                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title ">规则：</span>
@@ -55,7 +55,7 @@
             <div :class="{'appli-item':true,'batchActive':isBatch}">
               <div class="appli-head ">
                 <span class="name">{{item1.name}}</span>
-                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" />
+                <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title ">规则：</span>
@@ -72,7 +72,7 @@
               <div class="appli-footer">
                 <span class="time">{{item1.applyTime.split(" ")[0]}}</span>
                 <div class="state">
-                  <span class="delete">删除</span>
+                  <span class="delete" @click="deletePoint(item1.id)">删除</span>
                 </div>
               </div>
             </div>
@@ -159,7 +159,8 @@
     findPointPass,
     findPointDisagree,
     passPoint,
-    pointDisagree
+    pointDisagree,
+    deletePoint
   } from "@/api/integral";
   export default {
     name: "Approval",
@@ -212,6 +213,23 @@
           if (res.code == 0) {
             this.disagreeList = res.data
           }
+        })
+      },
+      async deletePoint(id) {
+        await deletePoint(id).then(res => {
+          if(res.code==0){
+            this.$toast("删除成功!")
+          }else{
+            this.$toast(res.msg)
+          }
+        })
+      },
+      // 删除审批申请
+      delete(id) {
+        this.$dialog.confirm({
+          message: '确定删除该条申请？'
+        }).then(() => {
+          this.deletePoint(id)
         })
       },
       // 单个操作
@@ -334,9 +352,11 @@
       max-height: calc(100vh - 140px);
       overflow-y: scroll;
     }
-    .accept,.unaccept{
-      .appli-item{
-        width:unset;
+
+    .accept,
+    .unaccept {
+      .appli-item {
+        width: unset;
         margin: 15px 10px;
       }
     }
@@ -345,8 +365,9 @@
       @include flex;
       background: none;
       margin: 15px 10px;
-      .appli-item{
-       margin-bottom:0;
+
+      .appli-item {
+        margin-bottom: 0;
       }
     }
 

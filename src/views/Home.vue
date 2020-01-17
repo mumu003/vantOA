@@ -2,7 +2,7 @@
   <div class="home main-cnt">
     <nav-bar :title='title'></nav-bar>
     <!-- 用户信息 -->
-    <div class="user-info main-box">
+    <div class="user-info">
       <van-image round src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579150814844&di=9c18d02255eecfc420c994089535bf2d&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F71807977.jpeg" />
       <div>
         <span class="user-name">{{userInfo.name}}</span>
@@ -143,7 +143,7 @@
     }
 
     .user-info {
-      margin-top: 10px;
+      margin: 10px 15px  0 15px;
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;

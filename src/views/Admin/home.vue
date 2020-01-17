@@ -6,8 +6,8 @@
       <span>{{curDate}}</span>
       <span>合计部门共 {{adminData.depetCount}} 个，员工 {{adminData.emplCount}} 名</span>
     </div>
-    <div class="summary-list">
-      <!--<div class="summary-item">
+    <div class="summary-list" v-if="adminData">
+      <div class="summary-item">
         <div class="the-more">
           <span>昨日加分最多的规则为：</span>
           <span>{{adminData.increaseByYesterday.name}}</span>
@@ -18,7 +18,7 @@
           <span>{{adminData.reduceByYesterday.name}}</span>
           <span class="num">共 {{adminData.reduceByYesterday.count}} 条</span>
         </div>
-      </div>-->
+      </div>
       <div class="summary-item">
         <div class="the-more">
           <span>本月审批加分最多的规则为：</span>
@@ -122,9 +122,7 @@
 
     .summary-item:first-child,
     .summary-item:last-child {
-      background: #1989fa;
-      opacity: 0.3;
-      color: #fff;
+      background:#f5f5f5;
     }
 
     .summary-item {
