@@ -1,6 +1,6 @@
 <template>
   <!-- 管理中心 -->
-  <div class="container">
+  <div class="container" style="height: calc(100vh - 50px);overflow-y: scroll;">
     <nav-bar :title='title'></nav-bar>
     <div v-if="$route.meta.manageShow" class="main-cnt manage-page">
       <van-row class="oa-cnt">

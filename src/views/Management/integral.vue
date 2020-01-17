@@ -156,7 +156,12 @@ export default {
 
         await applyempl(this.param).then(res => {
           if (res.code == 0) {
-            this.$toast("申请成功");
+            this.$toast.success("申请成功");
+            setTimeout(() => {
+              this.$router.push({
+                path:'/manager',
+              })
+            },800)
           }
           this.init();
         });
