@@ -3,7 +3,8 @@
     <nav-bar :title='title' :isLeftArrow='isLeftArrow' :isFixed='isFixed'></nav-bar>
     <div v-if="!isSetShow">
       <div class="user-info">
-        <van-image round src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579150814844&di=9c18d02255eecfc420c994089535bf2d&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F71807977.jpeg" />
+        <van-image round
+          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579150814844&di=9c18d02255eecfc420c994089535bf2d&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F71807977.jpeg" />
         <div class="user-name">{{userInfo.name}}</div>
         <!-- <div class="qr-code"></div> -->
       </div>
@@ -14,24 +15,25 @@
         <van-field label="密码" type="password" :value="userInfo.pwd" readonly @click="updatePwd" />
       </van-cell-group>
     </div>
-    <!-- <div class="main-box"> -->
-       <van-button type="info" class="info-btn" block>注销</van-button>
-    <!-- </div> -->
+    <van-button type="info" class="info-btn" block @click="logout">注销</van-button>
     <!-- 修改 -->
     <div class="update-modal" v-if="isSetShow">
       <van-nav-bar :title="setTitle" left-arrow right-text="保存" @click-left="back" @click-right="save" />
       <van-cell-group>
-        <van-field v-model="userInfo.name" placeholder="请输入新名称" v-show="isSetName" />
+        <van-field v-model="userInfo.name" placeholder="请输入新名称" maxlength="12" v-show="isSetName" />
+
         <van-field type="tel" v-model="userInfo.phone" placeholder="请输入新手机号" v-show="isSetMoblie" />
-        <van-field type="password" v-model="userInfo.pwd" placeholder="请输入新密码" v-show="isSetPwd" />
+        <van-field type="password" v-model="userInfo.pwd" placeholder="请输入6-20位密码" maxlength="20" v-show="isSetPwd" />
 
       </van-cell-group>
+      <span class="name-tip" v-show="isSetName">名称仅支持2-12个字符</span>
     </div>
     <tab-bar></tab-bar>
   </div>
 </template>
 
 <script>
+  import * as types from "../../store/types";
   import {
     updatename,
     updatephone,
@@ -65,13 +67,13 @@
     methods: {
       getUserInfo() {
         let info = this.$store.state.userinfo
-        this.userInfo={
-          id:info.id,
-          departId:info.departId,
-          roleId:info.roleId,
-          name:info.name,
-          phone:info.phone,
-          pwd:info.pwd
+        this.userInfo = {
+          id: info.id,
+          departId: info.departId,
+          roleId: info.roleId,
+          name: info.name,
+          phone: info.phone,
+          pwd: info.pwd
         }
       },
       updateName() {
@@ -95,46 +97,73 @@
         this.isSetMoblie = false
         this.isSetPwd = false
       },
+      // 手机号码校验
+      mobileValidate(val) {
+        if ((/^1[0-9]\d{9}$/.test(val))) {
+          return true
+        } else {
+          return false
+        }
+      },
       // 保存
       async save() {
-        console.log(this.userInfo)
         if (this.isSetName) {
           if (this.userInfo.name == '') {
             this.$toast("名称不能为空!")
           } else {
-            await updatename(this.userInfo).then(res => {
-              if (res.code == 0) {
-                this.$toast.success("修改成功!")
-                this.back()
-              }
-            })
+            if (this.userInfo.name.length < 2) {
+              this.$toast("请输入2-12位的字符!")
+            } else {
+              await updatename(this.userInfo).then(res => {
+                if (res.code == 0) {
+                  this.$toast.success("修改成功!")
+                  this.back()
+                }
+              })
+            }
+
           }
         } else if (this.isSetMoblie) {
           if (this.userInfo.phone == '') {
             this.$toast("手机号不能为空!")
           } else {
-            await updatename(this.userInfo).then(res => {
-              if (res.code == 0) {
-                this.$toast.success("修改成功!")
-                this.back()
-              } else if (res.code == -1) {
-                this.$toast("手机号已经存在，请重新修改!")
-              }
-            })
+            if (!this.mobileValidate(this.userInfo.phone)) {
+              this.$toast.fail("请输入正确的手机号")
+              return
+            } else {
+              await updatename(this.userInfo).then(res => {
+                if (res.code == 0) {
+                  this.$toast.success("修改成功!")
+                  this.back()
+                } else if (res.code == -1) {
+                  this.$toast("手机号已经存在，请重新修改!")
+                }
+              })
+            }
           }
+
         } else if (this.isSetPwd) {
-          if (this.userInfo.phone == '') {
+          if (this.userInfo.pwd == '') {
             this.$toast("密码不能为空!")
           } else {
-            await updatename(this.userInfo).then(res => {
-              if (res.code == 0) {
-                this.$toast.success("修改成功!")
-                this.back()
-              }
-            })
-
+            if (this.userInfo.pwd.length < 6) {
+              this.$toast("为安全起见，请输入6-20位的密码!")
+            } else {
+              await updatename(this.userInfo).then(res => {
+                if (res.code == 0) {
+                  this.$toast.success("修改成功!")
+                  this.back()
+                }
+              })
+            }
           }
         }
+      },
+       async logout() {
+        this.$store.commit(types.LOGOUT);
+        this.$router.push({
+          path: "login"
+        });
       }
     }
   }
@@ -169,23 +198,17 @@
         background-repeat: no-repeat;
       }
     }
-    .info-btn{
+
+    .info-btn {
       margin-top: 30px;
     }
 
-    .setting {
-      margin: 10px 0;
-      background: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 15px;
-
-      span {
-        color: #333;
-        font-size: 14px;
-      }
+    .name-tip {
+      font-size: 14px;
+      color: #666;
+      margin-left: 15px;
     }
+
   }
 
 </style>
@@ -202,12 +225,6 @@
       text-align: right;
     }
 
-    .setting {
-      .van-icon {
-        font-size: 14px;
-        color: #999;
-      }
-    }
   }
 
 </style>

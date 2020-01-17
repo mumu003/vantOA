@@ -8,7 +8,9 @@
         <span class="user-name">{{userInfo.name}}</span>
         <span class="user-time">{{formatTime(userInfo.createTime)}}</span>
       </div>
-      <button>管理</button>
+      <router-link to="/manager" tag="button">
+      管理
+      </router-link>
     </div>
     <!-- 积分信息 -->
     <van-row class="integral-info">
@@ -123,7 +125,6 @@
         return year + '.' + month + '.' + day 
       },
       async logout() {
-        console.log("logout");
         this.$store.commit(types.LOGOUT);
         this.$router.push({
           path: "login"
