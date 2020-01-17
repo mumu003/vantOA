@@ -2,9 +2,9 @@
 <!-- 员工管理 -->
   <div class="staff">
     <!-- <nav-bar :title='title' :isLeftArrow='isLeftArrow' ></nav-bar> -->
-    <van-nav-bar class="oa-nav" :title="title" left-arrow right-text="添加员工" @click-left="$router.go(-1);" @click-right="baseShow = false" />
+    <van-nav-bar class="oa-nav" :title="title" left-arrow right-text="添加员工" @click-left="$router.go(-1);" @click-right="baseShow = false;staffShow = true;" />
     <div v-if="baseShow">
-      <van-search v-model="name" placeholder="请输入员工姓名" show-action @search="onSearch">
+      <van-search v-model="name" placeholder="请输入员工姓名" show-action @search="onSearch" @clear="onSearch">
         <div slot="action" @click="onSearch">搜索</div>
       </van-search>
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" >
@@ -19,14 +19,14 @@
               <div>
                 <div class="row first">
                 <!-- departColumns[index].text -->
-                  <van-field v-model="item.departId" clearable label="部门 &gt;" placeholder="请选择部门" @click="departPop(item)" readonly="readonly"/>
+                  <van-field v-model="item.departName" clearable label="部门 &gt;" placeholder="请选择部门" @click="departPop(item)" readonly="readonly"/>
                   <van-popup v-model="departShow" position="bottom">
                     <van-picker show-toolbar :columns="departColumns" @cancel="departShow = false"  @confirm="onSelect" />
                   </van-popup>  
                 </div>
                 <div class="row second">
                 <!-- roleColumns[index].text -->
-                  <van-field v-model="aaa" clearable label="职位 &gt;" placeholder="请选择职位" @click="rolePop(item)" readonly="readonly"/>
+                  <van-field v-model="item.roleName" clearable label="职位 &gt;" placeholder="请选择职位" @click="rolePop(item)" readonly="readonly"/>
                   <van-popup v-model="roleShow" position="bottom">
                     <van-picker show-toolbar :columns="roleColumns" @cancel="roleShow = false"  @confirm="onSelect2" />
                   </van-popup>  
@@ -35,41 +35,32 @@
             </div>
             <div class="last-row">
               <div class="row last">
-                <van-button class="info-btn" type="info" >奖扣分权限</van-button>
-                <van-button class="info-btn" type="info" >重置密码</van-button>
+                <!-- <van-button class="info-btn" type="info" >奖扣分权限</van-button> -->
+                <van-button class="info-btn" type="info" @click="resetPwd(item)">重置密码</van-button>
               </div>
             </div>
           </div>
-
-
-          
-         
-          <!-- <div class="row first">
-            <p class="type">名称：<span>{{item.name}}</span></p>
-            <van-icon name="cross" size="0.4rem" @click.stop="deleteEmployees(item)" />
-          </div>
-          <div class="row second">
-            <p class="mark">内容：<span>{{item.remark}}</span></p>          
-            <p class="point" :style="{color:item.score > 0 ? '#027AFF' : '#FF6C02'}">{{item.score > 0 ? '+'+item.score : item.score}}</p>
-          </div>
-          <div class="row last">
-            <van-button class="info-btn" type="info"  @click="showmodal(item)">修改</van-button>
-          </div> -->
         </div>
       </van-list>
 
     </div>
+
+    <!-- 添加员工 -->
+    <addStaff v-if="staffShow" :roleColumns="roleColumns" :departColumns="departColumns" @back="back"></addStaff>
   </div>
 </template>
 <script>
-import { findList,updateEmployeesDept,updateEmployeesRole,deleteEmployees } from "@/api/manager.js" ;
+import { findList,updateEmployeesDept,updateEmployeesRole,deleteEmployees,resetPwd } from "@/api/manager.js" ;
 import { findAlldepart } from "@/api/depart.js" ;
+import addStaff from '@/components/manager/addStaff'
 export default {
+  components:{addStaff},
   data(){
     return{
       title:"员工管理",
       isLeftArrow:true,
       baseShow:true,
+      staffShow:false,
       name:"",
       loading:false,
       finished:false,
@@ -77,7 +68,7 @@ export default {
       count:0,
       list: [],
       staffItem: [],
-      aaa:'哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
+      aaa:'',
 
       department: 0,
       position: 'a',
@@ -104,7 +95,6 @@ export default {
   },
   mounted(){
     this.findList();
-    this.findAlldepart();
   },
   filters: {
     name(val) {
@@ -114,27 +104,46 @@ export default {
   },
   methods:{
     onSearch(){
-      
+      this.findList();
+      setTimeout(() => {
+        this.reset()
+      },500)
     },
     // 获取所有员工
     async findList() {
-      await findList().then(res => {
+      await findList({name: this.name}).then(res => {
         if (res.code == 0) {
           this.staffItem = res.data;
           this.list = this.staffItem.slice(0,3);
+          this.staffItem.map(item1 => {
+            this.roleColumns.forEach(item2 => {
+              if(item1.roleId == item2.roleId){
+                item1.roleName = item2.text;
+              }
+            })
+          })
+          this.findAlldepart();
         }
       });
+
     },
     // 获取所有部门
     async findAlldepart(){
       await findAlldepart().then(res => {
+        // console.log("数据列表:",this.staffItem)
         if(res.code == 0){
           if(res.data.length > 0){
             this.departColumns = res.data.map(item => ({
               text: item.name || "",
               id: item.id || ""
             }))
-            console.log("所有部门:",this.departColumns)
+            this.staffItem.map(item1 => {
+              this.departColumns.forEach(item2 => {
+                if(item1.departId == item2.id){
+                  item1.departName = item2.text;
+                }
+              })
+            })
           }
         }
       })
@@ -163,23 +172,44 @@ export default {
       this.setData(item);
     },
     setData(item){
-      this.activeItem.id = item.id;
-      this.activeItem.departId = item.id;
-      this.activeItem.name = item.name;
-      this.activeItem.phone = item.phone;
-      this.activeItem.roleId = item.roleId;
-      this.activeItem.pwd = item.pwd;
+      this.activeItem = item;
     },
     async onSelect(value, index) {
       this.activeItem.departId = value.id;
-      await updateEmployeesDept(this.activeItem).then(res => {
-        console.log(res)
+      let param={
+        departId:value.id,
+        id:this.activeItem.id
+      }
+      await updateEmployeesDept(param).then(res => {
+        if(res.code == 0){
+          this.$toast.success({
+            message: "修改成功",
+            duration: 1000
+          });
+          setTimeout(() => {
+            this.findList();
+            this.reset();
+          }, 1500);
+        }
       })
     },
     async onSelect2(value,index){
       this.activeItem.roleId = value.roleId;
-      await updateEmployeesRole(this.activeItem).then(res => {
-        console.log(res)
+      let param={
+        id:this.activeItem.id,
+        roleId:value.roleId
+      }
+      await updateEmployeesRole(param).then(res => {
+        if(res.code == 0){
+          this.$toast.success({
+            message: "修改成功",
+            duration: 1000
+          });
+          setTimeout(() => {
+            this.findList();
+            this.reset();
+          }, 1500);
+        }
       })
     },
     deleteStaff(item){
@@ -205,6 +235,23 @@ export default {
           },800)
         }
       })
+    },
+    // 重置密码
+    async resetPwd(item){
+      await resetPwd({id:item.id}).then(res => {
+        if(res.code == 0){
+          this.$toast.success({
+            message: "重置成功",
+            duration: 1000
+          });
+        }
+      })
+    },
+    back(){
+      this.findList();
+      this.reset();
+      this.staffShow = false;
+      this.baseShow = true;
     },
     reset(){
       this.limit = 3;
@@ -282,14 +329,18 @@ export default {
           justify-content: flex-end;
           .user-name{
             width: 60%;
-            font-size: 20px;
+            font-size: 18px;
           }
         }
         .last-row{
           @include flex;
           justify-content: flex-end;
           .van-button{
-            margin-right: 5px;
+            line-height: 1rem;
+            height: 1rem;
+            &:first-child{
+              margin-right: 10px;
+            }
           }
         }
         .closed{
@@ -299,34 +350,6 @@ export default {
           z-index: 10;
         }
       }
-
-
-      // .user-name{
-      //   font-size:16px;
-      //   max-width:60px;
-      // }
-      // .content{
-      //   width:50%;
-      //   position:relative;
-      //   .first,.second{
-      //     @include ellipsis;
-      //     -webkit-line-clamp: 1;
-      //   }
-      //   .last{
-      //     @include flex;
-      //     justify-content: flex-end;
-      //     .van-button{
-      //       line-height: 1rem;
-      //       height: 1rem;
-      //     };
-      //   }
-      //   .closed{
-      //     position: absolute;
-      //     top: 7px;
-      //     right: 0;
-      //     z-index: 10;
-      //   }
-      // }
     }
   }
 }

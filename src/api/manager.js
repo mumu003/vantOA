@@ -53,3 +53,10 @@ export const updateEmployeesRole = params=>req('put','/employees/updateEmployees
 
 // 删除员工
 export const deleteEmployees = params=>req('delete','/employees/delete',params)
+
+// 重置密码
+export const resetPwd = params=>req('put','/employees/resetpwd',params)
+
+// 新增员工
+export const addEmployees = params=>req('post','/employees/add',params)
+

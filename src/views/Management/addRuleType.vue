@@ -103,8 +103,8 @@ export default {
             this.count = 0;
             this.loading = true;
             this.finished = false;
-            this.list = []
-            this.onLoad()
+            this.list = [];
+            this.onLoad();
           },1500)   
         }
       })
