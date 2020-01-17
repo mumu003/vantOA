@@ -8,9 +8,7 @@
         <span class="user-name">{{userInfo.name}}</span>
         <span class="user-time">{{formatTime(userInfo.createTime)}}</span>
       </div>
-      <router-link to="/manager" tag="button">
-      管理
-      </router-link>
+      <button>{{userInfo.roleId == 1 ? '超级管理员' : userInfo.roleId == 2 ? '管理员' : '员工'}}</button>
     </div>
     <!-- 积分信息 -->
     <van-row class="integral-info">
@@ -29,7 +27,7 @@
     </van-row>
     <div class="line"></div>
     <!-- 分数详情 -->
-    <van-tabs v-model="activeTab">
+    <van-tabs v-model="activeTab" class="score-content">
       <van-tab title="奖励分" name="award">
         <div class="time-info">{{monthStartDate}}-{{nowDate}}</div>
         <!-- <div class="chart">
@@ -144,18 +142,18 @@
     }
 
     .user-info {
-      margin: 10px 15px  0 15px;
+      margin: 20px 15px 0 25px;
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
 
       .user-name {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 500;
       }
 
       .user-time {
-        font-size: 12px;
+        font-size: 14px;
         color: #999;
         margin-top: 5px;
       }
@@ -211,7 +209,7 @@
       .time-info {
         margin-top: 15px;
         color: #999;
-        font-size: 14px;
+        font-size: 16px;
       }
 
       .fraction-list {
@@ -227,6 +225,12 @@
         border-bottom: 1px solid #F9FAFB;
 
         span:first-child {
+          width: 80%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
           font-size: 16px;
         }
 
@@ -251,40 +255,39 @@
 
 <style lang="scss">
   .home {
-
     .van-image {
       width: 60px;
       height: 60px;
       flex-shrink: 0;
-      margin-right: 5px;
+      margin-right: 10px;
     }
-
     .van-tabs {
       .van-tabs__content {
-        margin: 0 20px;
+        padding: 0 20px;
       }
-
       [class*=van-hairline]::after {
         border: none;
       }
-
       .van-tabs__wrap {
         padding: 0 80px;
       }
-
       .van-tab--active .van-tab__text {
+        font-size: 16px;
         color: #1989fa;
       }
-
       .van-tabs__line {
         background: #1989fa;
       }
     }
-
     .van-circle__text {
       font-size: 18px;
     }
-
+     .score-content{
+      .van-tabs__content{
+        max-height: calc(100vh - 315px);
+        overflow-y: scroll;
+      }
+    }
   }
 
 </style>

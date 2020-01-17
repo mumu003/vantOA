@@ -16,7 +16,7 @@
 
     <div class="main-box">
       <van-loading size="24px" v-show="loading">加载中...</van-loading>
-      <div class="no-data" v-if="loadFinished">查无数据</div>
+      <div class="no-data" v-if="loadFinished" style="text-align:center;font-size:14px">暂无数据</div>
       <div class="event-item" v-for="(item,index) in list" :key="index" v-else>
           <div class="user-info">
               <span>{{item.name}}</span>
@@ -95,7 +95,7 @@
         // this.date = val;
         this.eventObj.starTime = this.formatDate(val[0]);
         this.eventObj.endTime = this.formatDate(val[1]);
-        this.date = this.eventObj.starTime + '-' + this.eventObj.endTime;
+        this.date = this.eventObj.starTime + '~' + this.eventObj.endTime;
         this.show = false;
       }
     }

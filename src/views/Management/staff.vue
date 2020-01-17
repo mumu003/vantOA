@@ -13,9 +13,9 @@
 
 
           <div class="right">
-            <van-icon name="cross" size="0.4rem" @click.stop="deleteEmployees(item)" class="closed" />
+            <van-icon name="cross" size="0.4rem" @click.stop="deleteStaff(item)" class="closed" />
             <div class="first-row">
-              <div class="user-name">{{item.name}}</div>
+              <!-- <div class="user-name">{{item.name}}</div> -->
               <div>
                 <div class="row first">
                 <!-- departColumns[index].text -->
@@ -294,7 +294,7 @@ export default {
     }
   }
   .van-list{
-    height: calc(100vh - 145px);
+    height: calc(100vh - 105px);
     overflow-y: scroll;
     .staffItem {
       font-size: 0.675rem /* 14/16 */;
@@ -313,14 +313,14 @@ export default {
         margin: 0 10px;
       }
       .pic-name{
-        width:70px;
-        height:70px;
+        width:60px;
+        height:60px;
         background:#1989fa;
         border-radius:50%;
         @include flex;
         color:#fff;
         font-size:18px;
-        min-width:70px;
+        min-width:60px;
       }
       .right{
         position: relative;

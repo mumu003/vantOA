@@ -29,7 +29,7 @@
       </van-tab>
     </van-tabs>
     <van-loading size="24px" v-show="loading">加载中...</van-loading>
-    <div class="no-data" v-if="loadFinished">查无数据</div>
+    <div class="no-data" v-if="rankList.length == 0" style="text-align:center;font-size:14px">暂无数据</div>
   </div>
 </template>
 

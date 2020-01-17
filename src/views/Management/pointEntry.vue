@@ -1,34 +1,33 @@
 <template>
   <div class="point-entry main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <van-cell title="选择规则分类" is-link placeholder="请选择" :value="ruleType" @click="showCategory = true" />
+    <van-cell title="选择规则分类" is-link placeholder="请选择" :value="ruleType" @click="showCategory = true" required/>
     <van-popup v-model="showCategory" position="bottom">
       <van-picker show-toolbar :columns="categoryList" @cancel="showCategory = false" @confirm="categoryConfirm" />
     </van-popup>
-    <van-cell title="选择分类" is-link :value="smallRule" placeholder="请选择" @click="showRule = true" />
+    <van-cell title="选择分类" is-link :value="smallRule" placeholder="请选择" @click="showRule = true" required/>
     <van-popup v-model="showRule" position="bottom">
       <van-picker show-toolbar :columns="ruleList" @cancel="showRule = false" @confirm="ruleConfirm" />
     </van-popup>
 
- <van-cell title="日期" is-link :value="pointObj.applyTime" @click="isDateShow = true" />
+    <van-cell title="日期" is-link :value="pointObj.applyTime" @click="isDateShow = true" required/>
     <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" />
-
-       <van-field class="score" v-model="pointObj.add" rows="1" label="积分" type="number" placeholder="请输入积分" disabled />
+    <van-field class="score" v-model="pointObj.add" rows="1" label="积分" type="number" placeholder="请输入积分" disabled />
     <van-field class="reason-cnt" v-model="pointObj.content" rows="2" autosize label="理由" type="textarea" maxlength="50"
-      placeholder="请输入理由（选填）" show-word-limit />
+        eholder="请输入理由（选填）" show-word-limit />
     <div class="line"></div>
 
-     <van-cell is-link @click="isMemberShow=!isMemberShow">选择人员
+     <van-cell is-link @click="isMemberShow=!isMemberShow" required>选择人员
       <span class="tip">请选择</span>
     </van-cell>
-    <div class="main-box">
+    <div class="main-box people-box">
       <van-tag closeable round plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
-        {{item}}
+        {{item}}&#x3000;
       </van-tag>
 
     </div>
     <van-popup round v-model="isMemberShow" position="bottom" :style="{ height: '60%' }">
-      <div class="member-title main-box">
+      <div class="member-title main-box pop-box">
         <span>请选择人员</span>
         <span @click="toSelect">确定</span>
       </div>
@@ -40,8 +39,11 @@
           </van-list>
         </van-tab>
         <van-tab title="选择人员" name="men">
-          <van-checkbox-group v-model="pointObj.employeesId" class="men-area">
+          <van-checkbox-group v-model="pointObj.employeesId" class="men-area" v-if="memberList.length !=0 ">
             <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(val.name)">{{val.name}}</van-checkbox>
+          </van-checkbox-group>
+          <van-checkbox-group v-model="pointObj.employeesId" class="men-area" v-else>
+            <p style="font-size:14px;color:#323233">暂无数据</p>
           </van-checkbox-group>
         </van-tab>
       </van-tabs>
@@ -150,7 +152,7 @@
       },
       // 格式化日期
       formatDate(date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       },
       dateConfirm(time) {
         this.isDateShow = false
@@ -191,14 +193,14 @@
         this.pointObj.employeesId.splice(i, 1)
       },
       async submit() {
-        console.log(this.pointObj)
+        // console.log(this.pointObj)
         if(this.rulesId==''|| this.pointObj.applyTime==''||this.pointObj.add==''||this.pointObj.employeesId==''){
              this.$toast("请输入完整内容再提交")
         } else {
           this.pointObj.employeesId=this.pointObj.employeesId.map(Number)
           await addPoint(this.pointObj).then(res => {
             if (res.code == 0) {
-              this.$toast("提交成功")
+              this.$toast.success("提交成功")
             }
           })
         }
@@ -232,6 +234,9 @@
       span:last-child {
         color: #1989fa;
       }
+    }
+    .pop-box{
+      padding: 20px;
     }
 
     .van-tag {
@@ -270,7 +275,9 @@
 
     }
 
-    .main-box {
+    .people-box {
+      background: #fff;
+      padding: 10px ;
       padding-bottom: 20px;
     }
   }
@@ -280,9 +287,13 @@
   .point-entry {
     .van-tab {
       flex: unset;
-      padding: 0;
-      padding-right: 10px;
       font-size: 15px;
+      width:100px;
+    }
+    .van-tabs__content{
+      padding-left:20px;
+      height: 280px;
+      overflow-y: scroll;
     }
 
     .score .van-field__control {

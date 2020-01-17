@@ -198,11 +198,6 @@
         background-repeat: no-repeat;
       }
     }
-
-    .info-btn {
-      margin-top: 30px;
-    }
-
     .name-tip {
       font-size: 14px;
       color: #666;

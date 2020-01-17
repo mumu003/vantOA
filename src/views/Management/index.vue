@@ -5,7 +5,10 @@
     <div v-if="$route.meta.manageShow" class="main-cnt manage-page">
       <van-row class="oa-cnt">
         <div class="m-type">OA</div>
-        <van-col class="content-item" span="6" v-for="(item,index) in menuList(1)" :key="index" @click="switchMenu(item)">
+        <div >
+          
+        </div>
+        <van-col class="content-item" span="6" v-for="(item,index) in menuList(1)" :key="index" @click="switchMenu(item)" v-if="item.meta.roleIds.indexOf(userInfo.roleId) != -1">
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
@@ -14,7 +17,7 @@
       </van-row>
       <van-row class="jx-cnt">
         <div class="m-type">绩效相关</div>
-        <van-col class="content-item" span="6" v-for="(item,index) in menuList(2)" :key="index" @click="switchMenu(item)">
+        <van-col class="content-item" span="6" v-for="(item,index) in menuList(2)"  :key="index" @click="switchMenu(item)" v-if="item.meta.roleIds.indexOf(userInfo.roleId) != -1">
           <div class="manage-box">
             <img :src="`/static/img/manage/${item.meta.img}.png`" class="icon" />
           </div>
@@ -33,6 +36,7 @@
       return {
         title: '管理中心',
         menus: menus,
+        userInfo:""
       }
     },
     computed: {
@@ -60,6 +64,7 @@
       }
     },
     mounted() {
+      this.userInfo = this.$store.state.userinfo
       // console.log("123",menus)
       // console.log(this.$router.options.routers )
     },

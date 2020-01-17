@@ -11,6 +11,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img0',
+        roleIds:[1],
       },
     },
     {
@@ -24,6 +25,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img1',
+        roleIds:[1,2],
       },
     },{
       path: '/notice',
@@ -36,6 +38,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img2',
+        roleIds:[1,2,3],
       },
     },{
       path: '/pointRule',
@@ -48,6 +51,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img3',
+        roleIds:[1,2],
       },
     },{
       path: '/taskManage',
@@ -60,6 +64,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img4',
+        roleIds:[1,2],
       },
     },
     // {
@@ -86,6 +91,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img5',
+        roleIds:[1,2,3],
       },
     },{
       path: '/pointEvent',
@@ -97,7 +103,34 @@ export default [
         name: '积分事件',
         img:'img6',
         requireAuth:true,
-        manageShow:false
+        manageShow:false,
+        roleIds:[1,2,3],
+      },
+    },{
+      path: '/pointEntry',
+      name: '积分录入',
+      component: () => import('@/views/Management/pointEntry.vue'),
+      meta: {
+        id: 7,
+        type:2,
+        name: '积分录入',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false,
+        roleIds:[1,2],
+      },
+    },{
+      path: '/pointRank',
+      name: '积分排名',
+      component: () => import('@/views/Management/pointRank.vue'),
+      meta: {
+        id: 8,
+        type:2,
+        name: '积分排名',
+        img:'img8',
+        requireAuth:true,
+        manageShow:false,
+        roleIds:[1,2,3],
       },
     },{
       path: '/integral',
@@ -109,19 +142,8 @@ export default [
         name: '积分申请',
         img:'img7',
         requireAuth:true,
-        manageShow:false
-      },
-    },{
-      path: '/pointRank',
-      name: '积分排名',
-      component: () => import('@/views/Management/pointRank.vue'),
-      meta: {
-        id: 7,
-        type:2,
-        name: '积分排名',
-        img:'img8',
-        requireAuth:true,
-        manageShow:false
+        manageShow:false,
+        roleIds:[2,3],
       },
     },{
       path: '/staff',
@@ -133,7 +155,8 @@ export default [
         name: '员工管理',
         img:'img9',
         requireAuth:true,
-        manageShow:false
+        manageShow:false,
+        roleIds:[1,2],
       },
     }
     
