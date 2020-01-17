@@ -9,6 +9,7 @@ import { Toast } from 'vant';
 let instance = axios.create({
   timeout:10000,
   baseURL:"http://www.middle888.top:8081"
+  // baseURL:"http://guoruan123xxx.ngrok2.xiaomiqiu.cn/"
 });
 
 
