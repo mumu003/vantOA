@@ -36,6 +36,6 @@ export default new Vuex.Store({
     [types.USERINFO]: (state, data) => {
       localStorage.userinfo = JSON.stringify(data.employees);
       state.userinfo = data.employees;
-    }
+    },
   }
 })

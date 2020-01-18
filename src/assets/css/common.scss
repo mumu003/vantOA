@@ -41,35 +41,35 @@
 }
 // 搜索框
 .van-search__action{
-  font-size: 16px;
-  padding: 0 10px;
-  background: #1989fa;
-  color: #fff;
-  margin: 0 5px;
-  border-radius: 2px;
+  font-size: 16px !important;
+  padding: 0 10px !important;
+  background: #1989fa !important;
+  color: #fff !important;
+  margin: 0 5px !important;
+  border-radius: 2px !important;
 }
 // 文本域
 .van-cell{
-  font-size: 16px;
+  font-size: 16px !important;
   &::after{
-    position: absolute;
-    box-sizing: border-box;
-    content: ' ';
-    pointer-events: none;
-    right: 0;
-    bottom: 0;
-    left: 0.5rem;
-    border-bottom: 0.03125rem solid #ebedf0;
-    -webkit-transform: scaleY(.5);
-    transform: scaleY(.5);
+    position: absolute !important;
+    box-sizing: border-box !important;
+    content: ' ' !important;
+    pointer-events: none !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0.5rem !important;
+    border-bottom: 0.03125rem solid #ebedf0 !important;
+    -webkit-transform: scaleY(.5) !important;
+    transform: scaleY(.5) !important;
   }
   .van-field__word-limit{
-    font-size: 14px;
+    font-size: 14px !important;
   }
 }
 // 蓝色按钮
 .info-btn{
-  font-size: 16px;
+  font-size: 16px !important;
 }
 // 新增 / 编辑容器
 .update-modal {
@@ -123,10 +123,10 @@
 }
 // loading
 .van-loading{
-  text-align:center;
+  text-align:center !important;
 }
 // 起始时间
 .van-cell__title{
-  flex:unset;
+  flex:unset !important;
 }
 

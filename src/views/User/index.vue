@@ -117,7 +117,7 @@
               await updatename(this.userInfo).then(res => {
                 if (res.code == 0) {
                   this.$toast.success("修改成功!")
-                  this.back()
+                  this.back();
                 }
               })
             }

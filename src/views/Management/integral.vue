@@ -153,6 +153,7 @@ export default {
         if (!this.checked) {
           this.param.rulesId = "";
         }
+        this.param.creator = this.$store.state.userinfo.creator;
 
         await applyempl(this.param).then(res => {
           if (res.code == 0) {
