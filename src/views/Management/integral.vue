@@ -157,11 +157,11 @@ export default {
         await applyempl(this.param).then(res => {
           if (res.code == 0) {
             this.$toast.success("申请成功");
-            setTimeout(() => {
-              this.$router.push({
-                path:'/approval',
-              })
-            },800)
+            // setTimeout(() => {
+            //   this.$router.push({
+            //     path:'/approval',
+            //   })
+            // },800)
           }
           this.init();
         });

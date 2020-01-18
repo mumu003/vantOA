@@ -146,6 +146,19 @@ export default [
         roleIds:[2,3],
       },
     },{
+      path: '/viewApproval',
+      name: '积分审批',
+      component: () => import('@/views/Management/approval.vue'),
+      meta: {
+        id: 8,
+        type:2,
+        name: '积分审批',
+        img:'img7',
+        requireAuth:true,
+        manageShow:false,
+        roleIds:[2,3],
+      },
+    },{
       path: '/staff',
       name: '员工管理',
       component: () => import('@/views/Management/staff.vue'),
