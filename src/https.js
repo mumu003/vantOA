@@ -20,7 +20,7 @@ export const setStorage = (key,val) => {
 }
 export const getStorage = (key,expire,isReset) => {
   var data = localStorage.getItem(key);
-  if(!data) return false;
+  if(!data) return false; 
   data = JSON.parse(data);
   if(expire && (new Date().getTime() - data.time > expire)){
     console.log("过期")

@@ -43,7 +43,7 @@ export const deleteRulesType = params=>req('delete','/rulesType/delete',params)
 export const findByEmpl = params=>req('get','/task/findByEmpl',params)
 
 // 员工管理-查看所有用户
-export const findList = params=>req('get','/employees/findList',params)
+export const findList = params=>req('get','/employees/emplManage',params)
 
 // 修改员工部门
 export const updateEmployeesDept = params=>req('put','/employees/updateEmployeesDept',params)
@@ -59,4 +59,7 @@ export const resetPwd = params=>req('put','/employees/resetpwd',params)
 
 // 新增员工
 export const addEmployees = params=>req('post','/employees/add',params)
+
+// 获取角色列表
+export  const findAllroles = params =>req('get','/roles/findAll',params);
 

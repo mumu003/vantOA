@@ -108,7 +108,7 @@
     name: "Approval",
     data() {
       return {
-        title: '积分审批',
+        title: '审批查看',
         isLeftArrow: true,
         activeTab: 0,
         waitList: [], 
@@ -210,7 +210,7 @@
 
     .appli-list {
       // padding: 10px 0;
-      max-height: calc(100vh - 140px);
+      max-height: calc(100vh - 100px);
       overflow-y: scroll;
     }
 

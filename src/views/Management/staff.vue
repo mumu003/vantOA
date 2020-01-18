@@ -17,6 +17,8 @@
             <div class="first-row">
               <!-- <div class="user-name">{{item.name}}</div> -->
               <div>
+                <van-field v-model="item.name" label="姓名 "  readonly="readonly" class="staff-cell"/> 
+                <van-field v-model="item.phone" label="手机号" readonly="readonly" class="staff-cell"/> 
                 <div class="row first">
                 <!-- departColumns[index].text -->
                   <van-field v-model="item.departName" clearable label="部门 &gt;" placeholder="请选择部门" @click="departPop(item)" readonly="readonly"/>
@@ -26,7 +28,7 @@
                 </div>
                 <div class="row second">
                 <!-- roleColumns[index].text -->
-                  <van-field v-model="item.roleName" clearable label="职位 &gt;" placeholder="请选择职位" @click="rolePop(item)" readonly="readonly"/>
+                  <van-field v-model="item.roleName" clearable label="角色 &gt;" placeholder="请选择角色" @click="rolePop(item)" readonly="readonly"/>
                   <van-popup v-model="roleShow" position="bottom">
                     <van-picker show-toolbar :columns="roleColumns" @cancel="roleShow = false"  @confirm="onSelect2" />
                   </van-popup>  
@@ -50,7 +52,7 @@
   </div>
 </template>
 <script>
-import { findList,updateEmployeesDept,updateEmployeesRole,deleteEmployees,resetPwd } from "@/api/manager.js" ;
+import { findList,updateEmployeesDept,updateEmployeesRole,deleteEmployees,resetPwd,findAllroles } from "@/api/manager.js" ;
 import { findAlldepart } from "@/api/depart.js" ;
 import addStaff from '@/components/manager/addStaff'
 export default {
@@ -79,16 +81,17 @@ export default {
       role:"",
       roleId:0,
       roleShow:false,   // 角色下拉框
-      roleColumns: [{
-        text:"超级管理员",
-        roleId:1
-      },{
-        text:"管理员",
-        roleId:2
-      },{
-        text:"普通员工",
-        roleId:3
-      }],
+      roleColumns: [],
+      // {
+      //   text:"超级管理员",
+      //   roleId:1
+      // },{
+      //   text:"管理员",
+      //   roleId:2
+      // },{
+      //   text:"普通员工",
+      //   roleId:3
+      // }
 
       activeItem:{},
     }
@@ -123,6 +126,7 @@ export default {
             })
           })
           this.findAlldepart();
+          this.findAllroles();
         }
       });
 
@@ -141,6 +145,27 @@ export default {
               this.departColumns.forEach(item2 => {
                 if(item1.departId == item2.id){
                   item1.departName = item2.text;
+                }
+              })
+            })
+          }
+        }
+      })
+    },
+    // 获取所有职位
+    async findAllroles(){
+      await findAllroles().then(res => {
+        console.log("数据列表:",this.staffItem)
+        if(res.code == 0){
+          if(res.data.length > 0){
+            this.roleColumns = res.data.map(item => ({
+              text: item.name || "",
+              roleId: item.id || ""
+            }))
+            this.staffItem.map(item1 => {
+              this.roleColumns.forEach(item2 => {
+                if(item1.roleId == item2.roleId){
+                  item1.roleName = item2.text;
                 }
               })
             })
@@ -356,18 +381,28 @@ export default {
 </style>
 <style lang="scss">
 .first-row{
+  .staff-cell{
+    padding: 0;
+    margin: 10px 0;
+    .van-cell__title{
+      width: 70px;
+    }
+  }
   .row{
     .van-field__label{
-      width:50px;
+      width:70px;
     }
     .van-cell{
       padding:0;
-      .van-field__control{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+       .van-field__body{
+          width: 80%;
+          .van-field__control{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <!-- 管理中心 -->
-  <div class="container" style="height: calc(100vh - 50px);overflow-y: scroll;">
+  <div class="container">
     <nav-bar :title='title'></nav-bar>
-    <div v-if="$route.meta.manageShow" class="main-cnt manage-page">
+    <div v-if="$route.meta.manageShow" class="main-cnt manage-page" style="max-height:calc(100vh - 45px);overflow-y:scroll">
       <van-row class="oa-cnt">
         <div class="m-type">OA</div>
         <div >

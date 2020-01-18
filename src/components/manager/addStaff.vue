@@ -6,7 +6,7 @@
     <van-popup v-model="departShow" position="bottom">
       <van-picker show-toolbar :columns="departColumns" @cancel="departShow = false"  @confirm="onSelect" />
     </van-popup>  
-    <van-field v-model="roleName" clearable label="选择职位" placeholder="请选择职位" @click="rolePop" readonly="readonly" required is-link/>
+    <van-field v-model="roleName" clearable label="选择角色" placeholder="请选择角色" @click="rolePop" readonly="readonly" required is-link/>
     <van-popup v-model="roleShow" position="bottom">
       <van-picker show-toolbar :columns="roleColumns" @cancel="roleShow = false"  @confirm="onSelect2" />
     </van-popup>  
@@ -61,7 +61,7 @@ export default {
     saveStaff(){
       var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
       if(this.roleName == ''){
-        this.$toast("请选择职位");
+        this.$toast("请选择角色");
       }else if(this.departName == ''){
         this.$toast("请选择部门");
       }else if(this.name == ''){
