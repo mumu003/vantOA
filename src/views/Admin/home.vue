@@ -10,37 +10,37 @@
       <div class="summary-item">
         <div class="the-more">
           <span>昨日加分最多的规则为：</span>
-          <span>{{adminData.increaseByYesterday.name}}</span>
-          <span class="num">共 {{adminData.increaseByYesterday.count}} 条</span>
+          <span>{{adminData.increaseByYesterday | fillName}}</span>
+          <span class="num">共 {{adminData.increaseByYesterday | fillCount}} 条</span>
         </div>
         <div class="the-less">
           <span>扣分最多的规则为：</span>
-          <span>{{adminData.reduceByYesterday.name}}</span>
-          <span class="num">共 {{adminData.reduceByYesterday.count}} 条</span>
+          <span>{{adminData.reduceByYesterday | fillName}}</span>
+          <span class="num">共 {{adminData.reduceByYesterday | fillCount}} 条</span>
         </div>
       </div>
       <div class="summary-item">
         <div class="the-more">
           <span>本月审批加分最多的规则为：</span>
-          <span>{{adminData.increaseByMoth.name}}</span>
-          <span class="num">共 {{adminData.increaseByMoth.count}} 条</span>
+          <span>{{adminData.increaseByMoth | fillName}}</span>
+          <span class="num">共 {{adminData.increaseByMoth | fillCount}} 条</span>
         </div>
         <div class="the-less">
           <span>扣分最多的规则为：</span>
-          <span>{{adminData.reduceByMoth.name}}</span>
-          <span class="num">共 {{adminData.reduceByMoth.count}} 条</span>
+          <span>{{adminData.reduceByMoth | fillName}}</span>
+          <span class="num">共 {{adminData.reduceByMoth | fillCount}} 条</span>
         </div>
       </div>
       <div class="summary-item">
         <div class="the-more">
           <span>本年审批加分最多的规则为：</span>
-          <span>{{adminData.increaseByYearMap.name}}</span>
-          <span class="num">共 {{adminData.increaseByYearMap.count}} 条</span>
+          <span>{{adminData.increaseByYearMap | fillName}}</span>
+          <span class="num">共 {{adminData.increaseByYearMap | fillCount}} 条</span>
         </div>
         <div class="the-less">
           <span>扣分最多的规则为：</span>
-          <span>{{adminData.reduceByYear.name}}</span>
-          <span class="num">共 {{adminData.reduceByYear.count}} 条</span>
+          <span>{{adminData.reduceByYear | fillName}}</span>
+          <span class="num">共 {{adminData.reduceByYear | fillCount}} 条</span>
         </div>
       </div>
     </div>
@@ -65,6 +65,22 @@
     },
     mounted() {
       this.getAdminData()
+    },
+    filters:{
+      fillName(val){
+        if(!val){
+          return '暂无数据'
+        }else{
+          return val.name
+        }
+      },
+      fillCount(val){
+        if(!val){
+          return 0
+        }else{
+          return val.count
+        }
+      }
     },
     methods: {
       async getAdminData() {
@@ -113,9 +129,9 @@
     }
 
     .summary-list {
-      margin-top: 10px;
+      // margin-top: 10px;
       background: #fff;
-      height: calc(100vh - 195px);
+      height: calc(100vh - 230px);
       overflow: auto;
 
     }

@@ -87,7 +87,7 @@ export default {
             this.getrule();
           } else {
             this.categoryList.push({ text: "无", value: "" });
-            this.param.employeesId = this.ruleList[0].value;
+            this.param.employeesId = this.categoryList[0].value;
           }
         }
       });
@@ -159,7 +159,7 @@ export default {
             this.$toast.success("申请成功");
             setTimeout(() => {
               this.$router.push({
-                path:'/manager',
+                path:'/approval',
               })
             },800)
           }
