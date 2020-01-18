@@ -1,30 +1,17 @@
 <template>
-  <div class="approval-page main-cnt">
+  <div class="view-approval main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <div class="batch-head" v-show="isBatch">
-      <van-checkbox v-model="isAll" @click="checkAll">全选</van-checkbox>
-      <span class="cancle" @click="cancle">取消</span>
-    </div>
-    <!-- 批量处理 -->
-    <div class="batch-footer" v-show="isBatch">
-      <span @click="allOperat(1)">拒绝</span>
-      <span></span>
-      <span @click="allOperat(2)">同意</span>
-    </div>
-
+   
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
         <div class="no-data" v-if="loadFinished[0]">暂无数据</div>
-        <template v-else>
-          <!-- 超级管理员 -->
-          <van-checkbox-group v-model="batchData" ref="approvalList" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}">
-            <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
-              <van-checkbox :name="item1.id" v-show="isBatch" />
-              <div :class="{'appli-item':true,'batchActive':isBatch}">
+          <!-- 普通管理员、员工 -->
+          <div :class="{'appli-list':true, 'main-box':true}" v-else>
+            <div class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
+              <div class="appli-item">
                 <div class="appli-head ">
                   <span class="name">{{item1.name}}的积分申请</span>
-                  <van-icon name="ellipsis" @click.stop="batchShow=!batchShow" v-show="!isBatch" />
                 </div>
                 <div class="appli-cnt">
                   <span class="appli-cnt-title ">规则：</span>
@@ -40,29 +27,18 @@
                 </div>
                 <div class="appli-footer">
                   <span class="time">{{item1.applyTime}}</span>
-                  <div class="state" v-show="!isBatch">
-                    <span @click="singleOperat(item1.id,1)">拒绝</span>
-                    <em></em>
-                    <span @click="singleOperat(item1.id,2)">同意</span>
+                  <div class="state">
+                    <span class="delete" @click="deletePoint(item1.id)">删除</span>
                   </div>
                 </div>
               </div>
-            </van-cell-group>
-          </van-checkbox-group>
-          <!-- 超管批量操作 -->
-          <van-popup v-model="batchShow" position="bottom" :style="{ height: '20%' }">
-            <div class="main-box">
-              <div class="more-operat" @click="batch">批量操作</div>
-              <div class="more-operat" @click="batchShow=!batchShow">取消</div>
             </div>
-          </van-popup>
-        </template>
-
+          </div>
       </van-tab>
       <van-tab title="已通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
         <div class="no-data" v-if="loadFinished[1]">暂无数据</div>
-        <div class="appli-list main-box accept" v-else>
+        <div class="appli-list accept" v-else>
           <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
               <span class="name">{{item2.name}}的积分申请</span>
@@ -91,12 +67,10 @@
       <van-tab title="未通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
         <div class="no-data" v-if="loadFinished[2]">暂无数据</div>
-        <template v-else>
-          <div class="appli-list main-box unaccept">
+          <div class="appli-list unaccept">
             <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
               <div class="appli-head ">
                 <span class="name">{{item3.name}}的积分申请</span>
-                <van-icon name="ellipsis" @click.stop="update(item3.id)" />
               </div>
               <div class="appli-cnt">
                 <span class="appli-cnt-title ">规则：</span>
@@ -118,27 +92,17 @@
               </div>
             </div>
           </div>
-          <van-popup v-model="updateShow" position="bottom" :style="{ height: '20%' }">
-            <div class="main-box">
-              <div class="more-operat" @click="singleOperat(updateId,2)">更改为同意</div>
-              <div class="more-operat" @click="updateShow=!updateShow">取消</div>
-            </div>
-          </van-popup>
-        </template>
       </van-tab>
     </van-tabs>
-
-    <tab-bar></tab-bar>
   </div>
 </template>
 
 <script>
   import {
-    findPointWait,
-    findPointPass,
-    findPointDisagree,
-    passPoint,
-    pointDisagree
+    findPointWaitByEmpl,
+    findPointPassByEmpl,
+    findPointDisagreeByEmpl,
+    deletePoint
   } from "@/api/integral";
   export default {
     name: "Approval",
@@ -147,45 +111,24 @@
         title: '积分审批',
         isLeftArrow: true,
         activeTab: 0,
-        isBatch: false, //是否批量状态
-        batchShow: false,
-        batchData: [], //批量数据d
-        isAll: false,
-        updateShow: false,
-        disagreeList: [], //未通过 超管
-        waitList: [], //待审核 超管
-        passList: [], //已通过 超管
-        disagreeList: [], //未通过 超管
+        waitList: [], 
+        passList: [], 
+        disagreeList:[],
         loadFinished: [false, false, false],
         loading: false
       }
     },
     mounted() {
+      let userInfo = this.$store.state.userinfo
+      this.roleId = userInfo.roleId
       this.getList()
     },
     methods: {
-      batch() {
-        document.querySelector('.van-tabs__wrap').style.display = "none"
-        this.isBatch = true
-        this.batchShow = false
-      },
-      cancle() {
-        document.querySelector('.van-tabs__wrap').style.display = "block"
-        this.isBatch = false
-      },
-      // 全选
-      checkAll() {
-        if(this.isAll){
-          this.$refs.approvalList.toggleAll(true)
-        }else{
-          this.$refs.approvalList.toggleAll()
-        }
-      },
       // 获取审批列表
       async getList() {
         this.loading = true
         // 待审批
-        await findPointWait().then(res => {
+        await findPointWaitByEmpl().then(res => {
           if (res.code == 0) {
             setTimeout(() => {
               this.loading = false
@@ -199,7 +142,7 @@
           }
         })
         // 已通过
-        await findPointPass().then(res => {
+        await findPointPassByEmpl().then(res => {
           if (res.code == 0) {
             setTimeout(() => {
               this.loading = false
@@ -213,7 +156,7 @@
           }
         })
         // 未通过
-        await findPointDisagree().then(res => {
+        await findPointDisagreeByEmpl().then(res => {
           if (res.code == 0) {
             setTimeout(() => {
               this.loading = false
@@ -227,71 +170,27 @@
           }
         })
       },
-      // 单个操作
-      async singleOperat(id,type) {
-        let ids = []
-        ids.push(id)
-        if (type == 1) {
-          // 拒绝
-          await pointDisagree(ids).then(res => {
-            if (res.code == 0) {
-              this.$toast("操作成功!")
-              this.getList()
-            } else if (res.code == -1) {
-              this.$toast(res.msg)
-            }
-          })
-        } else {
-          // 通过
-          await passPoint(ids).then(res => {
-            if (res.code == 0) {
-              if (this.updateShow) {
-                this.updateShow = !this.updateShow
-              }
-              this.$toast("操作成功!")
-              this.getList()
-            } else if (res.code == -1) {
-              this.$toast(res.msg)
-            }
-          })
+      async delete(id) {
+        let data={
+            id
         }
-      },
-      // 批量操作
-      async allOperat(type) {
-        if (type == 1) {
-          if (this.batchData == '') {
-            this.$toast("请选择要操作的数据!")
+        await deletePoint(data).then(res => {
+          if (res.code == 0) {
+            this.$toast("删除成功!")
           } else {
-            await pointDisagree(this.batchData).then(res => {
-              if (res.code == 0) {
-                this.$toast("操作成功!")
-                this.getList()
-              } else if (res.code == -1) {
-                this.$toast(res.msg)
-              }
-            })
+            this.$toast(res.msg)
           }
-        } else {
-          await passPoint(this.batchData).then(res => {
-            if (this.batchData == '') {
-              this.$toast("请选择要操作的数据!")
-            } else {
-              if (res.code == 0) {
-                this.$toast("操作成功!")
-                this.getList()
-              } else if (res.code == -1) {
-                this.$toast(res.msg)
-              }
-            }
-
-          })
-        }
+        })
       },
-      update(id) {
-        this.updateShow = true
-        this.updateId = id
+      // 删除审批申请
+      deletePoint(id,index) {
+        this.$dialog.confirm({
+          message: '确定删除该条申请？'
+        }).then(() => {
+          this.delete(id)
+        }).catch(() => {
+        });
       }
-
     }
   }
 
@@ -304,46 +203,9 @@
     align-items: center;
   }
 
-  .approval-page {
-    .batch-head {
-      @include flex;
-      font-size: 16px;
-      background: #fff;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-      padding: 10px 15px;
-
-      .cancle {
-        color: #1989fa;
-      }
-    }
-
-    .batch-footer {
-      z-index: 1000;
-      width: 100%;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
-      background: #fff;
-      position: fixed;
-      bottom: 45px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 12px;
-
-      span {
-        color: #1989fa;
-        font-size: 16px;
-      }
-
-      span:nth-child(2) {
-        display: block;
-        width: 1px;
-        height: 28px;
-        background: #eee;
-      }
-    }
-
+  .view-approval {
     .batch-list {
-      height: calc(100vh - 180px) !important;
+      height: calc(100vh - 220px) !important;
     }
 
     .appli-list {
@@ -368,10 +230,6 @@
       .appli-item {
         margin-bottom: 0;
       }
-    }
-
-    .batchActive {
-      margin-left: 5px;
     }
 
     .appli-item {
@@ -438,27 +296,16 @@
             padding: 0 15px;
             color: #1989fa;
           }
-
           .passed {
             color: #07c160;
           }
 
-          .rejected {
+          .rejected,.delete{
             color: #D75252;
           }
+
         }
       }
-    }
-
-    .more-operat {
-      width: 100%;
-      background: #fff;
-      color: #1989fa;
-      padding: 10px;
-      text-align: center;
-      font-size: 16px;
-      margin-top: 10px;
-      border-radius: 12px;
     }
 
     .no-data {
@@ -471,7 +318,7 @@
 
 </style>
 <style lang="scss">
-  .approval-page {
+  .view-approval {
     .van-tab {
       font-size: 18px;
       color: #999;
@@ -479,14 +326,6 @@
 
     .van-tab--active {
       color: #333;
-    }
-
-    .van-checkbox__icon {
-      margin-right: 5px;
-    }
-
-    .van-popup {
-      background: none;
     }
   }
 

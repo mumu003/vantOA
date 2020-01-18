@@ -27,6 +27,15 @@ export const findPointPass = params =>req('get','/point/findPointPass',params);
 // 管理员和超管--审批未通过列表
 export const findPointDisagree = params =>req('get','/point/findPointDisagree',params);
 
+//管理员和员工查看审批状态等待审批
+export const findPointWaitByEmpl = params =>req('get','/point/findPointWaitByEmpl',params);
+
+//管理员和员工查看审批状态已通过
+export const findPointPassByEmpl = params =>req('get','/point/findPointPassByEmpl',params);
+
+//管理员和员工查看审批状态未通过
+export const findPointDisagreeByEmpl = params =>req('get','/point/findPointDisagreeByEmpl',params);
+
 // 审核通过
 export const passPoint = params =>req('post','/point/passPoint',params);
 

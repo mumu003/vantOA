@@ -93,6 +93,15 @@
       this.getCategory()
     },
     methods: {
+      init(){
+        this.pointObj={
+           ulesId: '', 
+          applyTime: '',
+          add: 0,
+          content: '',
+          employeesId: []
+        }
+      },
       // 获取部门列表
       async getDeptList() {
         await findAlldepart().then(res => {
@@ -201,6 +210,7 @@
           await addPoint(this.pointObj).then(res => {
             if (res.code == 0) {
               this.$toast.success("提交成功")
+              this.init()
             }
           })
         }
