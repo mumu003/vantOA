@@ -67,6 +67,7 @@ instance.interceptors.request.use(config => {
 //http reponse拦截器
 instance.interceptors.response.use(response => {
     if(response.data.code != 0){
+      // router.push("/errInfo");
       // alert(response.data.errMsg);
       console.log("返回信息:",response.data.msg)
       Toast.fail(response.data.msg);
@@ -74,7 +75,7 @@ instance.interceptors.response.use(response => {
     return response.data;  //只返回服务器返回的data信息
   },
   error => {
-    console.log("报错信息:",error);
+    router.push("/errInfo");
     if (error.response) {
       switch (error.response.status) {
         case 401:

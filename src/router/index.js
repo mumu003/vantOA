@@ -10,6 +10,17 @@ Vue.use(Router);
 
 const routes = [
   {
+    path:'/',
+    redirect:"/login"
+  },{
+    path: '*',
+    name: 'errInfo',
+    meta:{
+      requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
+    },
+    component: ()=>import('@/components/error/errInfo.vue')
+  },
+  {
     path: '/home',
     name: 'home',
     meta:{
@@ -39,13 +50,6 @@ const routes = [
     component:()=>import('../views/login.vue')
   },
   {
-    path: '*',
-    name: 'login',
-    meta:{
-      requireAuth:true   //添加这个字段 表明进入这个路由需要登陆
-    },
-    component: ()=>import('../views/login.vue')
-  },{
     path: '/manager',
     name: 'manager',
     meta:{
@@ -92,7 +96,7 @@ router.beforeEach((to,from,next)=>{
       next();
     }else{
       next({
-        path:'/login',
+        name:'/login',
         query:{redirect:to.fullPath}
       })
     }
