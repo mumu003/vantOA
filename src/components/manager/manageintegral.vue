@@ -1,6 +1,7 @@
 <template>
   <div class="manageIntergral">
     <van-nav-bar title="管理部门" left-arrow @click-left="onClickLeft"  class="bluenav"/>
+    <div class="op-tip">tips：向左侧滑动 修改，向右测滑动 删除</div>
     <van-cell-group v-if="departList.length>0">
       <van-swipe-cell v-for="(item,index) in departList" :key="item.id+index">
         <template slot="left">
@@ -106,6 +107,12 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
+  .op-tip{
+    font-size: 16px;
+    padding: 10px 15px;
+    color: #1989fa;
+
+  }
   .van-cell-group{
     max-height: calc(100vh - 40px);
     overflow-y: scroll;
