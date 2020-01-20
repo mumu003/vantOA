@@ -6,7 +6,7 @@
       <van-search v-model="name" placeholder="请输入规则名称" show-action @search="onSearch">
         <div slot="action" @click="onSearch">搜索</div>
       </van-search>
-      <van-field v-model="type" clearable label="选择分类 &gt;" placeholder="请选择分类" @click="typeShow = true" readonly="readonly"/>
+      <van-field v-model="type" clearable label="选择分类" placeholder="请选择分类" @click="typeShow = true" readonly="readonly" is-link/>
       <van-popup v-model="typeShow" position="bottom">
         <van-picker show-toolbar :columns="typeColumns" @cancel="typeShow = false"  @confirm="onSelect" />
       </van-popup>  
@@ -55,7 +55,7 @@
     <div class="update-modal" v-if="showinput">
       <van-nav-bar :title="title2" left-arrow @click-left="showinput = false;baseShow = true;maskShow = false;"  class="bluenav"/>
       <div> 
-        <van-field v-model="activeItem.text" clearable label="选择分类 &gt;" required placeholder="请选择分类" @click="typeShow = true" readonly="readonly"/>
+        <van-field v-model="activeItem.text" clearable label="选择分类" required placeholder="请选择分类" @click="typeShow = true" readonly="readonly" is-link/>
         <van-popup v-model="typeShow" position="bottom">
           <van-picker show-toolbar :columns="typeColumns" @cancel="typeShow = false"  @confirm="onSelect2" />
         </van-popup> 

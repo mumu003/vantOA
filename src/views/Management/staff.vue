@@ -21,14 +21,14 @@
                 <van-field v-model="item.phone" label="手机号" readonly="readonly" class="staff-cell"/> 
                 <div class="row first">
                 <!-- departColumns[index].text -->
-                  <van-field v-model="item.departName" clearable label="部门 &gt;" placeholder="请选择部门" @click="departPop(item)" readonly="readonly"/>
+                  <van-field v-model="item.departName" clearable label="部门" placeholder="请选择部门" @click="departPop(item)" readonly="readonly" is-link/>
                   <van-popup v-model="departShow" position="bottom">
                     <van-picker show-toolbar :columns="departColumns" @cancel="departShow = false"  @confirm="onSelect" />
                   </van-popup>  
                 </div>
                 <div class="row second">
                 <!-- roleColumns[index].text -->
-                  <van-field v-model="item.roleName" clearable label="角色 &gt;" placeholder="请选择角色" @click="rolePop(item)" readonly="readonly"/>
+                  <van-field v-model="item.roleName" clearable label="角色" placeholder="请选择角色" @click="rolePop(item)" readonly="readonly" is-link/>
                   <van-popup v-model="roleShow" position="bottom">
                     <van-picker show-toolbar :columns="roleColumns" @cancel="roleShow = false"  @confirm="onSelect2" />
                   </van-popup>  
