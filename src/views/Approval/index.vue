@@ -250,7 +250,8 @@
           } else {
             await pointDisagree(this.batchData).then(res => {
               if (res.code == 0) {
-                this.$toast("操作成功!")
+                this.$toast.success("操作成功!")
+                this.cancle()
                 this.getList()
               } else if (res.code == -1) {
                 this.$toast(res.msg)
@@ -263,7 +264,8 @@
               this.$toast("请选择要操作的数据!")
             } else {
               if (res.code == 0) {
-                this.$toast("操作成功!")
+                this.$toast.success("操作成功!")
+                this.cancle()
                 this.getList()
               } else if (res.code == -1) {
                 this.$toast(res.msg)
