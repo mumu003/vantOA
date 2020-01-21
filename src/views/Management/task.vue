@@ -44,7 +44,7 @@
           </van-tab>
           <van-tab title="选择人员" name="men">
             <van-checkbox-group v-model="taskObj.employeesId" class="men-area" v-if="memberList.length !=0 ">
-              <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(val.name)">
+              <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(i)">
                 {{val.name}}
               </van-checkbox>
             </van-checkbox-group>
@@ -73,7 +73,7 @@
         taskObj: {
           title: '',
           content: '',
-          score: "", //积分
+          score: '', //积分
           endTime: '请选择', //截止时间
           degree: '0',    // 程度 0:待完成 1:已完成 2:未完成
           employeesId: []
@@ -91,7 +91,7 @@
         finished: false,
 
         timeShow:false,
-        minDate: new Date(2020, 0, 1),
+        minDate: new Date(2000, 0, 1),
         maxDate: new Date(2025, 10, 1),
         currentDate: new Date(),
 
@@ -141,12 +141,26 @@
         }
         await findAllList(data).then(res => {
           if (res.code == 0) {
-            this.memberList=res.data
+            // this.memberList=res.data
+            this.memberList = res.data.map(item => ({
+                id: item.id,
+                name:item.name,
+                isChecked:false
+            }))
           }
         })
       },
-      menConfirm(name) {
-        this.finalList.push(name)
+       menConfirm(i) {
+         if(!this.memberList[i].isChecked){
+          this.finalList.push(this.memberList[i].name)
+          this.memberList[i].isChecked=true
+         }else{
+           for(let j in this.finalList){
+             if(this.finalList[j]==this.memberList[i].name){
+               this.finalList.splice(i,1)
+             }
+           }
+         }
       },
       // 人员选中
       toSelect() {
@@ -305,7 +319,7 @@
     }
 
     .van-cell:not(:last-child)::after {
-      border: none;
+      border: none !important;
     }
 
     .men-area {

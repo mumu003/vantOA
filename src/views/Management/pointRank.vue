@@ -1,9 +1,16 @@
 <template>
   <div class="point-rank main-cnt">
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
-    <van-cell title="选择日期区间" required is-link :value="date" @click="dateShow = true" />
-
-    <van-calendar v-model="dateShow" type="range" color="#1989fa" @confirm="dateConfirm" />
+    <!-- <van-cell title="选择日期区间" required is-link :value="date" @click="dateShow = true" />
+    <van-calendar v-model="dateShow" type="range" color="#1989fa" :min-date="minDate" :default-date="defaultDate" @confirm="dateConfirm" /> -->
+     <van-cell title="开始时间" is-link :value="rankObj.startTime" @click="startShow = true" required/>
+    <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter"/>
+    </van-popup>
+    <van-cell title="结束时间" is-link :value="rankObj.endTime" @click="endShow = true" required/>
+    <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter"/>
+    </van-popup>
 
     <van-tabs v-model="activeTab" color="#1989fa" @click="rankClick">
       <van-tab title="员工排名">
@@ -24,7 +31,7 @@
         <div class="rank-item" v-for="(item3,index3) in rankList" :key="index3">
           <span class="num">{{index3+1}}</span>
           <span class="name">{{item3.name}}</span>
-          <span class="score">{{item3.score}}分</span>
+          <span class="score">{{item3.score}}次</span>
         </div>
       </van-tab>
     </van-tabs>
@@ -34,22 +41,29 @@
 </template>
 
 <script>
-  import {
-    getRank
-  } from "@/api/integral";
+  import { getRank } from "@/api/integral";
+  import { formdatatime } from "@/util/base";
   export default {
     name: 'PointRank',
     data() {
       return {
         title: '积分排名',
         isLeftArrow: true,
-        dateShow: false,
-        date: '请选择',
+        startShow:false,
+        endShow:false,
+        // dateShow: false,
+        // date: '请选择',
         rankObj: {
           type: 1, //1：员工排名 2：部门排名 3：规则排名
           startTime: '',
           endTime: ''
         },
+        // minDate: new Date(2000, 1, 1),
+        // defaultDate:new Date(),
+        currentDate1:new Date(),
+        currentDate2:new Date(),
+        minDate: new Date(2000, 0, 1),
+        maxDate: new Date(2025, 10, 1),
         activeTab: 0,
         rankList: [],
         loadFinished:false,
@@ -58,16 +72,38 @@
     },
     methods: {
       // 格式化日期
-      formatDate(date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      // formatDate(date) {
+      //   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      // },
+      // dateConfirm(date) {
+      //   const [start, end] = date
+      //   this.dateShow = false
+      //   this.rankObj.startTime = this.formatDate(start)
+      //   this.rankObj.endTime = this.formatDate(end)
+      //   this.date = `${this.formatDate(start)} ~ ${this.formatDate(end)}`
+      //   this.getRank()
+      // },
+      formatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`
+        }else if (type === 'day') {
+          return `${value}日`
+        }else if (type === 'hour') {
+          return `${value}时`
+        }else if (type === 'minute') {
+          return `${value}分`
+        }
+        return value;
       },
-      dateConfirm(date) {
-        const [start, end] = date
-        this.dateShow = false
-        this.rankObj.startTime = this.formatDate(start)
-        this.rankObj.endTime = this.formatDate(end)
-        this.date = `${this.formatDate(start)} ~ ${this.formatDate(end)}`
-        this.getRank()
+      startConfirm(time) {
+        this.startShow = false
+        this.rankObj.startTime = formdatatime(time)
+      },
+      endConfirm(time) {
+        this.endShow = false
+         this.rankObj.endTime = formdatatime(time)
       },
       async getRank() {
         this.loading=true
