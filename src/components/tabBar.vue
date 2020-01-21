@@ -71,7 +71,7 @@
     height: 45px;
     z-index: 1000;
     border-top: 1px solid #eee;
-    background: #fff;
+    background: #ffffff;
 
     ul {
       height: 45px;

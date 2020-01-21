@@ -22,6 +22,28 @@ if (val) {
     return '不支持显示'
 }
 }
+
+function formatDate(val,type,ishour){
+    
+    if (val) {
+        //默认以 - - -的形式展示
+        type?'':type='-';
+        
+        let date = new Date(val);
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1 >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
+        let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+        //是否只显年月日
+        if(ishour){
+            return year + type + month + type + day 
+        }
+        else{
+        return year + type + month + type + day
+        }
+    } else {
+        return '不支持显示'
+    }
+    }
 export {
-    formdatatime
+    formdatatime,formatDate
 }

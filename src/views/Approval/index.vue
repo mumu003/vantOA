@@ -15,10 +15,11 @@
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[0]">暂无数据</div>
+        <div class="no-data" v-if="waitList.length==0">暂无数据</div>
         <template v-else>
           <!-- 超级管理员 -->
-          <van-checkbox-group v-model="batchData" ref="approvalList" :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}">
+          <van-checkbox-group v-model="batchData" ref="approvalList"
+            :class="{'appli-list':true, 'main-box':true, 'batch-list':isBatch}">
             <van-cell-group class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
               <van-checkbox :name="item1.id" v-show="isBatch" />
               <div :class="{'appli-item':true,'batchActive':isBatch}">
@@ -61,7 +62,7 @@
       </van-tab>
       <van-tab title="已通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[1]">暂无数据</div>
+        <div class="no-data" v-if="passList.length==0">暂无数据</div>
         <div class="appli-list main-box accept" v-else>
           <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
@@ -90,7 +91,7 @@
       </van-tab>
       <van-tab title="未通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[2]">暂无数据</div>
+        <div class="no-data" v-if="disagreeList.length==0">暂无数据</div>
         <template v-else>
           <div class="appli-list main-box unaccept">
             <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
@@ -152,11 +153,11 @@
         batchData: [], //批量数据d
         isAll: false,
         updateShow: false,
+        updateId: -1,
         disagreeList: [], //未通过 超管
         waitList: [], //待审核 超管
         passList: [], //已通过 超管
         disagreeList: [], //未通过 超管
-        loadFinished: [false, false, false],
         loading: false
       }
     },
@@ -175,9 +176,9 @@
       },
       // 全选
       checkAll() {
-        if(this.isAll){
+        if (this.isAll) {
           this.$refs.approvalList.toggleAll(true)
-        }else{
+        } else {
           this.$refs.approvalList.toggleAll()
         }
       },
@@ -187,48 +188,33 @@
         // 待审批
         await findPointWait().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
-              this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[0] = true
-              } else {
-                this.loadFinished[0] = false
-                this.waitList = res.data
-              }
-            })
+            this.loading = false
+            if (res.data.length >= 0) {
+              this.waitList = res.data
+            }
           }
         })
         // 已通过
         await findPointPass().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
-              this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[1] = true
-              } else {
-                this.loadFinished[1] = false
-                this.passList = res.data
-              }
-            })
+            this.loading = false
+            if (res.data.length >= 0) {
+              this.passList = res.data
+            }
           }
         })
         // 未通过
         await findPointDisagree().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
-              this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[2] = true
-              } else {
-                this.loadFinished[2] = false
-                this.disagreeList = res.data
-              }
-            })
+            this.loading = false
+            if (res.data.length >= 0) {
+              this.disagreeList = res.data
+            }
           }
         })
       },
       // 单个操作
-      async singleOperat(id,type) {
+      async singleOperat(id, type) {
         let ids = []
         ids.push(id)
         if (type == 1) {
@@ -283,7 +269,6 @@
                 this.$toast(res.msg)
               }
             }
-
           })
         }
       },
@@ -308,7 +293,7 @@
     .batch-head {
       @include flex;
       font-size: 16px;
-      background: #fff;
+      background: #ffffff;
       box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
       padding: 10px 15px;
 
@@ -321,7 +306,7 @@
       z-index: 1000;
       width: 100%;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
-      background: #fff;
+      background: #ffffff;
       position: fixed;
       bottom: 45px;
       display: flex;
@@ -376,7 +361,7 @@
 
     .appli-item {
       width: 100%;
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 4px;
       font-size: 16px;
       margin-bottom: 10px;
@@ -452,7 +437,7 @@
 
     .more-operat {
       width: 100%;
-      background: #fff;
+      background: #ffffff;
       color: #1989fa;
       padding: 10px;
       text-align: center;

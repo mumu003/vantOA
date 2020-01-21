@@ -96,7 +96,7 @@
 
 <style lang="scss" scoped>
 $color-blur:#1989fa;
-$color-white:#fff;
+$color-white:#ffffff;
 @mixin flex{
   display: flex;
   align-items: center;

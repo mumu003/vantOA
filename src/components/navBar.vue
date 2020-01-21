@@ -47,10 +47,10 @@
   background: #1989fa;
       .van-nav-bar__title,
       .van-nav-bar__text {
-        color: #fff ;
+        color: #ffffff ;
       }
       .van-icon{
-        color: #fff;
+        color: #ffffff;
       }
 }
 </style>

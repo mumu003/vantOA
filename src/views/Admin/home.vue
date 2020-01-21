@@ -87,7 +87,7 @@
         this.adminName = this.$store.state.userinfo.name
         this.curDate = this.formatTime(new Date())
         await findAdminData().then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             this.adminData = res.data
           }
@@ -115,7 +115,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #fff;
+      background: #ffffff;
 
       span {
         padding-bottom: 15px;
@@ -130,7 +130,7 @@
 
     .summary-list {
       // margin-top: 10px;
-      background: #fff;
+      background: #ffffff;
       height: calc(100vh - 230px);
       overflow: auto;
 

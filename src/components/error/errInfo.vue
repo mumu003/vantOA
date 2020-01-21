@@ -33,7 +33,7 @@
     }
   }
   .error-msg{
-    color: #fff;
+    color: #ffffff;
     font-size: 16px;
     margin: 20px 0;
     text-align: center;

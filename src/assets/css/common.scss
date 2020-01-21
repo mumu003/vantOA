@@ -22,7 +22,7 @@
 
 
   $color-blur:#1989fa;
-  $color-white:#fff;
+  $color-white:#ffffff;
   // 定位
   @mixin flex{
     display: flex;
@@ -44,7 +44,7 @@
   font-size: 16px !important;
   padding: 0 10px !important;
   background: #1989fa !important;
-  color: #fff !important;
+  color: #ffffff !important;
   margin: 0 5px !important;
   border-radius: 2px !important;
 }
@@ -97,7 +97,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  background: #fff;
+  background: #ffffff;
   opacity: 0.7;
   z-index: 1;
 }

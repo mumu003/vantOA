@@ -155,7 +155,7 @@ export default {
         overflow-y: scroll;
         .typeItem {
           font-size: 0.675rem /* 14/16 */;
-          background-color: #fff;
+          background-color: #ffffff;
           border-radius: 4px;
           box-shadow: 0 2px 5px#ccc;
           margin: 15px 10px;

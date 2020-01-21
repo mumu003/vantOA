@@ -155,7 +155,7 @@ export default {
     // 获取所有职位
     async findAllroles(){
       await findAllroles().then(res => {
-        console.log("数据列表:",this.staffItem)
+        // console.log("数据列表:",this.staffItem)
         if(res.code == 0){
           if(res.data.length > 0){
             this.roleColumns = res.data.map(item => ({
@@ -316,7 +316,7 @@ export default {
     .van-icon,
     .van-nav-bar__title,
     .van-nav-bar__text{
-      color: #fff;
+      color: #ffffff;
     }
   }
   .van-list{
@@ -324,7 +324,7 @@ export default {
     overflow-y: scroll;
     .staffItem {
       font-size: 0.675rem /* 14/16 */;
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 4px;
       box-shadow: 0 2px 5px #ccc;
       margin: 15px 10px;
@@ -344,7 +344,7 @@ export default {
         background:#1989fa;
         border-radius:50%;
         @include flex;
-        color:#fff;
+        color:#ffffff;
         font-size:18px;
         min-width:60px;
       }

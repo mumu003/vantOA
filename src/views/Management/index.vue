@@ -79,7 +79,7 @@
 </script>
 <style lang="scss" scoped>
   $color-blur:#1989fa;
-  $color-white:#fff;
+  $color-white:#ffffff;
 
   @mixin flex {
     display: flex;
@@ -95,7 +95,7 @@
 
   .container { 
     .manage-page{
-      background: #fff;
+      background: #ffffff;
     }
     .m-type {
       width: 100%;

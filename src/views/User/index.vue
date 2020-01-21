@@ -184,7 +184,7 @@
 
     .user-info {
       padding: 10px 15px;
-      background: #fff;
+      background: #ffffff;
       display: flex;
       justify-content: flex-start;
       align-items: center;

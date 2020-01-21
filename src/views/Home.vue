@@ -135,7 +135,7 @@
 
 <style lang="scss" scoped>
   .home {
-    background: #ffff;
+    background: #ffffff;
 
     span {
       display: block;
@@ -165,7 +165,7 @@
         box-shadow: 0px 7px 14px 0px rgba(89, 160, 255, 0.35);
         border-radius: 19px;
         border: none;
-        color: #fff;
+        color: #ffffff;
         font-size: 14px;
         margin: 0 0 10px 10px;
       }

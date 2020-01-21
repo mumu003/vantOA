@@ -117,7 +117,7 @@ export default {
     height: 1.4375rem;
     line-height: 1.4375rem;
     text-align: center;
-    background-color: #fff;
+    background-color: #ffffff;
     .van-icon,
     .van-nav-bar__title,
     .van-nav-bar__text{

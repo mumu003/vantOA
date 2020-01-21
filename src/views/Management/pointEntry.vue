@@ -328,7 +328,7 @@
     }
 
     .people-box {
-      background: #fff;
+      background: #ffffff;
       padding: 10px ;
       padding-bottom: 20px;
     }

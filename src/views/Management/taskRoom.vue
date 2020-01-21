@@ -128,11 +128,11 @@ export default {
   .oa-nav{
     height: 1.40625rem;
     background: #1989fa;
-    color: #fff;
+    color: #ffffff;
     .van-icon,
     .van-nav-bar__title,
     .van-nav-bar__text{
-      color: #fff;
+      color: #ffffff;
     }
   }
   .tasks {
@@ -141,7 +141,7 @@ export default {
       overflow-y: scroll;
       .task {
         font-size: 0.675rem /* 14/16 */;
-        background-color: #fff;
+        background-color: #ffffff;
         border-radius: 4px;
         box-shadow: 0 2px 5px#ccc;
         margin: 15px 10px;

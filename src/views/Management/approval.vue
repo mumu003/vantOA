@@ -5,7 +5,7 @@
     <van-tabs v-model="activeTab" color="#1989fa">
       <van-tab title="待审批">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[0]">暂无数据</div>
+        <div class="no-data" v-if="waitList.length==0">暂无数据</div>
           <!-- 普通管理员、员工 -->
           <div :class="{'appli-list':true, 'main-box':true}" v-else>
             <div class="wait-item" v-for="(item1,index1) in waitList" :key="index1">
@@ -37,7 +37,7 @@
       </van-tab>
       <van-tab title="已通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[1]">暂无数据</div>
+        <div class="no-data" v-if="passList.length==0">暂无数据</div>
         <div class="appli-list accept" v-else>
           <div class="appli-item" v-for="(item2,index2) in passList" :key="index2">
             <div class="appli-head ">
@@ -66,7 +66,7 @@
       </van-tab>
       <van-tab title="未通过">
         <van-loading size="24px" v-show="loading">加载中...</van-loading>
-        <div class="no-data" v-if="loadFinished[2]">暂无数据</div>
+        <div class="no-data" v-if="disagreeList.length==0">暂无数据</div>
           <div class="appli-list unaccept">
             <div class="appli-item" v-for="(item3,index3) in disagreeList" :key="index3">
               <div class="appli-head ">
@@ -114,7 +114,6 @@
         waitList: [], 
         passList: [], 
         disagreeList:[],
-        loadFinished: [false, false, false],
         loading: false
       }
     },
@@ -130,43 +129,26 @@
         // 待审批
         await findPointWaitByEmpl().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
               this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[0] = true
-              } else {
-                this.loadFinished[0] = false
+              if (res.data.length >= 0) {
                 this.waitList = res.data
               }
-            })
           }
         })
         // 已通过
         await findPointPassByEmpl().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
-              this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[1] = true
-              } else {
-                this.loadFinished[1] = false
+            if (res.data.length >= 0) {
                 this.passList = res.data
               }
-            })
           }
         })
         // 未通过
         await findPointDisagreeByEmpl().then(res => {
           if (res.code == 0) {
-            setTimeout(() => {
-              this.loading = false
-              if (res.data.length == 0) {
-                this.loadFinished[2] = true
-              } else {
-                this.loadFinished[2] = false
+            if (res.data.length >= 0) {
                 this.disagreeList = res.data
               }
-            })
           }
         })
       },
@@ -177,6 +159,7 @@
         await deletePoint(data).then(res => {
           if (res.code == 0) {
             this.$toast("删除成功!")
+            this.getList()
           } else {
             this.$toast(res.msg)
           }
@@ -235,7 +218,7 @@
 
     .appli-item {
       width: 100%;
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 4px;
       font-size: 16px;
       margin-bottom: 10px;

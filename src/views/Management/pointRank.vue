@@ -3,13 +3,15 @@
     <nav-bar :title='title' :isLeftArrow='isLeftArrow'></nav-bar>
     <!-- <van-cell title="选择日期区间" required is-link :value="date" @click="dateShow = true" />
     <van-calendar v-model="dateShow" type="range" color="#1989fa" :min-date="minDate" :default-date="defaultDate" @confirm="dateConfirm" /> -->
-     <van-cell title="开始时间" is-link :value="rankObj.startTime" @click="startShow = true" required/>
-    <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }"   >
-        <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter"/>
+    <van-cell title="开始时间" is-link :value="rankObj.startTime" @click="startShow = true" required />
+    <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }">
+      <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate"
+        @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter" />
     </van-popup>
-    <van-cell title="结束时间" is-link :value="rankObj.endTime" @click="endShow = true" required/>
-    <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }"   >
-        <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter"/>
+    <van-cell title="结束时间" is-link :value="rankObj.endTime" @click="endShow = true" required />
+    <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }">
+      <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate"
+        @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter" />
     </van-popup>
 
     <van-tabs v-model="activeTab" color="#1989fa" @click="rankClick">
@@ -41,16 +43,20 @@
 </template>
 
 <script>
-  import { getRank } from "@/api/integral";
-  import { formdatatime } from "@/util/base";
+  import {
+    getRank
+  } from "@/api/integral";
+  import {
+    formatDate
+  } from "@/util/base";
   export default {
     name: 'PointRank',
     data() {
       return {
         title: '积分排名',
         isLeftArrow: true,
-        startShow:false,
-        endShow:false,
+        startShow: false,
+        endShow: false,
         // dateShow: false,
         // date: '请选择',
         rankObj: {
@@ -60,14 +66,14 @@
         },
         // minDate: new Date(2000, 1, 1),
         // defaultDate:new Date(),
-        currentDate1:new Date(),
-        currentDate2:new Date(),
+        currentDate1: new Date(),
+        currentDate2: new Date(),
         minDate: new Date(2000, 0, 1),
         maxDate: new Date(2025, 10, 1),
         activeTab: 0,
         rankList: [],
-        loadFinished:false,
-        loading:false
+        loadFinished: false,
+        loading: false
       }
     },
     methods: {
@@ -88,38 +94,54 @@
           return `${value}年`;
         } else if (type === 'month') {
           return `${value}月`
-        }else if (type === 'day') {
+        } else if (type === 'day') {
           return `${value}日`
-        }else if (type === 'hour') {
+        } else if (type === 'hour') {
           return `${value}时`
-        }else if (type === 'minute') {
+        } else if (type === 'minute') {
           return `${value}分`
         }
         return value;
       },
       startConfirm(time) {
         this.startShow = false
-        this.rankObj.startTime = formdatatime(time)
+        this.rankObj.startTime = formatDate(time)
+        if(this.rankObj.endTime != ""){
+          this.getRank()
+        }
       },
       endConfirm(time) {
         this.endShow = false
-         this.rankObj.endTime = formdatatime(time)
+        this.rankObj.endTime = formatDate(time)
+        if(this.rankObj.startTime != ""){
+          this.getRank()
+        }
       },
       async getRank() {
-        this.loading=true
-        await getRank(this.rankObj).then(res => {
-          if (res.code == 0) {
-            setTimeout(()=>{
-              this.loading=false
-              if(res.data.list.length==0){
-                this.loadFinished=true
-              }else{
-                this.loadFinished=false
-                this.rankList = res.data.list
-              }
-            })
-          }
-        })
+        this.rankList=[]
+        let d1 = new Date(this.rankObj.startTime.replace(/\-/g, "\/"))
+        let d2 = new Date(this.rankObj.endTime.replace(/\-/g, "\/"))
+
+        if (this.rankObj.startTime != "" && this.rankObj.endTime != "" && d1 > d2) {
+          this.$toast.fail("开始时间不能大于结束时间！")
+          return
+        } else {
+          this.loading = true
+          await getRank(this.rankObj).then(res => {
+            if (res.code == 0) {
+              setTimeout(() => {
+                this.loading = false
+                if (res.data.list.length == 0) {
+                  this.loadFinished = true
+                } else {
+                  this.loadFinished = false
+                  this.rankList = res.data.list
+                }
+              })
+            }
+          })
+        }
+
       },
       rankClick() {
         if (this.activeTab == 0) {
@@ -193,7 +215,7 @@
 <style lang="scss">
   .point-rank {
     .van-tabs__content {
-      background: #fff;
+      background: #ffffff;
     }
   }
 
