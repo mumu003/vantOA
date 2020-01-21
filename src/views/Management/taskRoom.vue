@@ -5,10 +5,10 @@
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" >
           <!-- <van-cell v-for="item in list" :key="item" :title="item" /> -->
           <div class="task" v-for="(item,index) in list" :key="item+index" >
-            <div class="row first" @click="updateTitle(item)">
+            <div class="row first">
               <p>{{item.title}}</p>
             </div>
-            <div class="row second" @click="updateContent(item)">
+            <div class="row second">
               <p>{{item.content}}</p>
             </div>
             <div class="row last">

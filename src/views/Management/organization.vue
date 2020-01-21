@@ -124,7 +124,7 @@ export default {
         if (res.code == 0) {
           this.$toast.success({
             message: "删除成功",
-            dduration: 1000
+            duration: 1000
           });
           this.finddepart();
         }
@@ -149,7 +149,7 @@ export default {
         if (res.code == 0) {
           this.$toast({
             message: "添加成功",
-            dduration: 1000
+            duration: 1000
           });
 
           this.finddepart();

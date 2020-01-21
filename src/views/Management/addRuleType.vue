@@ -81,6 +81,7 @@ export default {
     },
     deleteTypes(item){
       this.$dialog.confirm({
+            closeOnPopstate:true,
         title: "删除",
         message: "确定要删除吗？"
       }).then(() => {

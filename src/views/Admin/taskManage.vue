@@ -32,14 +32,22 @@
       </div>
 
       <!-- 修改 -->
-      <div class="update-modal" v-if="showinput">
+      <!-- <div class="update-modal" v-if="showinput">
         <van-nav-bar :title="setTitle" left-arrow right-text="保存" @click-left="back" @click-right="save" />
         <van-cell-group>
           <van-field v-model="activeItem.title" placeholder="请输入任务标题" v-show="isSetTitle" />
           <van-field v-model="activeItem.content" rows="3" v-show="isSetContent"
             autosize label="内容" type="textarea" maxlength="50" placeholder="请输入任务内容" show-word-limit />
         </van-cell-group>
-      </div>
+      </div> -->
+
+      <van-dialog v-model="showinput" :title="setTitle" show-cancel-button @confirm="save">
+        <van-field v-model="activeItem.title" label="任务标题" center clearable placeholder="请输入任务标题"  v-show="isSetTitle"></van-field>
+        <van-field v-model="activeItem.content" rows="3" v-show="isSetContent"
+          autosize label="任务内容" type="textarea" maxlength="50" placeholder="请输入任务内容" show-word-limit />
+        <!-- <van-button slot="button" size="small" type="info" @click="addintegral">确认</van-button> -->
+        
+      </van-dialog>
 
       <!-- 发布任务 -->
       <ReleaseTask v-if="release" @back="releaseBack"></ReleaseTask>
@@ -70,6 +78,7 @@ export default {
       // 发布任务
       sendTask:false,
       // 修改任务
+      setTitle:"",
       isSetTitle:false,
       isSetContent:false,
       activeItem:"",
@@ -116,16 +125,25 @@ export default {
     // 已完成 / 未完成
     async finish(item){
       // console.log(item);
-      var degree = item.degree;
-      item.degree = item.degree == "1" ? '2' :'1';
-      await updateStatus(item).then(res => {
-        if(res.code == 0){
-          this.$toast.success({
-            message: "操作成功",
-            duration: 1000
-          });
-        }
-      })
+      this.$dialog.confirm({
+        closeOnPopstate:true,
+        title: "确认",
+        message: "是否继续该操作？"
+      }).then(() => {
+        var degree = item.degree;
+        item.degree = item.degree == "1" ? '2' :'1';
+        updateStatus(item).then(res => {
+          if(res.code == 0){
+            this.$toast.success({
+              message: "操作成功",
+              duration: 1000
+            });
+          }
+        })
+
+      }).catch(() => {
+          // on cancel
+      });
     },
     // 编辑
     // showModal(item){
@@ -135,6 +153,7 @@ export default {
     // 删除任务
     deleteTask(item){
       this.$dialog.confirm({
+        closeOnPopstate:true,
         title: "删除",
         message: "确定要删除吗？"
       }).then(() => {
@@ -159,37 +178,31 @@ export default {
     },
     updateTitle(item) {
       if(item.degree == "0"){
-        this.setTitle = '修改任务名称';
-        this.base = false;
+        this.setTitle = '修改任务标题';
+        // this.base = false;
         this.showinput = true;
-        this.release = true;
+        this.release = false;
         this.isSetTitle = true;
-        this.activeItem = item;
+        this.isSetContent = false;
+        this.activeItem =JSON.parse(JSON.stringify(item));
       }
     },
     updateContent(item) {
       if(item.degree == "0"){
         this.setTitle = '修改任务内容';
-        this.base = false;
+        // this.base = false;
         this.showinput = true;
-        this.release = true;
+        this.release = false;
+        this.isSetTitle = false;
         this.isSetContent = true;
-        this.activeItem = item;
+        this.activeItem = JSON.parse(JSON.stringify(item));
       }
-    },
-    back() {
-      this.base = true;
-      this.showinput = false;
-      this.release = false;
-      this.isSetTitle = false;
-      this.isSetContent = false;
     },
     // 保存
     async save() {
       if (this.isSetTitle) {
         await updateTitle(this.activeItem).then(res => {
           if(res.code == 0){
-            
             this.successTip();
           }
         })

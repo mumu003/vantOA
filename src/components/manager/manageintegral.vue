@@ -61,7 +61,7 @@ export default {
              if(res.code==0){
                 this.$toast({
               message:'修改成功',
-              dduration:1000
+              duration:1000
           })
           setTimeout(()=>{
                this.finddepart();
@@ -72,8 +72,8 @@ export default {
           })
     },
     deledepart(item) {
-     
           this.$dialog.confirm({
+            closeOnPopstate:true,
             message: '确定删除吗？'
           }).then(() => {
               this.godelete(item);
@@ -85,7 +85,7 @@ export default {
              if(res.code==0){
              this.$toast({
               message:'删除成功',
-              dduration:1000
+              duration:1000
           })
           this.finddepart();
 
@@ -95,6 +95,9 @@ export default {
     onClickLeft() {
      this.$emit('closemanage');
     }
+  },
+  destroyed(){
+    this.$toast().clear();
   }
 };
 </script>

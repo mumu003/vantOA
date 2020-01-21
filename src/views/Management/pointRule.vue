@@ -184,7 +184,9 @@ export default {
       if(item){
         this.activeItem = JSON.parse(JSON.stringify(item));
         this.activeItem.score = this.activeItem.score.toString();
-        var a =this.typeColumns.filter(item => {
+        // console.log('activeItem',this.activeItem)
+        var a = this.typeColumns.filter(item => {
+          // console.log('123',item)
           return item["id"] == this.activeItem.rulesType;
         })
         this.activeItem.text = a[0].text;
@@ -278,6 +280,7 @@ export default {
     },
     deleteRules(item) {
       this.$dialog.confirm({
+            closeOnPopstate:true,
         title: "删除",
         message: "确定要删除吗？"
       }).then(() => {

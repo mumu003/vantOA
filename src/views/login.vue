@@ -6,7 +6,7 @@
     </div>
     <div id="contain">
         <van-cell-group>
-          <van-field value="请输入员工姓名" label="姓名" left-icon="contact" v-model="user.loginName" />
+          <van-field value="请输入员工手机号" label="手机号" left-icon="contact" v-model="user.loginName" />
           <van-field value="请输入员工密码" label="密码" left-icon="contact" v-model="user.pwd"  type="password"/>
         </van-cell-group>
         <van-checkbox v-model="remember">记住我</van-checkbox>

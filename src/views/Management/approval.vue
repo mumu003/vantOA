@@ -185,6 +185,7 @@
       // 删除审批申请
       deletePoint(id,index) {
         this.$dialog.confirm({
+            closeOnPopstate:true,
           message: '确定删除该条申请？'
         }).then(() => {
           this.delete(id)

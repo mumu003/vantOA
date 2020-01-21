@@ -13,11 +13,12 @@
           </van-dropdown-menu>
         </div>
         <div class="moreinput">
-          <van-field v-model="param.certifier" size="small" placeholder="证明人" required />
+          <van-field v-model="param.certifier" size="small" placeholder="证明人"  />
           <span class="span">分值:</span>
-          <van-field v-model="param.add" size="small" type="number" min="0" placeholder="输入分值" required />
+          <van-field v-model="param.add" size="small"  type="number" min="0" placeholder="输入分值" required :disabled="true" v-if="checked&&param.rulesId" />
+          <van-field v-model="param.add" size="small"  type="number" min="0" placeholder="输入分值" required v-else />
         </div>
-        <van-switch-cell v-model="checked" title="指定积分规则" active-color="#1989fa" />
+        <van-switch-cell v-model="checked" title="指定积分规则" active-color="#1989fa" @change="change"/>
         <div class="select" v-if="checked">
           <label for>选择规则类别</label>
           <van-dropdown-menu>
@@ -27,7 +28,7 @@
         <div class="select" v-if="checked">
           <label for>选择积分规则</label>
           <van-dropdown-menu>
-            <van-dropdown-item v-model="param.rulesId" :options="ruleList" />
+            <van-dropdown-item v-model="param.rulesId" :options="ruleList" @change="bingd" />
           </van-dropdown-menu>
         </div>
       </van-cell-group>
@@ -110,8 +111,28 @@ export default {
             this.ruleList.push({ text: "无", value: "" });
             this.param.rulesId = this.ruleList[0].value;
           }
+          
         }
       });
+    },
+    change(val){
+      if(val){
+        this.ruleList.forEach(v=>{
+         
+          if(v.value==this.param.rulesId){
+         
+            this.param.add=v.score
+         
+          }
+        })
+      }
+      else{
+        this.param.add='';
+      }
+     
+    },
+    bingd(val){
+     this.change(val)
     },
     //获取审核人
     async findautior() {
@@ -138,15 +159,15 @@ export default {
     },
     //积分申请
     async applyempl() {
-      if (this.param.certifier == "") {
-        this.$toast("证明人不能为空!");
-        return;
-      } 
+      // if (this.param.certifier == "") {
+      //   this.$toast("证明人不能为空!");
+      //   return;
+      // } 
       // else if (this.param.add == "") {
       //   this.$toast("分数不能为空!");
       //   return;
       // }
-      else if(!this.param.add){
+       if(!this.param.add){
         this.$toast("请输入正确格式的积分");
       }else{
         delete this.param.employeesId;
@@ -168,7 +189,8 @@ export default {
         });
       }
     }
-  }
+  },
+  
 };
 </script>
 <style lang="scss" scoped>

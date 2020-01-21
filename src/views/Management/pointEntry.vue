@@ -209,8 +209,13 @@
           this.pointObj.employeesId=this.pointObj.employeesId.map(Number)
           await addPoint(this.pointObj).then(res => {
             if (res.code == 0) {
-              this.$toast.success("提交成功")
+              this.$toast.success("提交成功");
               this.init()
+              setTimeout(() => {
+                this.$router.push({
+                  path:'/manager',
+                })
+              },1500)
             }
           })
         }

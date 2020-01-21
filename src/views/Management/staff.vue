@@ -13,7 +13,7 @@
 
 
           <div class="right">
-            <van-icon name="cross" size="0.4rem" @click.stop="deleteStaff(item)" class="closed" />
+            <van-icon name="cross" size="0.4rem" @click.stop="deleteStaff(item)" class="closed" v-if="item.roleId != 1" />
             <div class="first-row">
               <!-- <div class="user-name">{{item.name}}</div> -->
               <div>
@@ -239,6 +239,7 @@ export default {
     },
     deleteStaff(item){
       this.$dialog.confirm({
+            closeOnPopstate:true,
         title: "删除",
         message: "确定要删除吗？"
       }).then(() => {

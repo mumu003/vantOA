@@ -8,7 +8,12 @@
         placeholder="请输入任务标题" show-word-limit required/>
       <van-field v-model="taskObj.content" rows="2" autosize label="任务内容" type="textarea" maxlength="100"
         placeholder="请输入任务内容" show-word-limit required/>
-      <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" required/>
+      <!-- <van-field class="score" v-model="taskObj.score" rows="1" label="积分" type="number" min="0" placeholder="请输入积分" required/> -->
+      
+      <!-- 数字键盘 -->
+      <van-field label="积分" readonly required clickable v-model="taskObj.score" @touchstart.native.stop="scoreShow = true"  placeholder="请输入积分(负数代表扣分)"/>
+      <van-number-keyboard v-model="taskObj.score" :show="scoreShow" :maxlength="3" @blur="scoreShow = false" safe-area-inset-bottom  extra-key="-"/>
+
 
       <van-cell title="截止时间" is-link :value="taskObj.endTime" @click="timeShow = true" required/>
       <van-popup v-model="timeShow" position="bottom" :style="{ height: '40%' }"   >
@@ -68,7 +73,7 @@
         taskObj: {
           title: '',
           content: '',
-          score: 0, //积分
+          score: "", //积分
           endTime: '请选择', //截止时间
           degree: '0',    // 程度 0:待完成 1:已完成 2:未完成
           employeesId: []
@@ -89,6 +94,9 @@
         minDate: new Date(2020, 0, 1),
         maxDate: new Date(2025, 10, 1),
         currentDate: new Date(),
+
+        // 数字键盘
+        scoreShow:false,
 
       }
     },
@@ -156,10 +164,31 @@
         if (this.taskObj.title == '' ||  this.taskObj.content == '' || this.taskObj.employeesId == '' || this.taskObj.endTime == '' ) {
           this.$toast("请输入完整内容再提交");
           return
-        }else if(!this.taskObj.score && this.taskObj.score != 0){
-          this.$toast("请输入正确格式的积分");
+        }else if(!(this.taskObj.score<0)){
           // 分数大于0
-        } else {
+          if(this.taskObj.score.indexOf("-") != -1){
+            this.$toast("请输入正确格式的积分");
+            return;
+          }else if(this.taskObj.score > 100){
+            this.$toast("请输入100分以内的积分");
+            return;
+          }else{
+            this.taskObj.employeesId=this.taskObj.employeesId.map(Number)
+            await addTask(this.taskObj).then(res => {
+              if (res.code == 0) {
+                this.$toast.success("发布成功");
+                setTimeout(() => {
+                  this.$emit("back");
+                },800)   
+              }
+            })
+          }
+        }
+        // else if(!this.taskObj.score && this.taskObj.score != 0){
+        //   this.$toast("请输入正确格式的积分");
+        //   // 分数大于0
+        // } 
+        else {
           this.taskObj.employeesId=this.taskObj.employeesId.map(Number)
           await addTask(this.taskObj).then(res => {
             if (res.code == 0) {

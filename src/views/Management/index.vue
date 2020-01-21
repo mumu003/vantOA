@@ -64,8 +64,7 @@
       }
     },
     mounted() {
-      this.userInfo = this.$store.state.userinfo
-      // console.log("123",menus)
+      this.userInfo = this.$store.state.userinfo;
       // console.log(this.$router.options.routers )
     },
     methods: {

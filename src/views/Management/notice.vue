@@ -28,8 +28,8 @@
         <van-cell-group>
           <van-field v-model="activeitem.title" rows="1" autosize
             label="公告标题" type="textarea" placeholder="请输入公告标题" />
-          <van-field v-model="activeitem.content" rows="3"
-            autosize label="留言" type="textarea" maxlength="50" placeholder="请输入公告内容" show-word-limit />
+          <van-field v-model="activeitem.content" rows="5"
+            autosize label="公告内容" type="textarea" maxlength="150" placeholder="请输入公告内容" show-word-limit />
         </van-cell-group>
         <van-button type="info" class="info-btn" block @click="updatenotice">修改</van-button>
       </div>
@@ -124,8 +124,9 @@ export default {
     },
     deletnotice(item) {
       this.$dialog.confirm({
+            closeOnPopstate:true,
         title: "删除",
-        message: "确定要删除吗？此操作仅限管理员使用。所有相关文件和相关数据将被删除。 相关统计结果和历史图表将失效。 这将影响系统的数据关系和智能判断。 重要的历史报告可能有错误。 相关功能将失效。"
+        message: "确定要删除吗？"
       })
         .then(() => {
          this.godelete(item);
