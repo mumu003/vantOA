@@ -11,7 +11,11 @@
     </van-popup>
 
     <van-cell title="日期" is-link :value="pointObj.applyTime" @click="isDateShow = true" required/>
-    <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" />
+    <van-popup v-model="isDateShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="dateConfirm" @cancel="isDateShow = false;" :formatter="formatter"/>
+    </van-popup>
+
+    <!-- <van-calendar v-model="isDateShow" color="#1989fa" @confirm="dateConfirm" /> -->
     <van-field class="score" v-model="pointObj.add" rows="1" label="积分" type="number" placeholder="请输入积分" disabled />
     <van-field class="reason-cnt" v-model="pointObj.content" rows="2" autosize label="理由" type="textarea" maxlength="50"
         eholder="请输入理由（选填）" show-word-limit />
@@ -40,7 +44,7 @@
         </van-tab>
         <van-tab title="选择人员" name="men">
           <van-checkbox-group v-model="pointObj.employeesId" class="men-area" v-if="memberList.length !=0 ">
-            <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(val.name)">{{val.name}}</van-checkbox>
+            <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(i)">{{val.name}}</van-checkbox>
           </van-checkbox-group>
           <van-checkbox-group v-model="pointObj.employeesId" class="men-area" v-else>
             <p style="font-size:14px;color:#323233">暂无数据</p>
@@ -55,6 +59,7 @@
 <script>
   import { findAlldepart,findAllList} from "@/api/depart";
   import { getruletype,getrule,addPoint} from "@/api/integral";
+  import { formdatatime } from "@/util/base";
   export default {
     name: 'PointEntry',
     data() {
@@ -70,15 +75,19 @@
         showCategory: false,
         pointObj: {
           rulesId: '', //小类规则Id
-          applyTime: '',
+          applyTime: '请选择',
           add: 0,
           content: '',
           employeesId: []
         },
         isDateShow: false,
+        minDate: new Date(2000, 1, 1),
+        maxDate: new Date(2025, 10, 1),
+        currentDate: new Date(),
         isMemberShow: false,
         activeTab: 'dept',
         showPicker: false,
+        menChecked:false,
         list: [],
         deptList: [],
         memberList: [],
@@ -161,11 +170,25 @@
       },
       // 格式化日期
       formatDate(date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+        // return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      },
+       formatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`
+        }else if (type === 'day') {
+          return `${value}日`
+        }else if (type === 'hour') {
+          return `${value}时`
+        }else if (type === 'minute') {
+          return `${value}分`
+        }
+        return value;
       },
       dateConfirm(time) {
         this.isDateShow = false
-        this.pointObj.applyTime = this.formatDate(time)
+        this.pointObj.applyTime = formdatatime(time)
       },
       onLoad() {
         // 异步更新数据
@@ -186,12 +209,26 @@
         }
         await findAllList(data).then(res => {
           if (res.code == 0) {
-            this.memberList=res.data
+            // this.memberList=res.data
+            this.memberList = res.data.map(item => ({
+                id: item.id,
+                name:item.name,
+                isChecked:false
+              }))
           }
         })
       },
-       menConfirm(name) {
-        this.finalList.push(name)
+       menConfirm(i) {
+         if(!this.memberList[i].isChecked){
+          this.finalList.push(this.memberList[i].name)
+          this.memberList[i].isChecked=true
+         }else{
+           for(let j in this.finalList){
+             if(this.finalList[j]==this.memberList[i].name){
+               this.finalList.splice(i,1)
+             }
+           }
+         }
       },
       // 人员选中
       toSelect() {
@@ -211,6 +248,11 @@
             if (res.code == 0) {
               this.$toast.success("提交成功")
               this.init()
+              setTimeout(()=>{
+                this.$router.push({
+              path:'/manager',
+              })
+              },1000)
             }
           })
         }
@@ -311,7 +353,7 @@
     }
 
     .van-cell:not(:last-child)::after {
-      border: none;
+      border: none !important;
     }
 
     [class*=van-hairline]::after {

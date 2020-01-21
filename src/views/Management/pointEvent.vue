@@ -4,15 +4,17 @@
     <van-search v-model="eventObj.name" placeholder="请输入人员姓名" show-action @search="filter">
       <div slot="action" @click="filter">筛选</div>
     </van-search>
-    <!-- <van-cell title="开始时间" is-link :value="eventObj.starTime" @click="show = true"/>
-    <van-calendar v-model="startShow" color="#1989fa" @confirm="startConfirm" />
-    <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="show = true" />
-    <van-calendar v-model="endShow" color="#1989fa" @confirm="endConfirm" /> -->
+    <van-cell title="开始时间" is-link :value="eventObj.starTime" @click="startShow = true" required/>
+    <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter"/>
+    </van-popup>
+    <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="endShow = true" required/>
+    <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }"   >
+        <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate" @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter"/>
+    </van-popup>
 
-
-    <van-cell title="选择日期区间" :value="date" @click="show = true" is-link required/>
-    <van-calendar v-model="show" color="#1989fa" @confirm="onConfirm" type="range" :min-date="minTime"/>
-
+    <!-- <van-cell title="选择日期区间" :value="date" @click="show = true" is-link required/>
+    <van-calendar v-model="show" color="#1989fa" @confirm="onConfirm" type="range" :min-date="minTime"/> -->
 
     <div class="main-box">
       <van-loading size="24px" v-show="loading">加载中...</van-loading>
@@ -34,6 +36,7 @@
 
 <script>
  import { findPointEvent } from "@/api/integral";
+  import { formdatatime } from "@/util/base";
   export default {
     name: 'PointEvent',
     data() {
@@ -47,11 +50,15 @@
             starTime: '',
             endTime: '',
         },
+        currentDate1:new Date(),
+        currentDate2:new Date(),
+        minDate: new Date(2000, 0, 1),
+        maxDate: new Date(2025, 10, 1),
         list: [],
         loadFinished:false,
-        date: '',
-        show: false,
-        minTime:new Date(2019,0,1),
+        // date: '',
+        // show: false,
+        // minTime:new Date(2019,0,1),
         loading:false,
       }
     },
@@ -80,24 +87,38 @@
           
       },
       // 格式化日期
-      formatDate(date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      // formatDate(date) {
+      //   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      // },
+      formatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`
+        }else if (type === 'day') {
+          return `${value}日`
+        }else if (type === 'hour') {
+          return `${value}时`
+        }else if (type === 'minute') {
+          return `${value}分`
+        }
+        return value;
       },
-      // startConfirm(time) {
-      //   this.startShow = false;
-      //   this.eventObj.starTime = this.formatDate(time);
-      // },
-      // endConfirm(time) {
-      //   this.endShow = false;
-      //   this.eventObj.endTime = this.formatDate(time);
-      // },
-      onConfirm(val){
-        // this.date = val;
-        this.eventObj.starTime = this.formatDate(val[0]);
-        this.eventObj.endTime = this.formatDate(val[1]);
-        this.date = this.eventObj.starTime + '~' + this.eventObj.endTime;
-        this.show = false;
-      }
+      startConfirm(time) {
+        this.startShow = false
+        this.eventObj.starTime = formdatatime(time)
+      },
+      endConfirm(time) {
+        this.endShow = false
+         this.eventObj.endTime = formdatatime(time)
+      },
+      // onConfirm(val){
+      //   // this.date = val;
+      //   this.eventObj.starTime = this.formatDate(val[0]);
+      //   this.eventObj.endTime = this.formatDate(val[1]);
+      //   this.date = this.eventObj.starTime + '~' + this.eventObj.endTime;
+      //   this.show = false;
+      // }
     }
   }
 

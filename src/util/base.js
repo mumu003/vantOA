@@ -16,7 +16,7 @@ if (val) {
         return year + type + month + type + day 
     }
     else{
-    return year + type + month + type + day + ' ' + hour + ':' + minute + ':' + scen
+    return year + type + month + type + day + ' ' + hour + ':' + minute 
     }
 } else {
     return '不支持显示'
