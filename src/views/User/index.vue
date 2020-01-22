@@ -10,9 +10,10 @@
       </div>
       <van-cell-group class="info-list">
         <van-field label="个人账号" :value="userInfo.phone" readonly />
-        <van-field label="姓名" :value="userInfo.name" readonly @click="updateName" />
-        <van-field label="手机号" :value="userInfo.phone" readonly @click="updateMobile" />
-        <van-field label="密码" type="password" :value="userInfo.pwd" readonly @click="updatePwd" />
+        <van-field label="所属部门" :value="userInfo.departName" readonly />
+        <van-field label="姓名" :value="userInfo.name" readonly @click="updateName" is-link/>
+        <van-field label="手机号" :value="userInfo.phone" readonly @click="updateMobile" is-link/>
+        <van-field label="密码" type="password" :value="userInfo.pwd" readonly @click="updatePwd" is-link/>
       </van-cell-group>
     </div>
     <van-button type="info" class="info-btn" block @click="logout">注销</van-button>
@@ -34,6 +35,7 @@
 
 <script>
   import * as types from "../../store/types";
+  import { findAlldepart } from "@/api/depart";
   import {
     updatename,
     updatephone,
@@ -65,16 +67,26 @@
       this.getUserInfo()
     },
     methods: {
-      getUserInfo() {
-        let info = this.$store.state.userinfo
-        this.userInfo = {
-          id: info.id,
-          departId: info.departId,
-          roleId: info.roleId,
-          name: info.name,
-          phone: info.phone,
-          pwd: info.pwd
-        }
+      async getUserInfo() {
+        
+        await findAlldepart().then(res => {
+          if (res.code == 0) {
+            let departAry = res.data;
+            let depart = departAry.filter(item => {
+              return item.id == this.$store.state.userinfo.departId
+            })
+            let info = this.$store.state.userinfo
+            this.userInfo = {
+              id: info.id,
+              departId: info.departId,
+              roleId: info.roleId,
+              name: info.name,
+              phone: info.phone,
+              pwd: info.pwd,
+              departName : depart[0].name
+            }
+          }
+        })
       },
       updateName() {
         this.setTitle = '修改名称'

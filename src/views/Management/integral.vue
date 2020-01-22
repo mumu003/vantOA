@@ -111,7 +111,9 @@ export default {
             this.ruleList.push({ text: "无", value: "" });
             this.param.rulesId = this.ruleList[0].value;
           }
-          
+          if(this.checked){
+            this.change(this.param.rulesId);
+          }
         }
       });
     },
