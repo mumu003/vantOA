@@ -23,6 +23,7 @@
 // }
 // }
 
+
 function formatDate(val,type,ishour){
     
     if (val) {
