@@ -59,7 +59,7 @@
       let userInfo = this.$store.state.userinfo
       this.roleId = userInfo.roleId
     }
-  }
+  } 
 
 </script>
 <style lang="scss">

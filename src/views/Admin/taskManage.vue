@@ -19,8 +19,8 @@
                 <p class="time">结束时间：<span>{{item.endDate | formtime}}</span></p>
               </div>
               <div class="btn-row" v-if="item.degree == 0">
-                <van-tag plain type="success" @click.stop="finish(item)" style="margin-right:8px;">已完成</van-tag>
-                <van-tag plain type="warning" @click.stop="finish(item)">未完成</van-tag>
+                <van-tag plain type="success" @click.stop="finish(item,1)" style="margin-right:8px;">已完成</van-tag>
+                <van-tag plain type="warning" @click.stop="finish(item,2)">未完成</van-tag>
               </div>
               <div class="btn-row" v-else>
                 <span v-if="item.degree == 1" class="passed">已完成</span>
@@ -123,7 +123,7 @@ export default {
       });
     },
     // 已完成 / 未完成
-    async finish(item){
+    async finish(item,status){
       // console.log(item);
       this.$dialog.confirm({
         closeOnPopstate:true,
@@ -131,7 +131,7 @@ export default {
         message: "是否继续该操作？"
       }).then(() => {
         var degree = item.degree;
-        item.degree = item.degree == "1" ? '2' :'1';
+        item.degree = status;
         updateStatus(item).then(res => {
           if(res.code == 0){
             this.$toast.success({
