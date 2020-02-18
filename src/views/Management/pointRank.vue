@@ -5,12 +5,12 @@
     <van-calendar v-model="dateShow" type="range" color="#1989fa" :min-date="minDate" :default-date="defaultDate" @confirm="dateConfirm" /> -->
     <van-cell title="开始时间" is-link :value="rankObj.startTime" @click="startShow = true" required />
     <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }">
-      <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate"
+      <van-datetime-picker v-model="currentDate1" type="date" :min-date="minDate" :max-date="maxDate"
         @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter" />
     </van-popup>
     <van-cell title="结束时间" is-link :value="rankObj.endTime" @click="endShow = true" required />
     <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }">
-      <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate"
+      <van-datetime-picker v-model="currentDate2" type="date" :min-date="minDate" :max-date="maxDate"
         @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter" />
     </van-popup>
 
@@ -96,11 +96,7 @@
           return `${value}月`
         } else if (type === 'day') {
           return `${value}日`
-        } else if (type === 'hour') {
-          return `${value}时`
-        } else if (type === 'minute') {
-          return `${value}分`
-        }
+        } 
         return value;
       },
       startConfirm(time) {
