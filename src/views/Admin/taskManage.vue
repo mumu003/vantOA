@@ -54,7 +54,7 @@
     </div>
 </template>
 <script>
-import { formdatatime } from "@/util/base";
+import { formdatatimeSQ } from "@/util/base";
 import { findByAdmin,updateStatus,deleteTasks,updateTitle,updateContent } from "@/api/admin.js";
 import ReleaseTask from '../Management/task'
 export default {
@@ -92,7 +92,7 @@ export default {
   filters: {
     formtime(val) {
       if(val){
-        return formdatatime(val);
+        return formdatatimeSQ(val);
       }
       
     }

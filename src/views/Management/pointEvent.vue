@@ -6,12 +6,12 @@
     </van-search>
     <van-cell title="开始时间" is-link :value="eventObj.starTime" @click="startShow = true" required />
     <van-popup v-model="startShow" position="bottom" :style="{ height: '40%' }">
-      <van-datetime-picker v-model="currentDate1" type="datetime" :min-date="minDate" :max-date="maxDate"
+      <van-datetime-picker v-model="currentDate1" type="date" :min-date="minDate" :max-date="maxDate"
         @confirm="startConfirm" @cancel="startShow = false;" :formatter="formatter" />
     </van-popup>
     <van-cell title="结束时间" is-link :value="eventObj.endTime" @click="endShow = true" required />
     <van-popup v-model="endShow" position="bottom" :style="{ height: '40%' }">
-      <van-datetime-picker v-model="currentDate2" type="datetime" :min-date="minDate" :max-date="maxDate"
+      <van-datetime-picker v-model="currentDate2" type="date" :min-date="minDate" :max-date="maxDate"
         @confirm="endConfirm" @cancel="endShow = false;" :formatter="formatter" />
     </van-popup>
 

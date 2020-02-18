@@ -30,16 +30,16 @@
         <div class="content">
           <div class="more-show" style="position: absolute;bottom: 0;width: 100%;">
             <div class="add-rule more-row">
-              <span>添加规则</span>
               <div @click="showmodal()">
                 <img :src="`/static/img/manage/addRule.png`" alt="">
               </div>
+              <span>添加规则</span>
             </div>
             <div class="add-type more-row">
-              <span>添加分类</span>
               <div @click="addRuleType">
                 <img :src="`/static/img/manage/addRuleType.png`" alt="">
               </div>
+              <span>添加分类</span>
             </div>
           </div>
         </div>
@@ -425,9 +425,9 @@ export default {
   }
   .bigest{
     position: absolute;
-    bottom: 80px;
+    bottom: 120px;
     // padding-bottom: 40px;
-    right: 40px;
+    left: 40px;
       .content{
         position: relative;
         height:0;
@@ -441,7 +441,7 @@ export default {
           z-index: 2;
           .more-row{
             @include flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             margin: 10px 0;
             span{
               font-size: 13px;
@@ -462,7 +462,7 @@ export default {
         @include flex;
         z-index: 5;
         position: relative;
-        justify-content: flex-end;
+        justify-content: flex-start;
         >div{
           @include more-icon;
           @include flex;

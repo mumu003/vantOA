@@ -59,7 +59,7 @@
 <script>
   import { findAlldepart,findAllList} from "@/api/depart";
   import { getruletype,getrule,addPoint} from "@/api/integral";
-  import { formdatatime } from "@/util/base";
+  import { formtime } from "@/util/base";
   export default {
     name: 'PointEntry',
     data() {
@@ -188,7 +188,7 @@
       },
       dateConfirm(time) {
         this.isDateShow = false
-        this.pointObj.applyTime = formdatatime(time)
+        this.pointObj.applyTime = formtime(time)
       },
       onLoad() {
         // 异步更新数据

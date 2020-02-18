@@ -62,7 +62,7 @@
 <script>
   import { addTask } from "@/api/task";
   import { findAlldepart,findAllList } from "@/api/depart";
-  import { formdatatime } from "@/util/base";
+  import { formtime } from "@/util/base";
 
   export default {
     name: 'ReleaseTask',
@@ -215,9 +215,17 @@
         }
       },
       confirmTime(value){
-        this.taskObj.endTime = formdatatime(value);
-        this.timeShow = false;
-        // console.log(formdatatime(value))
+        let now =formtime(new Date())
+        now=new Date(now.replace(/\-/g, "\/"))
+        let d =formtime(value)
+        let end = new Date(d.replace(/\-/g, "\/"))
+        if (end <= now) {
+          this.$toast.fail("截至时间不能小于当前时间！")
+          return
+        }else{
+          this.taskObj.endTime = d
+          this.timeShow = false;
+        }
       },
       formatter(type, value) {
         if (type === 'year') {

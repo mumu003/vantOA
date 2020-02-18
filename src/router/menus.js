@@ -91,7 +91,7 @@ export default [
         manageShow:false,
         requireAuth:true,
         img:'img5',
-        roleIds:[1,2,3],
+        roleIds:[2,3],
       },
     },{
       path: '/pointEvent',

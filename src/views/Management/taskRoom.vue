@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-import { formdatatime } from "@/util/base";
+import { formdatatimeSQ } from "@/util/base";
 import { findByEmpl } from "@/api/manager.js";
 import ReleaseTask from '../Management/task'
 export default {
@@ -60,7 +60,7 @@ export default {
   filters: {
     formtime(val) {
       if(val){
-        return formdatatime(val);
+        return formdatatimeSQ(val);
       }
       
     }

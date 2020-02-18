@@ -1,27 +1,27 @@
-// function formdatatime(val,type,ishour){
+function formtime(val,type,ishour){
     
-// if (val) {
-//     //默认以 - - -的形式展示
-//     type?'':type='-';
+if (val) {
+    //默认以 - - -的形式展示
+    type?'':type='-';
     
-//     let date = new Date(val);
-//     let year = date.getFullYear();
-//     let month = date.getMonth() + 1 >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
-//     let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
-//     let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
-//     let minute = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
-//     let scen = date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds();
-//     //是否只显年月日
-//     if(ishour){
-//         return year + type + month + type + day 
-//     }
-//     else{
-//     return year + type + month + type + day + ' ' + hour + ':' + minute 
-//     }
-// } else {
-//     return '不支持显示'
-// }
-// }
+    let date = new Date(val);
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1 >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
+    let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+    let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
+    let minute = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
+    let scen = date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds();
+    //是否只显年月日
+    if(ishour){
+        return year + type + month + type + day 
+    }
+    else{
+    return year + type + month + type + day + ' ' + hour + ':' + minute + ':' +scen
+    }
+} else {
+    return '不支持显示'
+}
+}
 
 
 function formatDate(val,type,ishour){
@@ -47,7 +47,7 @@ function formatDate(val,type,ishour){
     }
 
     const REGEX = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/
-    function formdatatime(val, format)  {
+    function formdatatimeSQ(val, format)  {
        if (val) {
            /**
             * @instructions 如果不是时间戳格式，且含有字符 '-' 则将 '-' 替换成 '/' && 删除小数点及后面的数字
@@ -59,10 +59,18 @@ function formatDate(val,type,ishour){
            }
            let date = new Date(val)
            date.setHours(date.getHours() + 8)
-           const [whole, yy, MM, dd, hh, mm, ss] = date.toISOString().match(REGEX)
-           const year = new Date().getFullYear()
-           const month = new Date().getMonth() + 1
-           const dates = new Date().getDate()
+           
+           
+            var a =new Date(date)
+            const [whole, yy, MM, dd, hh, mm, ss] = a.toISOString().match(REGEX)
+           
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1 >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
+            let dates = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+            let hour = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
+            let minute = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
+            let second = date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds();
+
            if (format) {
                return format
                    .replace('yyyy', yy)
@@ -73,7 +81,7 @@ function formatDate(val,type,ishour){
                    .replace('mm', mm)
                    .replace('ss', ss)
            } else {
-               return [yy, MM, dd].join('-') + ' ' + [hh, mm, ss].join(':')
+               return [year, month, dates].join('/') + ' ' + [hour, minute, second].join(':')
            }
        } else {
            return '--'
@@ -82,5 +90,5 @@ function formatDate(val,type,ishour){
       
       
 export {
-    formdatatime,formatDate
+    formdatatimeSQ,formatDate,formtime
 }

@@ -38,7 +38,7 @@
 </template>
 <script>
 import { findnotice, updatenotice, deletenotice } from "@/api/manager";
-import { formdatatime } from "@/util/base";
+import { formdatatimeSQ } from "@/util/base";
 export default {
   data: function() {
     return {
@@ -161,7 +161,7 @@ export default {
   },
   filters: {
     formtime(val) {
-      return formdatatime(val);
+      return formdatatimeSQ(val);
     }
   }
 };
