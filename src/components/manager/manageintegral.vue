@@ -1,7 +1,7 @@
 <template>
   <div class="manageIntergral">
     <van-nav-bar title="管理部门" left-arrow @click-left="onClickLeft"  class="bluenav"/>
-    <div class="op-tip">tips：向左侧滑动 修改，向右测滑动 删除</div>
+    <div class="op-tip">tips：向左侧滑动 删除，向右测滑动 修改</div>
     <van-cell-group v-if="departList.length>0">
       <van-swipe-cell v-for="(item,index) in departList" :key="item.id+index">
         <template slot="left">
