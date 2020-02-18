@@ -226,6 +226,7 @@
            for(let j in this.finalList){
              if(this.finalList[j]==this.memberList[i].name){
                this.finalList.splice(i,1)
+               this.memberList[i].isChecked=false
              }
            }
          }
@@ -235,6 +236,7 @@
         this.isMemberShow = false
       },
       remove(i) {
+        this.memberList[i].isChecked=false
         this.finalList.splice(i, 1)
         this.pointObj.employeesId.splice(i, 1)
       },

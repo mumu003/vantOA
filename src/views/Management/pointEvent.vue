@@ -112,10 +112,6 @@
           return `${value}月`
         } else if (type === 'day') {
           return `${value}日`
-        } else if (type === 'hour') {
-          return `${value}时`
-        } else if (type === 'minute') {
-          return `${value}分`
         }
         return value;
       },
