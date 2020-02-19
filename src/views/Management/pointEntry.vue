@@ -248,15 +248,19 @@
       toSelect() {
         this.isMemberShow = false
       },
-      remove(i) {
+       remove(i) {
         const curIndex=this.finalList[i].mIndex
-        for(let k in this.finalList){
-          if(this.finalList[k].deptId==this.curDepId){
+        // for(let k in this.finalList){
+          if(this.finalList[i].deptId==this.curDepId){
+            // console.log('if')
             this.memberList[curIndex].isChecked=false
+            // this.finalList.splice(i, 1)
+            // this.pointObj.employeesId.splice(i, 1)
           }
-        }
-        this.finalList.splice(i, 1)
-        this.pointObj.employeesId.splice(i, 1)
+          this.finalList.splice(i, 1)
+          this.pointObj.employeesId.splice(i, 1)
+        // }
+        
       },
       async submit() {
         // console.log(this.pointObj)

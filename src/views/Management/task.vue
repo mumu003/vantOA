@@ -182,11 +182,11 @@
       },
       remove(i) {
         const curIndex=this.finalList[i].mIndex
-        for(let k in this.finalList){
-          if(this.finalList[k].deptId==this.curDepId){
+        // for(let k in this.finalList){
+          if(this.finalList[i].deptId==this.curDepId){
             this.memberList[curIndex].isChecked=false
           }
-        }
+        // }
         this.finalList.splice(i, 1)
         this.taskObj.employeesId.splice(i, 1)
       },
