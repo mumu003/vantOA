@@ -149,13 +149,13 @@
                 mName:item.name,
                 isChecked:false
             }))
-            for(let i in this.finalList){
-              for(let j in this.memberList){
-                if(this.memberList[j].mId==this.finalList[i].mId){
-                  this.memberList[j].isChecked=true
-                }
-              }
-            }
+            for(let i in this.finalList){
+              for(let j in this.memberList){
+                if(this.memberList[j].mId==this.finalList[i].mId){
+                  this.memberList[j].isChecked=true
+                }
+              }
+            }
           }
         })
       },
@@ -181,6 +181,7 @@
         this.isMemberShow = false
       },
       remove(i) {
+        this.memberList[i].isChecked=false
         this.finalList.splice(i, 1)
         this.taskObj.employeesId.splice(i, 1)
       },
