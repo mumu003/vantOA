@@ -27,7 +27,7 @@
       </van-cell>
       <div class="main-box" style="margin:5px 10px;">
         <van-tag closeable round plain @close="remove(index)" v-for="(item,index) in finalList" :key="index">
-          {{item}}&#x3000;
+          {{item.mName}}&#x3000;
         </van-tag>
       </div>
       <van-popup round v-model="isMemberShow" position="bottom" :style="{ height: '60%' }">
@@ -44,8 +44,8 @@
           </van-tab>
           <van-tab title="选择人员" name="men">
             <van-checkbox-group v-model="taskObj.employeesId" class="men-area" v-if="memberList.length !=0 ">
-              <van-checkbox :name="`${val.id}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(i)">
-                {{val.name}}
+              <van-checkbox :name="`${val.mId}`" v-for="(val,i) in memberList" :key="i" @click="menConfirm(i)">
+                {{val.mName}}
               </van-checkbox>
             </van-checkbox-group>
             <van-checkbox-group v-model="taskObj.employeesId" class="men-area" v-else>
@@ -86,6 +86,7 @@
         deptList: [],
         memberList: [],
         activeDept: -1,
+        curDepId:'',//当前部门Id
         finalList: [], //最终选中
         loading: false,
         finished: false,
@@ -133,9 +134,10 @@
           }
         }, 500);
       },
-      // 部门选中
+      // 部门选中 
       async deptConfirm(departId, index) {
         this.activeDept = index
+        this.curDepId=departId
         let data = {
           departId
         }
@@ -143,21 +145,32 @@
           if (res.code == 0) {
             // this.memberList=res.data
             this.memberList = res.data.map(item => ({
-                id: item.id,
-                name:item.name,
+                mId: item.id,
+                mName:item.name,
                 isChecked:false
             }))
+            for(let i in this.finalList){
+              for(let j in this.menberList){
+                if(this.menberList[j].id==this.finalList[i].mId){
+                  this.menberList[j].isChecked=true
+                }
+              }
+            }
           }
         })
       },
        menConfirm(i) {
+         let _obj = Object.assign(this.memberList[i], {
+            deptId: this.curDepId,
+            mIndex: i
+          });
          if(!this.memberList[i].isChecked){
-          this.finalList.push(this.memberList[i].name)
+          this.finalList.push(_obj)
           this.memberList[i].isChecked=true
          }else{
            for(let j in this.finalList){
-             if(this.finalList[j]==this.memberList[i].name){
-               this.finalList.splice(i,1)
+             if(this.finalList[j].mId==this.memberList[i].mId){
+               this.finalList.splice(j,1)
                this.memberList[i].isChecked=false
              }
            }
@@ -168,7 +181,6 @@
         this.isMemberShow = false
       },
       remove(i) {
-        this.memberList[i].isChecked=false
         this.finalList.splice(i, 1)
         this.taskObj.employeesId.splice(i, 1)
       },
