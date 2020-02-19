@@ -149,13 +149,13 @@
                 mName:item.name,
                 isChecked:false
             }))
-            for(let i in this.finalList){
-              for(let j in this.menberList){
-                if(this.menberList[j].id==this.finalList[i].mId){
-                  this.menberList[j].isChecked=true
-                }
-              }
-            }
+            for(let i in this.finalList){
+              for(let j in this.memberList){
+                if(this.memberList[j].mId==this.finalList[i].mId){
+                  this.memberList[j].isChecked=true
+                }
+              }
+            }
           }
         })
       },
